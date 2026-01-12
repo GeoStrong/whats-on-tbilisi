@@ -6,7 +6,6 @@ import {
   getCategoryById,
   getCategoriesByActivityId,
 } from "@/lib/functions/supabaseFunctions";
-import { Category } from "@/lib/types";
 import { queryKeys } from "@/lib/react-query/queryKeys";
 
 /**
@@ -76,7 +75,3 @@ export const useInvalidateCategories = () => {
     },
   };
 };
-
-
-
-

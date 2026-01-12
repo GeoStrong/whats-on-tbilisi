@@ -39,6 +39,7 @@ import {
   Home,
 } from "lucide-react";
 import { toast } from "sonner";
+import MapUserLocation from "./mapUserLocation";
 
 interface MapProps {
   displayActivities?: boolean;
@@ -72,6 +73,8 @@ const MapComponent: React.FC<MapProps> = ({
 
   const { activityLocations } = useActivitiesFilter();
   const [isLocating, setIsLocating] = useState(false);
+  const [userLocation, setUserLocation] =
+    useState<google.maps.LatLngLiteral | null>(null);
   const hasSetTbilisiRef = useRef(false);
   const { resolvedTheme } = useTheme();
   const { isFullscreen } = useSelector((state: RootState) => state.map);
@@ -153,6 +156,7 @@ const MapComponent: React.FC<MapProps> = ({
           };
           map.setCenter(userLocation);
           map.setZoom(16);
+          setUserLocation(userLocation);
           setIsLocating(false);
         },
         (error) => {
@@ -209,6 +213,7 @@ const MapComponent: React.FC<MapProps> = ({
     if (!map) return;
     map.setCenter({ lat: 41.73809, lng: 44.7808 });
     map.setZoom(12);
+    setUserLocation(null);
     toast.success("Map reset to Tbilisi");
   }, [map]);
 
@@ -319,6 +324,8 @@ const MapComponent: React.FC<MapProps> = ({
             <FloatingCursorPin />
           </AdvancedMarker>
         )}
+
+        {userLocation && <MapUserLocation userLocation={userLocation} />}
 
         {cursorPos && isFloatingEnabled && (
           <div

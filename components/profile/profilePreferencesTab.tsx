@@ -9,7 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Bell, Globe, Lock, Mail, Palette, Monitor, Sun, Moon } from "lucide-react";
+import {
+  Bell,
+  Globe,
+  Lock,
+  Mail,
+  Palette,
+  Monitor,
+  Sun,
+  Moon,
+} from "lucide-react";
 import { Label } from "../ui/label";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import useThemeSwitch from "@/lib/hooks/useThemeSwitch";
@@ -30,7 +39,7 @@ const ProfilePreferencesTab: React.FC = () => {
   return (
     <>
       <TabsContent value="preferences" className="space-y-4">
-        <Card className="dark:bg-gray-800">
+        {/* <Card className="dark:bg-gray-800">
           <CardHeader>
             <CardTitle className="text-lg">Notifications</CardTitle>
             <CardDescription className="text-base">
@@ -84,7 +93,7 @@ const ProfilePreferencesTab: React.FC = () => {
               </div>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card className="dark:bg-gray-800 md:hidden">
           <CardHeader>
@@ -102,7 +111,10 @@ const ProfilePreferencesTab: React.FC = () => {
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-[140px] justify-start">
+                    <Button
+                      variant="outline"
+                      className="w-[140px] justify-start"
+                    >
                       {theme === "system" ? (
                         <>
                           <Monitor className="mr-2 h-4 w-4" />
@@ -150,7 +162,7 @@ const ProfilePreferencesTab: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="dark:bg-gray-800">
+        {/* <Card className="dark:bg-gray-800">
           <CardHeader>
             <CardTitle className="">Account Settings</CardTitle>
             <CardDescription className="text-base">
@@ -183,7 +195,7 @@ const ProfilePreferencesTab: React.FC = () => {
               </Button>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </TabsContent>
     </>
   );

@@ -64,7 +64,7 @@ const CreateActivityLayout: React.FC<{ mapKey: string }> = ({ mapKey }) => {
 
   return (
     <APIProvider apiKey={mapKey} libraries={["places"]}>
-      <div className="mt-3 flex w-full flex-col justify-between gap-2 rounded-md bg-white dark:bg-gray-800 md:max-h-[500px] lg:flex-row">
+      <div className="mt-3 flex w-full flex-col justify-between gap-2 rounded-md bg-white dark:bg-gray-800 lg:max-h-[500px] lg:flex-row">
         {isMobile ? (
           <div className="md:hidden">
             <CreateActivityMobileMap buttonRef={openMobileMapRef} />
@@ -73,13 +73,13 @@ const CreateActivityLayout: React.FC<{ mapKey: string }> = ({ mapKey }) => {
           <div className="hidden w-full rounded-2xl md:block">
             <MapWrapper
               API_KEY={mapKey}
-              height={`h-96 ${isFullscreen && "h-screen"}`}
+              height={`h-96 lg:h-[500px] ${isFullscreen && "h-screen lg:h-screen"}`}
               displayActivities={false}
               skipAPIProvider={true}
             />
           </div>
         )}
-        <div className="w-full p-3 pb-10 md:pb-0">
+        <div className="w-full p-3 md:pb-0">
           {isLoading ? (
             <CreateActivityLoading />
           ) : !isAuthenticated || !user ? (

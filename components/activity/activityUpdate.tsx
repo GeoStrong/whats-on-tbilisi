@@ -95,15 +95,18 @@ const ActivityUpdate: React.FC<{
           Edit
         </DrawerTrigger>
         <DrawerContent className="w-full">
-          <APIProvider apiKey={env.googleMapsApiKey || ""} libraries={["places"]}>
-            <DrawerHeader>
+          <APIProvider
+            apiKey={env.googleMapsApiKey || ""}
+            libraries={["places"]}
+          >
+            <DrawerHeader className="max-h-screen overflow-y-auto p-5">
               <DrawerTitle className="mb-3 text-center text-xl">
                 Edit Activity
               </DrawerTitle>
               <div className="">
                 <CreateActivityMobileMap buttonRef={openMobileMapRef} />
               </div>
-              <div className="h-[75%] md:h-[85%]">{formikComponent}</div>
+              <div className="">{formikComponent}</div>
               <CreateActivityAlert
                 buttonRef={openCreateActivityAlertRef}
                 isActivityCreated={false}

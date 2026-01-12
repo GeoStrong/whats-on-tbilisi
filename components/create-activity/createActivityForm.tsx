@@ -8,7 +8,7 @@ import { ActivityCategories, NewActivityEntity } from "@/lib/types";
 import { categories } from "@/lib/data/categories";
 import { useEffect } from "react";
 import { FaMapMarkedAlt } from "react-icons/fa";
-import { useLocation } from "react-use";
+// import { useLocation } from "react-use";
 import Image from "next/image";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
@@ -29,34 +29,34 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
   handleOpenMobileMap,
   displayOpenMapButton,
 }) => {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
 
-  const isCreatePage = pathname === "/create-activity";
+  // const isCreatePage = pathname === "/create-activity";
 
   useEffect(() => {
     if (latLng) {
       formik.setFieldValue("googleLocation", latLng);
-      
+
       // Reverse geocode to get address when latLng is set from map click
       // Only reverse geocode if location field is empty or significantly different
       // This prevents overwriting when address is selected from autocomplete
       if (typeof window !== "undefined" && window.google?.maps) {
         const geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode(
-          { location: latLng },
-          (results, status) => {
-            if (status === "OK" && results && results[0]) {
-              const newAddress = results[0].formatted_address;
-              const currentLocation = formik.values.location || "";
-              
-              // Only update if location is empty or if the new address is significantly different
-              // This allows reverse geocoding on map click while preserving autocomplete selections
-              if (!currentLocation || !currentLocation.includes(newAddress.split(",")[0])) {
-                formik.setFieldValue("location", newAddress);
-              }
+        geocoder.geocode({ location: latLng }, (results, status) => {
+          if (status === "OK" && results && results[0]) {
+            const newAddress = results[0].formatted_address;
+            const currentLocation = formik.values.location || "";
+
+            // Only update if location is empty or if the new address is significantly different
+            // This allows reverse geocoding on map click while preserving autocomplete selections
+            if (
+              !currentLocation ||
+              !currentLocation.includes(newAddress.split(",")[0])
+            ) {
+              formik.setFieldValue("location", newAddress);
             }
-          },
-        );
+          }
+        });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,9 +71,10 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
   };
 
   return (
-    <Form className="h-full">
+    <Form className="h-full overflow-y-scroll pb-5">
       <div
-        className={`mb-3 flex w-full flex-col gap-4 overflow-x-hidden overflow-y-scroll p-3 ${isCreatePage ? "md:max-h-[80%]" : "h-1/2"}`}
+        className={`mb-3 flex w-full flex-col gap-4 p-3`}
+        // className={`mb-3 flex w-full flex-col gap-4 p-3 ${isCreatePage ? "md:max-h-[80%]" : "h-1/2"}`}
       >
         {/* Title */}
         <div>
@@ -211,7 +212,7 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
             {displayOpenMapButton && (
               <button
                 type="button"
-                className="absolute right-4 top-[0.35rem] rounded-lg border bg-primary px-2 py-1"
+                className="absolute right-4 top-[0.6rem] rounded-lg border bg-primary px-2 py-1"
                 onClick={handleOpenMobileMap}
               >
                 <FaMapMarkedAlt className="text-white" />
