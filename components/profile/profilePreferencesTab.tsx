@@ -10,23 +10,23 @@ import {
   CardTitle,
 } from "../ui/card";
 import {
-  Bell,
-  Globe,
-  Lock,
-  Mail,
+  // Bell,
+  // Globe,
+  // Lock,
+  // Mail,
   Palette,
   Monitor,
   Sun,
   Moon,
 } from "lucide-react";
 import { Label } from "../ui/label";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+// import { Separator } from "@radix-ui/react-dropdown-menu";
 import useThemeSwitch from "@/lib/hooks/useThemeSwitch";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  // DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
