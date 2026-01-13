@@ -108,9 +108,13 @@ export const getPWADisplayMode = () => {
   if (typeof document === "undefined" || typeof window === "undefined")
     return "unknown";
 
+  const ref = typeof document.referrer === "string" ? document.referrer : "";
+
+  if (ref.startsWith("android-app://")) return "twa";
   if (
-    typeof document.referrer === "string" &&
-    document.referrer.startsWith("android-app://")
+    ref.includes("ios-app") ||
+    ref.includes("wkwebview") ||
+    ref.includes("safari-view-controller")
   )
     return "twa";
 
@@ -123,7 +127,12 @@ export const getPWADisplayMode = () => {
     if (m("(display-mode: window-controls-overlay)"))
       return "window-controls-overlay";
   } catch {
-    // matchMedia may throw in some environments — ignore and fallthrough
+    // ignore matchMedia errors
+  }
+
+  if (typeof navigator !== "undefined") {
+    const nav = navigator as any;
+    if (nav.standalone) return "standalone"; // iOS home-screen PWA
   }
 
   return "unknown";
