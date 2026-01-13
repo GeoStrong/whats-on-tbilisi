@@ -105,16 +105,26 @@ export const groupCommentsOneLevel = (comments: CommentEntity[]) => {
 };
 
 export const getPWADisplayMode = () => {
-  if (document.referrer.startsWith("android-app://")) return "twa";
-  if (window.matchMedia("(display-mode: browser)").matches) return "browser";
-  if (window.matchMedia("(display-mode: standalone)").matches)
-    return "standalone";
-  if (window.matchMedia("(display-mode: minimal-ui)").matches)
-    return "minimal-ui";
-  if (window.matchMedia("(display-mode: fullscreen)").matches)
-    return "fullscreen";
-  if (window.matchMedia("(display-mode: window-controls-overlay)").matches)
-    return "window-controls-overlay";
+  if (typeof document === "undefined" || typeof window === "undefined")
+    return "unknown";
+
+  if (
+    typeof document.referrer === "string" &&
+    document.referrer.startsWith("android-app://")
+  )
+    return "twa";
+
+  try {
+    const m = (q: string) => window.matchMedia(q).matches;
+    if (m("(display-mode: browser)")) return "browser";
+    if (m("(display-mode: standalone)")) return "standalone";
+    if (m("(display-mode: minimal-ui)")) return "minimal-ui";
+    if (m("(display-mode: fullscreen)")) return "fullscreen";
+    if (m("(display-mode: window-controls-overlay)"))
+      return "window-controls-overlay";
+  } catch {
+    // matchMedia may throw in some environments — ignore and fallthrough
+  }
 
   return "unknown";
 };
