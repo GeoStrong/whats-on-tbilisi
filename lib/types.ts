@@ -47,6 +47,17 @@ export interface ActivityParticipantsEntity {
   created_at: Date | string;
 }
 
+export interface UserParticipationHistory {
+  userId: string;
+  userName: string;
+  userAvatar: string | undefined;
+  activityId: string;
+  activityTitle: string;
+  participationDate: string;
+  activityStatus?: "active" | "inactive" | "pending";
+  activityDate: string;
+}
+
 export interface ActivityEntity {
   id: string;
   user_id?: string;

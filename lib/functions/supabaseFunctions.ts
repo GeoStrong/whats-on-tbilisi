@@ -1,3 +1,5 @@
+import { PostgrestError } from "@supabase/supabase-js";
+import { getUserById } from "../auth/auth";
 import { supabase } from "../supabase/supabaseClient";
 import {
   ActivityCategories,
@@ -8,6 +10,8 @@ import {
   NewActivityEntity,
   UserProfile,
   FeedPostWithActivity,
+  ActivityParticipantsEntity,
+  UserParticipationHistory,
 } from "../types";
 import { isString, isValidImage } from "./helperFunctions";
 
@@ -1171,4 +1175,99 @@ export const getFeedPostsByUserId = async (userId: string) => {
     .filter((post: any): post is FeedPostWithActivity => post !== null);
 
   return transformedPosts;
+};
+
+export const getFollowedUsersParticipation = async (userId: string) => {
+  if (!userId) return;
+
+  const { data: followings, error: followingsError } = await supabase
+    .from("followers")
+    .select("user_id")
+    .eq("follower_id", userId);
+
+  if (followingsError) {
+    console.error("Error fetching followings:", followingsError);
+    return [];
+  }
+
+  const followedUserIds: string[] = followings
+    ? followings.map((f) => f.user_id)
+    : [];
+
+  if (followedUserIds.length === 0) {
+    return [];
+  }
+
+  const data = (
+    await Promise.all(
+      followedUserIds.map(async (fid) => {
+        const { data } = await supabase
+          .from("activity_participants")
+          .select(`*`)
+          .eq("user_id", fid);
+        return data as ActivityParticipantsEntity[];
+      }),
+    )
+  ).flat();
+
+  const fullInfo = (
+    await Promise.all(
+      data.map(async (participation) => {
+        const user = (await getUserById(participation.user_id)) as UserProfile;
+        const activity = (await getActivityById(
+          participation.activity_id,
+        )) as ActivityEntity[];
+        return {
+          userId: user.id,
+          userName: user.name,
+          userAvatar: user.avatar_path,
+          activityId: activity[0]?.id,
+          activityTitle: activity[0]?.title,
+          participationDate: participation.created_at,
+          activityStatus: activity[0]?.status,
+          activityDate: activity[0]?.date,
+        };
+      }),
+    )
+  ).flat() as UserParticipationHistory[];
+
+  return fullInfo;
+};
+
+export const getUserParticipationHistory = async (userId: string) => {
+  const { data, error } = (await supabase
+    .from("activity_participants")
+    .select(`*`)
+    .eq("user_id", userId)) as {
+    data: ActivityParticipantsEntity[];
+    error: PostgrestError | null;
+  };
+
+  const fullInfo = (
+    await Promise.all(
+      data.map(async (participation) => {
+        const user = (await getUserById(userId)) as UserProfile;
+        const activity = (await getActivityById(
+          participation.activity_id,
+        )) as ActivityEntity[];
+        return {
+          userId: user.id,
+          userName: user.name,
+          userAvatar: user.avatar_path,
+          activityId: activity[0]?.id,
+          activityTitle: activity[0]?.title,
+          participationDate: participation?.created_at,
+          activityStatus: activity[0]?.status,
+          activityDate: activity[0]?.date,
+        };
+      }),
+    )
+  ).flat() as UserParticipationHistory[];
+
+  if (error) {
+    console.error("Error fetching user participation history:", error);
+    return [];
+  }
+
+  return fullInfo;
 };

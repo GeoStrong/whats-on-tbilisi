@@ -2,7 +2,6 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchUserInfo } from "@/lib/profile/profile";
-import { UserProfile } from "@/lib/types";
 import { queryKeys } from "@/lib/react-query/queryKeys";
 
 /**
@@ -39,7 +38,3 @@ export const useInvalidateUser = () => {
     },
   };
 };
-
-
-
-

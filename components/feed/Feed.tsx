@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useGetUserProfile from "@/lib/hooks/useGetUserProfile";
 import NotAuth from "../auth/notAuth";
 import UserAvatar from "../users/userAvatar";
@@ -10,15 +10,30 @@ import { Button } from "../ui/button";
 import FeedLoading, { FeedPostSkeleton } from "./FeedLoading";
 import { useFeedPosts } from "@/lib/hooks/useFeedPosts";
 import FeedPost from "./FeedPost";
+import { getFollowedUsersParticipation } from "@/lib/functions/supabaseFunctions";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { UserParticipationHistory } from "@/lib/types";
+import ParticipationHistory from "../general/participationHistory";
 
 const Feed: React.FC = () => {
   const { user, isLoading: userLoading, isAuthenticated } = useGetUserProfile();
+  const [followedParticipations, setFollowedParticipations] = useState<
+    UserParticipationHistory[] | null
+  >(null);
 
   const userId = useMemo(() => user?.id || null, [user?.id]);
 
   const { data: posts = [], isLoading: postsLoading } = useFeedPosts(userId);
 
   const memoizedPosts = useMemo(() => posts, [posts]);
+
+  useEffect(() => {
+    (async () => {
+      const participantsInfo = await getFollowedUsersParticipation(userId!);
+      if (!participantsInfo) return;
+      setFollowedParticipations(participantsInfo);
+    })();
+  }, [followedParticipations, userId]);
 
   if (userLoading && !user) {
     return (
@@ -64,11 +79,33 @@ const Feed: React.FC = () => {
                 </Button>
               </div>
             ) : (
-              <div className="flex flex-col gap-3">
-                {memoizedPosts.map((post) => (
-                  <FeedPost key={post.id} user={user} post={post} />
-                ))}
-              </div>
+              <>
+                <Tabs defaultValue="posts" className="">
+                  <div className="flex w-full justify-center">
+                    <TabsList>
+                      <TabsTrigger className="text-base" value="posts">
+                        Posts
+                      </TabsTrigger>
+                      <TabsTrigger className="text-base" value="participation">
+                        Participation
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+                  <TabsContent value="posts" className="flex flex-col gap-3">
+                    {memoizedPosts.map((post) => (
+                      <FeedPost key={post.id} user={user} post={post} />
+                    ))}
+                  </TabsContent>
+                  <TabsContent value="participation">
+                    <p className="text-center">
+                      See where you friends are going
+                    </p>
+                    <ParticipationHistory
+                      participations={followedParticipations}
+                    />
+                  </TabsContent>
+                </Tabs>
+              </>
             )}
           </>
         )}

@@ -4,18 +4,28 @@ import React, { useEffect, useState } from "react";
 import {
   getActivitiesByUserId,
   getFeedPostsByUserId,
+  getUserParticipationHistory,
 } from "@/lib/functions/supabaseFunctions";
-import { ActivityEntity, FeedPostWithActivity, UserProfile } from "@/lib/types";
+import {
+  ActivityEntity,
+  FeedPostWithActivity,
+  UserParticipationHistory,
+  UserProfile,
+} from "@/lib/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { redirect } from "next/navigation";
 import ActivityCard from "../activities/activityCard";
 import { BsCalendar2Event } from "react-icons/bs";
 import { FiFileText } from "react-icons/fi";
 import FeedPost from "../feed/FeedPost";
+import ParticipationHistory from "../general/participationHistory";
 
 const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
   const [postedActivities, setPostedActivities] = useState<
     ActivityEntity[] | null
+  >(null);
+  const [participationHistory, setParticipationHistory] = useState<
+    UserParticipationHistory[] | null
   >(null);
   const [userPosts, setUserPosts] = useState<FeedPostWithActivity[] | null>(
     null,
@@ -32,6 +42,14 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
     (async () => {
       const posts = await getFeedPostsByUserId(user.id);
       setUserPosts(posts);
+    })();
+  }, [user.id]);
+
+  useEffect(() => {
+    (async () => {
+      const history = await getUserParticipationHistory(user.id);
+      if (!history) return;
+      setParticipationHistory(history);
     })();
   }, [user.id]);
 
@@ -69,8 +87,8 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
                 <TabsTrigger className="text-base" value="posted">
                   Posted Activities
                 </TabsTrigger>
-                <TabsTrigger className="text-base" value="attended">
-                  Attended Activities
+                <TabsTrigger className="text-base" value="participation">
+                  Participation History
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -93,8 +111,8 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
                 ))}
               </div>
             </TabsContent>
-            <TabsContent value="attended" className="text-center">
-              In the development...
+            <TabsContent value="participation" className="text-center">
+              <ParticipationHistory participations={participationHistory} />
             </TabsContent>
           </Tabs>
         </TabsContent>
@@ -102,14 +120,19 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
           value="posts"
           className="rounded-xl border shadow-md dark:bg-gray-800 md:p-4"
         >
-          <h3 className="mt-3 text-center text-xl font-bold md:text-left">
-            {user.name} Posts
+          <h3 className="mt-3 text-center text-xl font-bold">
+            {user.name}&apos;s Posts
           </h3>
-          <div className="mt-3">
+          <div className="my-3">
             {userPosts &&
               userPosts.map((post) => (
                 <FeedPost key={post.id} user={user} post={post} />
               ))}
+            {userPosts?.length === 0 && (
+              <p className="col-span-full text-center text-lg">
+                This user has not made any posts yet.
+              </p>
+            )}
           </div>
         </TabsContent>
       </Tabs>

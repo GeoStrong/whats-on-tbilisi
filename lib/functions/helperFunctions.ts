@@ -1,4 +1,3 @@
-// import { supabase } from "../supabase/supabaseClient";
 import { CommentEntity, Poi, UserProfile } from "../types";
 
 export const isString = (value: unknown) => {
@@ -64,6 +63,7 @@ export const handleUploadFile = async (
         statusText: uploadRes.statusText,
       });
     } catch (e) {
+      console.error(e);
       // ignore dev-only logging failures
     }
   }
