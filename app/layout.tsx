@@ -28,6 +28,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navAgent = navigator.userAgent;
   return (
     <html lang="en">
       <body className={`${myFont.variable} antialiased`}>
@@ -43,6 +44,11 @@ export default function RootLayout({
                   >
                     <UserInitializer />
                     <main className="flex min-h-[90dvh] flex-col pb-10">
+                      <div className="flex justify-center">
+                        <div className="mt-5 rounded-full border bg-gray-600 p-4 text-white">
+                          {navAgent}
+                        </div>
+                      </div>
                       <MainLayout>{children}</MainLayout>
                     </main>
                     <Footer />
