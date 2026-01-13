@@ -105,22 +105,34 @@ export const groupCommentsOneLevel = (comments: CommentEntity[]) => {
 };
 
 export const getPWADisplayMode = () => {
-  if (typeof document === "undefined" || typeof window === "undefined")
-    return "unknown";
+  if (typeof window === "undefined") return "unknown";
 
-  const ref = typeof document.referrer === "string" ? document.referrer : "";
+  const ua = typeof navigator !== "undefined" ? navigator.userAgent || "" : "";
+  const ref = typeof document !== "undefined" ? document.referrer || "" : "";
 
+  // Dev-only debug output to help refine heuristics
+  if (process.env.NODE_ENV === "development") {
+    try {
+      // eslint-disable-next-line no-console
+      console.debug("[getPWADisplayMode] ua:", ua, "ref:", ref);
+    } catch {}
+  }
+
+  // Android Trusted Web Activity explicit referrer
   if (ref.startsWith("android-app://")) return "twa";
-  if (
-    ref.includes("ios-app") ||
-    ref.includes("wkwebview") ||
-    ref.includes("safari-view-controller")
-  )
-    return "twa";
 
+  // Heuristic: some iOS wrappers embed indicators in referrer
+  if (/ios-app|wkwebview|safari-view-controller|applewebdata/i.test(ref)) {
+    return "twa";
+  }
+
+  // iOS home-screen PWA (legacy Safari API)
+  if (typeof navigator !== "undefined" && (navigator as any).standalone)
+    return "standalone";
+
+  // Prefer explicit display-mode matches first
   try {
     const m = (q: string) => window.matchMedia(q).matches;
-    if (m("(display-mode: browser)")) return "browser";
     if (m("(display-mode: standalone)")) return "standalone";
     if (m("(display-mode: minimal-ui)")) return "minimal-ui";
     if (m("(display-mode: fullscreen)")) return "fullscreen";
@@ -130,10 +142,32 @@ export const getPWADisplayMode = () => {
     // ignore matchMedia errors
   }
 
-  if (typeof navigator !== "undefined") {
-    const nav = navigator as any;
-    if (nav.standalone) return "standalone"; // iOS home-screen PWA
+  // Known in-app browser signatures -> mark as in-app (not a regular browser)
+  const inAppIndicators = [
+    "FBAN",
+    "FBAV",
+    "Instagram",
+    "Twitter",
+    "LinkedInApp",
+    "Line",
+    "Pinterest",
+    "GSA",
+    "MicroMessenger",
+    "WhatsApp",
+  ];
+  if (inAppIndicators.some((i) => ua.includes(i))) return "in-app";
+
+  // Heuristic for iOS webviews (SFSafariViewController / WKWebView)
+  if (/iphone|ipad|ipod/i.test(ua)) {
+    // If UA mentions Safari but not Version/ (common in SFSafariViewController), treat as in-app
+    if (/Safari/i.test(ua) && !/Version\//i.test(ua) && /Mobile/i.test(ua))
+      return "in-app";
   }
+
+  // Fallback: explicit browser display-mode
+  try {
+    if (window.matchMedia("(display-mode: browser)").matches) return "browser";
+  } catch {}
 
   return "unknown";
 };
