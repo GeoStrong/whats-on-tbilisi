@@ -63,7 +63,7 @@ Fill in your environment variables in `.env.local`:
 - `R2_ENDPOINT` - Your Cloudflare R2 endpoint
 - `R2_ACCESS_KEY_ID` - Your R2 access key ID
 - `R2_SECRET_ACCESS_KEY` - Your R2 secret access key
-- `R2_BUCKET` - Your R2 bucket name
+- `R2_BUCKET_NAME` - Your R2 bucket name
 
 4. Run database migrations:
 
@@ -132,6 +132,20 @@ The application uses Supabase (PostgreSQL). Key tables:
 - `activity_participants` - Event participation
 - `activity_comments` - Comments on activities
 - `saved_activities` - Bookmarked activities
+
+## Documentation
+
+### Production & Deployment
+
+- [Production Launch Guide](docs/LAUNCH.md) - Complete launch strategy and checklist
+- [Production Readiness Checklist](docs/PRODUCTION_CHECKLIST.md) - Pre-launch verification
+- [Supabase RLS Policies](docs/supabase-rls-policies.sql) - Database security policies
+- [API Reference](docs/API.md) - API endpoint documentation
+
+### Legal & Compliance
+
+- [Privacy Policy](/privacy) - Data collection and privacy rights
+- [Terms of Service](/terms) - Acceptable use and liability
 
 ## API Documentation
 

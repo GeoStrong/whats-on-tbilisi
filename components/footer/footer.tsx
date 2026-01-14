@@ -24,6 +24,12 @@ const Footer: React.FC = () => {
             <Link className="text-lg" href="/create-activity">
               Create a New Activity
             </Link>
+            <Link className="text-lg" href="/privacy">
+              Privacy Policy
+            </Link>
+            <Link className="text-lg" href="/terms">
+              Terms of Service
+            </Link>
           </div>
           <div className="flex flex-col items-center justify-evenly gap-3 md:flex-row">
             <div className=""></div>

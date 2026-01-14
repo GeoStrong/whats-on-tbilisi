@@ -33,6 +33,7 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@reduxjs/toolkit": "^2.5.1",
+    "@sentry/nextjs": "^10.33.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "latest",
     "@tanstack/react-query": "^5.90.16",

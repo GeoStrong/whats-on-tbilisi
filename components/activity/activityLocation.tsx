@@ -2,20 +2,23 @@ import React, { useEffect, useState } from "react";
 import MapWrapper from "../map/map";
 import { ActivityEntity } from "@/lib/types";
 import { Skeleton } from "../ui/skeleton";
+import { env } from "@/lib/utils/env";
 
 const ActivityLocation: React.FC<{ activity: ActivityEntity }> = ({
   activity,
 }) => {
-  const [mapKey, setMapKey] = useState<string>("");
+  // const [mapKey, setMapKey] = useState<string>("");
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("/api/use-secret");
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await fetch("/api/use-secret");
 
-      const { key } = await response.json();
-      setMapKey(key);
-    })();
-  }, []);
+  //     const { key } = await response.json();
+  //     setMapKey(key);
+  //   })();
+  // }, []);
+
+  const mapKey = env.googleMapsApiKey || "";
 
   return (
     <>

@@ -14,6 +14,7 @@ import MapWrapper from "../map/map";
 import { Button } from "../ui/button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
+import { env } from "@/lib/utils/env";
 
 interface CreateActivityMobileMapProps {
   buttonRef: React.RefObject<HTMLButtonElement | null>;
@@ -22,17 +23,19 @@ interface CreateActivityMobileMapProps {
 const CreateActivityMobileMap: React.FC<CreateActivityMobileMapProps> = ({
   buttonRef,
 }) => {
-  const [mapKey, setMapKey] = useState<string>("");
+  // const [mapKey, setMapKey] = useState<string>("");
   const { isFullscreen } = useSelector((state: RootState) => state.map);
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("/api/use-secret");
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await fetch("/api/use-secret");
 
-      const { key } = await response.json();
-      setMapKey(key);
-    })();
-  }, []);
+  //     const { key } = await response.json();
+  //     setMapKey(key);
+  //   })();
+  // }, []);
+
+  const mapKey = env.googleMapsApiKey || "";
 
   return (
     <>

@@ -4,12 +4,12 @@ const requiredEnvVars = {
   R2_ENDPOINT: process.env.R2_ENDPOINT,
   R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
   R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
-  R2_BUCKET: process.env.R2_BUCKET,
+  R2_BUCKET_NAME: process.env.R2_BUCKET_NAME,
 } as const;
 
 const optionalEnvVars = {
   NEXT_PUBLIC_R2_DEV_URL: process.env.NEXT_PUBLIC_R2_DEV_URL,
-  GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
 } as const;
 
 export function validateEnv(): void {
@@ -38,10 +38,10 @@ export const env = {
     endpoint: requiredEnvVars.R2_ENDPOINT!,
     accessKeyId: requiredEnvVars.R2_ACCESS_KEY_ID!,
     secretAccessKey: requiredEnvVars.R2_SECRET_ACCESS_KEY!,
-    bucket: requiredEnvVars.R2_BUCKET!,
+    bucket: requiredEnvVars.R2_BUCKET_NAME!,
   },
   r2DevUrl: optionalEnvVars.NEXT_PUBLIC_R2_DEV_URL,
-  googleMapsApiKey: optionalEnvVars.GOOGLE_MAPS_API_KEY,
+  googleMapsApiKey: optionalEnvVars.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
 } as const;
 
 if (typeof window === "undefined" && process.env.NODE_ENV !== "test") {

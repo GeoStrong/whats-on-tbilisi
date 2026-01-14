@@ -21,6 +21,18 @@ const myFont = localFont({
 export const metadata: Metadata = {
   title: "What’sOnTbilisi",
   description: "Every event. Every Tbilisi resident",
+  icons: [
+    {
+      rel: "icon",
+      url: "/icon.svg",
+      type: "image/svg+xml",
+    },
+    {
+      rel: "apple-touch-icon",
+      url: "/apple-icon.svg",
+      sizes: "180x180",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -30,6 +42,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-icon.svg" sizes="180x180" />
+      </head>
       <body className={`${myFont.variable} antialiased`}>
         <ErrorBoundary>
           <ProgressiveBarProvider>

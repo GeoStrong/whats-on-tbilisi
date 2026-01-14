@@ -53,9 +53,14 @@ export interface UserParticipationHistory {
   userAvatar: string | undefined;
   activityId: string;
   activityTitle: string;
+  activityImage: string | null;
+  activityLocation: string;
+  activityCategories: string[];
   participationDate: string;
   activityStatus?: "active" | "inactive" | "pending";
   activityDate: string;
+  activityTime: string;
+  participantCount?: number;
 }
 
 export interface ActivityEntity {
