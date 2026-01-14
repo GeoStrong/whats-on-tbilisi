@@ -1177,6 +1177,91 @@ export const getFeedPostsByUserId = async (userId: string) => {
   return transformedPosts;
 };
 
+/**
+ * Interface for activity category query result
+ */
+interface ActivityCategoryJoinResult {
+  activity_id: number | string;
+  category_id: number;
+  categories: {
+    id: string;
+    name: string;
+    icon: string;
+    color: string;
+    category: ActivityCategories;
+  } | null;
+}
+
+/**
+ * Helper function to batch fetch and count participants per activity
+ * @param activityIds - Array of activity IDs to fetch participants for
+ * @returns Map of activity ID to participant count
+ */
+const getParticipantCounts = async (
+  activityIds: (number | string)[],
+): Promise<Map<number | string, number>> => {
+  const { data: allParticipants } = await supabase
+    .from("activity_participants")
+    .select("activity_id")
+    .in("activity_id", activityIds);
+
+  const participantCounts = new Map<number | string, number>();
+  (allParticipants || []).forEach((p) => {
+    participantCounts.set(
+      p.activity_id,
+      (participantCounts.get(p.activity_id) || 0) + 1,
+    );
+  });
+
+  return participantCounts;
+};
+
+/**
+ * Helper function to batch fetch and group categories by activity ID
+ * @param activityIds - Array of activity IDs to fetch categories for
+ * @returns Map of activity ID to array of categories
+ */
+const getCategoriesByActivityIds = async (
+  activityIds: (number | string)[],
+): Promise<Map<number | string, Category[]>> => {
+  const { data: activityCategoriesData } = await supabase
+    .from("activity_categories")
+    .select(
+      `
+      activity_id,
+      category_id,
+      categories (
+        id,
+        name,
+        icon,
+        color,
+        category
+      )
+    `,
+    )
+    .in("activity_id", activityIds);
+
+  const categoriesByActivity = new Map<number | string, Category[]>();
+  (activityCategoriesData || []).forEach((item: any) => {
+    const category = item.categories;
+    if (!category) return;
+
+    const activityId = item.activity_id;
+    if (!categoriesByActivity.has(activityId)) {
+      categoriesByActivity.set(activityId, []);
+    }
+    categoriesByActivity.get(activityId)!.push({
+      id: category.id,
+      name: category.name,
+      icon: category.icon,
+      color: category.color,
+      category: category.category,
+    } as Category);
+  });
+
+  return categoriesByActivity;
+};
+
 export const getFollowedUsersParticipation = async (userId: string) => {
   if (!userId) return;
 
@@ -1231,54 +1316,11 @@ export const getFollowedUsersParticipation = async (userId: string) => {
     .select("*")
     .in("id", activityIds);
 
-  // Batch fetch all participant records to count them
-  const { data: allParticipants } = await supabase
-    .from("activity_participants")
-    .select("activity_id")
-    .in("activity_id", activityIds);
-
-  // Count participants per activity
-  const participantCounts = new Map<number | string, number>();
-  (allParticipants || []).forEach((p) => {
-    participantCounts.set(p.activity_id, (participantCounts.get(p.activity_id) || 0) + 1);
-  });
+  // Batch fetch participant counts for all activities
+  const participantCounts = await getParticipantCounts(activityIds);
 
   // Batch fetch categories for all activities
-  const { data: activityCategoriesData } = await supabase
-    .from("activity_categories")
-    .select(
-      `
-      activity_id,
-      category_id,
-      categories (
-        id,
-        name,
-        icon,
-        color,
-        category
-      )
-    `,
-    )
-    .in("activity_id", activityIds);
-
-  // Group categories by activity ID
-  const categoriesByActivity = new Map<number | string, Category[]>();
-  (activityCategoriesData || []).forEach((item: any) => {
-    const category = item.categories;
-    if (!category) return;
-
-    const activityId = item.activity_id;
-    if (!categoriesByActivity.has(activityId)) {
-      categoriesByActivity.set(activityId, []);
-    }
-    categoriesByActivity.get(activityId)!.push({
-      id: category.id,
-      name: category.name,
-      icon: category.icon,
-      color: category.color,
-      category: category.category,
-    });
-  });
+  const categoriesByActivity = await getCategoriesByActivityIds(activityIds);
 
   // Create a map for quick activity lookup
   const activityMap = new Map(
@@ -1347,54 +1389,11 @@ export const getUserParticipationHistory = async (userId: string) => {
     .select("*")
     .in("id", activityIds);
 
-  // Batch fetch all participant records to count them
-  const { data: allParticipants } = await supabase
-    .from("activity_participants")
-    .select("activity_id")
-    .in("activity_id", activityIds);
-
-  // Count participants per activity
-  const participantCounts = new Map<number | string, number>();
-  (allParticipants || []).forEach((p) => {
-    participantCounts.set(p.activity_id, (participantCounts.get(p.activity_id) || 0) + 1);
-  });
+  // Batch fetch participant counts for all activities
+  const participantCounts = await getParticipantCounts(activityIds);
 
   // Batch fetch categories for all activities
-  const { data: activityCategoriesData } = await supabase
-    .from("activity_categories")
-    .select(
-      `
-      activity_id,
-      category_id,
-      categories (
-        id,
-        name,
-        icon,
-        color,
-        category
-      )
-    `,
-    )
-    .in("activity_id", activityIds);
-
-  // Group categories by activity ID
-  const categoriesByActivity = new Map<number | string, Category[]>();
-  (activityCategoriesData || []).forEach((item: any) => {
-    const category = item.categories;
-    if (!category) return;
-
-    const activityId = item.activity_id;
-    if (!categoriesByActivity.has(activityId)) {
-      categoriesByActivity.set(activityId, []);
-    }
-    categoriesByActivity.get(activityId)!.push({
-      id: category.id,
-      name: category.name,
-      icon: category.icon,
-      color: category.color,
-      category: category.category,
-    });
-  });
+  const categoriesByActivity = await getCategoriesByActivityIds(activityIds);
 
   // Create a map for quick activity lookup
   const activityMap = new Map(
