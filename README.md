@@ -63,7 +63,7 @@ Fill in your environment variables in `.env.local`:
 - `R2_ENDPOINT` - Your Cloudflare R2 endpoint
 - `R2_ACCESS_KEY_ID` - Your R2 access key ID
 - `R2_SECRET_ACCESS_KEY` - Your R2 secret access key
-- `R2_BUCKET` - Your R2 bucket name
+- `R2_BUCKET_NAME` - Your R2 bucket name
 
 4. Run database migrations:
 

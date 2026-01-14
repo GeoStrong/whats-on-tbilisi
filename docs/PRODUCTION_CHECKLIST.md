@@ -20,11 +20,13 @@
 ### Required Before Launch (⏳ TODO)
 
 - [ ] **Enable Supabase RLS Policies**
+
   - Run SQL from `docs/supabase-rls-policies.sql` in Supabase dashboard
   - Test policies in staging: verify users can't access others' data
   - Impact: Database-level security for all tables
 
 - [ ] **Apply Rate Limiting to API Routes**
+
   - `/api/upload-image` — 10 per hour per user (prevent storage spam)
   - `/api/create-activity` — 5 per 24 hours per user (prevent spam)
   - Auth endpoints — 5 failed attempts per 15 mins
@@ -32,6 +34,7 @@
   - TODO: For distributed deployments, migrate to Upstash Redis
 
 - [ ] **Configure CORS Policy**
+
   - If planning mobile app, restrict allowed origins (don't use `*`)
   - Add CORS middleware to API routes
 
@@ -46,11 +49,13 @@
 ### Completed ✅
 
 - [x] Create Privacy Policy page (`app/privacy/page.tsx`)
+
   - Covers GDPR/CCPA rights (access, deletion, export)
   - Lists third-party services (Supabase, R2, Google Maps, Sentry, Vercel)
   - Documents data retention (30 days post-deletion)
 
 - [x] Create Terms of Service page (`app/terms/page.tsx`)
+
   - Covers acceptable use (no spam, harassment, NSFW)
   - Documents moderation policies
   - Limits liability
@@ -62,23 +67,27 @@
 ### Before Launch (⏳ TODO)
 
 - [ ] **Add Cookie Consent Banner**
+
   - Required for GDPR compliance (EU users)
   - Recommend: `react-cookie-consent` package
   - Add to `components/general/mainLayout.tsx`
   - Track: session cookie (essential), analytics (optional)
 
 - [ ] **Implement Data Export Feature**
+
   - Add button in profile settings: "Download My Data"
   - Export as JSON: profile info, activities, comments, follows
   - Compliance: GDPR Article 20 (right to portability)
 
 - [ ] **Implement Data Deletion Feature**
+
   - Add button in profile settings: "Delete My Account"
   - Delete: profiles table record, all user data
   - Keep: user content (activities, comments) but disassociate from profile
   - Process: soft-delete (flag for 30-day grace period), then hard-delete
 
 - [ ] **Update Footer & Navigation**
+
   - Add links to Privacy (`/privacy`), Terms (`/terms`)
   - Add contact email: `privacy@whatson-tbilisi.com`
 
@@ -94,6 +103,7 @@
 ### Infrastructure Setup
 
 - [ ] **Vercel Deployment**
+
   - [ ] Connect GitHub repository to Vercel
   - [ ] Set environment variables in Vercel dashboard:
     - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
@@ -105,6 +115,7 @@
     - `develop` → staging preview
 
 - [ ] **Supabase Production Database**
+
   - [ ] Create new Supabase project (EU region preferred for Georgia users)
   - [ ] Enable automatic backups (Pro tier includes daily backups + PITR)
   - [ ] Note: URL and anon key (add to Vercel env)
@@ -112,6 +123,7 @@
   - [ ] Test connection from staging environment
 
 - [ ] **Cloudflare R2 Bucket**
+
   - [ ] Create R2 bucket (e.g., `whatson-tbilisi-prod`)
   - [ ] Generate API token with Object Read/Write permissions
   - [ ] Add credentials to Vercel env
@@ -126,12 +138,14 @@
 ### CI/CD Pipeline (⏳ TODO)
 
 - [x] Create GitHub Actions workflow (`.github/workflows/deploy.yml`)
+
   - Runs: linting, unit tests, E2E tests, build
   - Deploys to staging on `develop` push
   - Deploys to production on `main` push
   - (Optional) Sends Slack notifications
 
 - [ ] Configure GitHub repo secrets for workflow:
+
   ```
   VERCEL_TOKEN
   VERCEL_ORG_ID
@@ -160,14 +174,17 @@
 ### Error Tracking (Sentry)
 
 - [ ] Create Sentry account (free tier sufficient for early stage)
+
   - Go to https://sentry.io
   - Create new project → Next.js
   - Copy DSN
 
 - [ ] Integrate Sentry into app:
+
   ```bash
   npm install @sentry/nextjs
   ```
+
   - Initialize in `app/layout.tsx`
   - Update `lib/utils/logger.ts` to pipe errors to Sentry
   - Test: trigger error in dev, verify it appears in Sentry dashboard
@@ -180,6 +197,7 @@
 ### Uptime Monitoring
 
 - [ ] Set up uptime monitoring service (Pingdom, Healthchecks.io, or UptimeRobot)
+
   - Monitor `/api/health` endpoint every 5 minutes
   - Alert on 2+ consecutive failures (10+ minute downtime)
   - Notify: Email + Slack
@@ -192,6 +210,7 @@
 ### Analytics (Vercel + Google Search Console)
 
 - [ ] Enable Vercel Analytics:
+
   - Auto-enabled on deployment
   - Monitor: LCP, FID, CLS, FCP
   - Track Core Web Vitals daily
@@ -208,11 +227,13 @@
 ### Supabase Database
 
 - [ ] Enable automated backups (Pro tier):
+
   - Supabase dashboard → Settings → Backups
   - Check daily backups are enabled
   - Enable PITR (Point-In-Time Recovery) if available
 
 - [ ] Document backup restoration:
+
   - Save recovery procedure to wiki
   - Include: how to access backups, restore process, estimated recovery time
   - Shared with team
@@ -225,11 +246,13 @@
 ### Cloudflare R2
 
 - [ ] Enable R2 bucket versioning (optional):
+
   - Allows tracking image changes and recovery
   - Slight cost increase (~$0.02/GB stored versions)
   - Recommended: enable during launch
 
 - [ ] Set up lifecycle rules (optional):
+
   - Auto-delete orphaned images 90 days after activity deletion
   - Reduces storage costs
 
@@ -245,9 +268,11 @@
 ### Unit & Integration Tests
 
 - [ ] Run full test suite:
+
   ```bash
   npm test -- --coverage
   ```
+
   - Verify all tests pass
   - Check coverage > 50% (baseline requirement)
 
@@ -265,9 +290,11 @@
 ### E2E Tests
 
 - [ ] Run Playwright E2E tests:
+
   ```bash
   npm run test:e2e
   ```
+
   - Verify all E2E tests pass
   - Add tests for critical flows if missing
 
@@ -279,6 +306,7 @@
 ### Performance Testing
 
 - [ ] Run Lighthouse audit:
+
   - Desktop: target LCP < 2.5s, FID < 100ms, CLS < 0.1
   - Mobile: target LCP < 4s, FID < 100ms, CLS < 0.1
   - Fix major issues before launch
@@ -291,6 +319,7 @@
 ### Security Testing
 
 - [ ] Verify RLS policies:
+
   - [ ] Unauthenticated user cannot read private data ✓
   - [ ] User cannot update other users' profiles ✓
   - [ ] User cannot delete other users' activities ✓
@@ -312,6 +341,7 @@
 - [x] Create `docs/supabase-rls-policies.sql` — RLS setup
 
 - [ ] Create `docs/RUNBOOK.md` — emergency procedures:
+
   - Database down
   - Image storage down
   - Auth broken
@@ -319,6 +349,7 @@
   - Storage quota exceeded
 
 - [ ] Create `docs/POSTMORTEM_TEMPLATE.md` — for incident review:
+
   - What went wrong?
   - Root cause?
   - How to prevent?
@@ -347,20 +378,24 @@
 ### 2 Days Before Launch
 
 - [ ] **Final Security Audit**
+
   ```bash
   npm run lint
   npm test
   npm run test:e2e
   ```
+
   - Ensure all tests pass
   - Zero console errors
 
 - [ ] **Staging Smoke Test**
+
   - Create account → create activity → join → comment
   - Verify all features work end-to-end
   - Test on mobile
 
 - [ ] **Monitor Setup**
+
   - Sentry: project created and receiving test errors
   - Uptime monitoring: `/api/health` endpoint live
   - Slack notifications: test alert delivery
@@ -373,18 +408,21 @@
 ### Launch Day (Tuesday 10 AM)
 
 - [ ] **1 Hour Before Launch**
+
   - Final health check: `curl https://app.vercel.app/api/health`
   - Verify all env vars set in Vercel
   - Verify Sentry DSN correct
   - Team on standby in Slack
 
 - [ ] **Deploy to Production**
+
   - Merge PR to `main` branch
   - GitHub Actions runs CI/CD pipeline
   - Monitor deployment progress in Vercel dashboard
   - Should complete in ~5 minutes
 
 - [ ] **Immediate Monitoring (First 30 mins)**
+
   - Watch Sentry errors (should be 0)
   - Check Vercel logs for warnings
   - Test `/api/health` uptime
@@ -399,6 +437,7 @@
 ### First Week
 
 - [ ] **Daily Standups**
+
   - Review Sentry errors
   - Check Vercel logs
   - Monitor database performance
@@ -424,6 +463,7 @@
 ### Week 2-4: Stabilization
 
 - [ ] Monitor key metrics:
+
   - Daily active users (DAU)
   - Error rate (target: < 1%)
   - API latency p95 (target: < 500ms)
@@ -487,6 +527,7 @@
 If critical issues found post-launch:
 
 1. **Immediate Rollback** (< 5 mins):
+
    ```bash
    # Revert to previous commit
    git revert HEAD
@@ -495,6 +536,7 @@ If critical issues found post-launch:
    ```
 
 2. **Database Rollback** (< 15 mins):
+
    - Restore Supabase backup from Settings → Backups
    - Test connection
    - Announce maintenance window to users
@@ -507,13 +549,13 @@ If critical issues found post-launch:
 
 ## Contacts & Escalation
 
-| Issue | Contact | Response Time |
-|-------|---------|---|
-| Supabase down | Supabase support | 24 hours |
-| Vercel down | Vercel support | 24 hours |
-| R2/Cloudflare down | Cloudflare support | 24 hours |
-| Critical bug | On-call engineer | 15 minutes |
-| Data breach | CTO + Legal | Immediate |
+| Issue              | Contact            | Response Time |
+| ------------------ | ------------------ | ------------- |
+| Supabase down      | Supabase support   | 24 hours      |
+| Vercel down        | Vercel support     | 24 hours      |
+| R2/Cloudflare down | Cloudflare support | 24 hours      |
+| Critical bug       | On-call engineer   | 15 minutes    |
+| Data breach        | CTO + Legal        | Immediate     |
 
 ---
 

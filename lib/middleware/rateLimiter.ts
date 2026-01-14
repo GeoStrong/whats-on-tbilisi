@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 interface RateLimitStore {
   [key: string]: { count: number; resetTime: number };
@@ -38,8 +38,8 @@ export function createRateLimiter(config: RateLimitConfig) {
     windowMs,
     keyGenerator = (req) => {
       // Get IP from headers (for Vercel and other proxies)
-      const forwarded = req.headers.get('x-forwarded-for');
-      const ip = forwarded ? forwarded.split(',')[0].trim() : 'unknown';
+      const forwarded = req.headers.get("x-forwarded-for");
+      const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
       return ip;
     },
     onLimitExceeded,
@@ -66,10 +66,17 @@ export function createRateLimiter(config: RateLimitConfig) {
       onLimitExceeded?.(key);
       return NextResponse.json(
         {
-          error: 'Rate limit exceeded. Please try again later.',
+          error: "Rate limit exceeded. Please try again later.",
           retryAfter: Math.ceil((store[key].resetTime - now) / 1000),
         },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((store[key].resetTime - now) / 1000)) } }
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(
+              Math.ceil((store[key].resetTime - now) / 1000),
+            ),
+          },
+        },
       );
     }
 
@@ -82,7 +89,7 @@ export function createRateLimiter(config: RateLimitConfig) {
  */
 export function withRateLimit(
   limiter: ReturnType<typeof createRateLimiter>,
-  handler: (req: NextRequest) => Promise<NextResponse>
+  handler: (req: NextRequest) => Promise<NextResponse>,
 ) {
   return async (request: NextRequest): Promise<NextResponse> => {
     const limitResponse = await limiter(request);
@@ -113,15 +120,15 @@ export const RATE_LIMITS = {
 
 /**
  * TODO: For production, migrate to Upstash Redis:
- * 
+ *
  * import { Ratelimit } from "@upstash/ratelimit";
  * import { Redis } from "@upstash/redis";
- * 
+ *
  * export const upstashLimiter = new Ratelimit({
  *   redis: Redis.fromEnv(),
  *   limiter: Ratelimit.slidingWindow(10, "1 h"),
  * });
- * 
+ *
  * Then use:
  * const { success } = await upstashLimiter.limit(key);
  * if (!success) return NextResponse.json({ error: "Rate limited" }, { status: 429 });

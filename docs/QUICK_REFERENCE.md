@@ -16,12 +16,12 @@
 
 ## 🚀 Launch Timeline
 
-| Phase | Duration | Status |
-|-------|----------|--------|
-| **Staging Setup** | 1 week | 📍 Start here |
-| **Testing & Optimization** | 2 weeks | ⏳ Next |
-| **Pre-Launch** | 1 week | ⏳ Later |
-| **Production Launch** | 1 day | 📅 Week 4 |
+| Phase                      | Duration | Status        |
+| -------------------------- | -------- | ------------- |
+| **Staging Setup**          | 1 week   | 📍 Start here |
+| **Testing & Optimization** | 2 weeks  | ⏳ Next       |
+| **Pre-Launch**             | 1 week   | ⏳ Later      |
+| **Production Launch**      | 1 day    | 📅 Week 4     |
 
 ---
 
@@ -32,6 +32,7 @@
 **Location:** Supabase Dashboard → SQL Editor
 
 **Action:**
+
 1. Open `docs/supabase-rls-policies.sql`
 2. Copy all SQL
 3. Paste into Supabase SQL Editor
@@ -74,6 +75,7 @@ R2_ENDPOINT=xxx
 ### 3. Test Production Workflow
 
 **Action:**
+
 1. Push to `develop` branch → should deploy to staging in ~5 mins
 2. Push to `main` branch → should deploy to production in ~5 mins
 3. Check Vercel dashboard for logs
@@ -87,28 +89,33 @@ R2_ENDPOINT=xxx
 ## 📋 Pre-Launch Checklist (One Page)
 
 - [ ] **Security**
+
   - [ ] RLS policies enabled in Supabase
   - [ ] Rate limiter applied to upload + create endpoints
   - [ ] No console errors in staging
   - [ ] Sentry receiving test errors
 
 - [ ] **Testing**
+
   - [ ] Sign up → create activity → join → comment (full flow)
   - [ ] Image upload works
   - [ ] Rate limiting works (trigger 429)
   - [ ] E2E tests pass: `npm run test:e2e`
 
 - [ ] **Performance**
+
   - [ ] Lighthouse score > 80 in all categories
   - [ ] API response time < 200ms
   - [ ] Database queries < 100ms
 
 - [ ] **Legal**
+
   - [ ] Privacy Policy link works (`/privacy`)
   - [ ] Terms of Service link works (`/terms`)
   - [ ] Links visible in footer
 
 - [ ] **Monitoring**
+
   - [ ] Sentry dashboard configured
   - [ ] Uptime monitoring active
   - [ ] Slack notifications tested
@@ -124,32 +131,36 @@ R2_ENDPOINT=xxx
 ## 📂 Key Files Reference
 
 ### Documentation
-| File | Purpose |
-|------|---------|
-| `docs/LAUNCH.md` | **READ THIS FIRST** — Full launch guide |
-| `docs/PRODUCTION_CHECKLIST.md` | Detailed pre-launch verification |
-| `docs/IMPLEMENTATION_SUMMARY.md` | What was done and why |
+
+| File                             | Purpose                                      |
+| -------------------------------- | -------------------------------------------- |
+| `docs/LAUNCH.md`                 | **READ THIS FIRST** — Full launch guide      |
+| `docs/PRODUCTION_CHECKLIST.md`   | Detailed pre-launch verification             |
+| `docs/IMPLEMENTATION_SUMMARY.md` | What was done and why                        |
 | `docs/supabase-rls-policies.sql` | Database security — copy/paste to SQL Editor |
 
 ### Configuration
-| File | Purpose |
-|------|---------|
-| `.env.example` | Environment variables reference |
-| `.github/workflows/deploy.yml` | CI/CD pipeline |
-| `next.config.ts` | Security headers configured |
+
+| File                           | Purpose                         |
+| ------------------------------ | ------------------------------- |
+| `.env.example`                 | Environment variables reference |
+| `.github/workflows/deploy.yml` | CI/CD pipeline                  |
+| `next.config.ts`               | Security headers configured     |
 
 ### Compliance
-| File | Purpose |
-|------|---------|
+
+| File                   | Purpose                                  |
+| ---------------------- | ---------------------------------------- |
 | `app/privacy/page.tsx` | Privacy Policy page (live at `/privacy`) |
-| `app/terms/page.tsx` | Terms of Service page (live at `/terms`) |
+| `app/terms/page.tsx`   | Terms of Service page (live at `/terms`) |
 
 ### Code Ready for Use
-| File | Purpose |
-|------|---------|
-| `lib/middleware/rateLimiter.ts` | Rate limiting — ready to use in API routes |
+
+| File                                  | Purpose                                     |
+| ------------------------------------- | ------------------------------------------- |
+| `lib/middleware/rateLimiter.ts`       | Rate limiting — ready to use in API routes  |
 | `lib/middleware/contentModeration.ts` | Moderation framework — ready to build UI on |
-| `scripts/setup-sentry.sh` | Sentry setup script |
+| `scripts/setup-sentry.sh`             | Sentry setup script                         |
 
 ---
 
@@ -160,8 +171,12 @@ R2_ENDPOINT=xxx
 **In any API route:**
 
 ```typescript
-import { createRateLimiter, RATE_LIMITS, withRateLimit } from '@/lib/middleware/rateLimiter';
-import { withAuth } from '@/lib/middleware/auth';
+import {
+  createRateLimiter,
+  RATE_LIMITS,
+  withRateLimit,
+} from "@/lib/middleware/rateLimiter";
+import { withAuth } from "@/lib/middleware/auth";
 
 const limiter = createRateLimiter(RATE_LIMITS.IMAGE_UPLOAD);
 
@@ -209,13 +224,13 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 
 ## 🚨 Emergency Contacts
 
-| Service | Issue | Contact |
-|---------|-------|---------|
-| **Database** | Supabase down | https://status.supabase.com |
-| **Hosting** | Vercel down | https://www.vercel.com/status |
-| **Storage** | R2 down | https://www.cloudflarestatus.com |
-| **Maps** | Google Maps broken | https://status.cloud.google.com |
-| **Errors** | Too many errors | Check Sentry dashboard |
+| Service      | Issue              | Contact                          |
+| ------------ | ------------------ | -------------------------------- |
+| **Database** | Supabase down      | https://status.supabase.com      |
+| **Hosting**  | Vercel down        | https://www.vercel.com/status    |
+| **Storage**  | R2 down            | https://www.cloudflarestatus.com |
+| **Maps**     | Google Maps broken | https://status.cloud.google.com  |
+| **Errors**   | Too many errors    | Check Sentry dashboard           |
 
 ---
 
@@ -223,38 +238,43 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 
 🎯 **Target:** < 1% error rate, > 99.5% uptime, 50+ sign-ups
 
-| Metric | Target | Tool |
-|--------|--------|------|
-| Error rate | < 1% | Sentry |
-| Uptime | > 99.5% | Healthchecks.io |
+| Metric          | Target  | Tool             |
+| --------------- | ------- | ---------------- |
+| Error rate      | < 1%    | Sentry           |
+| Uptime          | > 99.5% | Healthchecks.io  |
 | API latency p95 | < 500ms | Vercel Analytics |
-| Response time | < 200ms | Vercel Analytics |
+| Response time   | < 200ms | Vercel Analytics |
 
 ---
 
 ## 🎓 Team Learning Path
 
 **Product Manager:**
+
 - Read `docs/LAUNCH.md` (go-live plan)
 - Understand launch day timeline
 - Prepare announcement/PR
 
 **DevOps/Deployment:**
+
 - Read `docs/PRODUCTION_CHECKLIST.md` (detailed verification)
 - Understand GitHub Actions pipeline
 - Configure all secrets and monitoring
 
 **Frontend Engineers:**
+
 - Review `app/privacy/page.tsx` and `app/terms/page.tsx`
 - Understand rate limiter in `lib/middleware/rateLimiter.ts`
 - Know how to apply rate limiting to routes
 
 **Backend/Database:**
+
 - Read `docs/supabase-rls-policies.sql`
 - Execute RLS policies in Supabase
 - Understand content moderation in `lib/middleware/contentModeration.ts`
 
 **QA:**
+
 - Read `docs/PRODUCTION_CHECKLIST.md` (test cases)
 - Run `npm run test:e2e` to verify
 - Execute full user flow on staging
@@ -267,7 +287,7 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 ❌ Commit `.env.local` to git (secrets leak)  
 ❌ Use `main` branch for feature development (breaks prod)  
 ❌ Ignore Sentry alerts (bugs spread)  
-❌ Skip backup testing (data loss risk)  
+❌ Skip backup testing (data loss risk)
 
 ---
 
@@ -287,4 +307,4 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 
 ---
 
-*Generated: January 14, 2026*
+_Generated: January 14, 2026_

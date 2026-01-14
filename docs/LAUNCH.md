@@ -38,9 +38,11 @@
 ### ✅ Monitoring & Logging
 
 - [ ] **Integrate Sentry** (recommended for error tracking):
+
   ```bash
   npm install @sentry/nextjs
   ```
+
   - Create free account at https://sentry.io/
   - Add initialization in [app/layout.tsx](../../app/layout.tsx)
   - Update [lib/utils/logger.ts](../../lib/utils/logger.ts) to pipe errors to Sentry
@@ -71,6 +73,7 @@
 ### ✅ Database & Backups
 
 - [ ] **Enable Supabase backups** — Supabase Pro tier includes daily backups
+
   - Verify in Supabase dashboard: Settings → Backups
   - Enable Point-In-Time Recovery (PITR) if available
 
@@ -81,6 +84,7 @@
 ### ✅ Performance & Web Vitals
 
 - [ ] **Run performance audit** — Use Lighthouse in Chrome DevTools:
+
   - Aim for: LCP < 2.5s, FID < 100ms, CLS < 0.1
   - Optimize images: ensure WebP conversion is working
   - Test with 3G throttling enabled
@@ -96,16 +100,19 @@
 ### 📋 Pre-Launch (2 days before)
 
 1. **Final Security Audit**
+
    ```bash
    # Run security checks
    npm run lint
    npm test
    npm run test:e2e
    ```
+
    - Ensure all tests pass
    - Check for console warnings/errors
 
 2. **Staging Smoke Test**
+
    - Sign up with test account
    - Create activity with image upload
    - Join activity
@@ -113,6 +120,7 @@
    - Test all major user flows
 
 3. **Monitor Setup**
+
    - Sentry project configured and receiving test errors
    - Uptime monitoring active
    - Slack notifications tested
@@ -139,11 +147,13 @@ curl https://yourapp.vercel.app/api/health
 #### At Launch
 
 1. **Deploy to production** (via GitHub or Vercel):
+
    - Merge PR to `main` branch
    - GitHub Actions runs full CI/CD pipeline
    - Deployment completes in ~5 minutes
 
 2. **Monitor immediately** (first 30 minutes):
+
    - Watch Sentry for errors (should be 0)
    - Check Vercel logs for warnings
    - Monitor `/api/health` uptime (should show 100%)
@@ -185,11 +195,13 @@ curl https://yourapp.vercel.app/api/health
 ### 📅 Weekly Maintenance (Ongoing)
 
 1. **Monday: Review Metrics**
+
    - DAU, feature adoption, retention
    - Error rates and performance
    - User feedback and support tickets
 
 2. **Wednesday: Code Review & Merge**
+
    - Process PRs from the team
    - Deploy fixes/features to staging first
 
@@ -366,6 +378,7 @@ Sentry.init({
 ```
 
 **Create alerts in Sentry dashboard:**
+
 - Alert on: 5 errors in 1 hour
 - Notify: Slack channel #whatson-errors
 
@@ -447,18 +460,21 @@ Sentry.init({
 ## Success Criteria for Launch
 
 ✅ **Technical**
+
 - [ ] Zero critical errors (Sentry)
 - [ ] API latency p95 < 500ms
 - [ ] Database responds in < 100ms
 - [ ] Uptime > 99.5%
 
 ✅ **User Experience**
+
 - [ ] Users can sign up and create activities
 - [ ] Images upload and display correctly
 - [ ] Map loads without errors
 - [ ] No 404 errors on main pages
 
 ✅ **Compliance**
+
 - [ ] Privacy Policy accessible
 - [ ] Terms of Service accepted on signup
 - [ ] GDPR right-to-delete works
