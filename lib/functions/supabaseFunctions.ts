@@ -1215,13 +1215,14 @@ export const getFollowedUsersParticipation = async (userId: string) => {
   const activityIds = [...new Set(data.map((p) => p.activity_id))];
   const userIds = [...new Set(data.map((p) => p.user_id))];
 
-  // Batch fetch all users
-  const userPromises = userIds.map((uid) => getUserById(uid));
-  const usersResults = await Promise.all(userPromises);
+  // Batch fetch all users in one query
+  const { data: users } = await supabase
+    .from("users")
+    .select("*")
+    .in("id", userIds);
+
   const userMap = new Map(
-    usersResults
-      .filter((u) => u !== null)
-      .map((u) => [(u as UserProfile).id, u as UserProfile]),
+    (users || []).map((u) => [u.id, u as UserProfile]),
   );
 
   // Batch fetch all activities
@@ -1230,18 +1231,17 @@ export const getFollowedUsersParticipation = async (userId: string) => {
     .select("*")
     .in("id", activityIds);
 
-  // Batch fetch participant counts for all activities
-  const participantCountsPromises = activityIds.map(async (activityId) => {
-    const { count } = await supabase
-      .from("activity_participants")
-      .select("*", { count: "exact", head: true })
-      .eq("activity_id", activityId);
-    return { activityId, count: count || 0 };
+  // Batch fetch all participant records to count them
+  const { data: allParticipants } = await supabase
+    .from("activity_participants")
+    .select("activity_id")
+    .in("activity_id", activityIds);
+
+  // Count participants per activity
+  const participantCounts = new Map<number | string, number>();
+  (allParticipants || []).forEach((p) => {
+    participantCounts.set(p.activity_id, (participantCounts.get(p.activity_id) || 0) + 1);
   });
-  const participantCountsResults = await Promise.all(participantCountsPromises);
-  const participantCounts = new Map(
-    participantCountsResults.map((r) => [r.activityId, r.count]),
-  );
 
   // Batch fetch categories for all activities
   const { data: activityCategoriesData } = await supabase
@@ -1347,18 +1347,17 @@ export const getUserParticipationHistory = async (userId: string) => {
     .select("*")
     .in("id", activityIds);
 
-  // Batch fetch participant counts for all activities
-  const participantCountsPromises = activityIds.map(async (activityId) => {
-    const { count } = await supabase
-      .from("activity_participants")
-      .select("*", { count: "exact", head: true })
-      .eq("activity_id", activityId);
-    return { activityId, count: count || 0 };
+  // Batch fetch all participant records to count them
+  const { data: allParticipants } = await supabase
+    .from("activity_participants")
+    .select("activity_id")
+    .in("activity_id", activityIds);
+
+  // Count participants per activity
+  const participantCounts = new Map<number | string, number>();
+  (allParticipants || []).forEach((p) => {
+    participantCounts.set(p.activity_id, (participantCounts.get(p.activity_id) || 0) + 1);
   });
-  const participantCountsResults = await Promise.all(participantCountsPromises);
-  const participantCounts = new Map(
-    participantCountsResults.map((r) => [r.activityId, r.count]),
-  );
 
   // Batch fetch categories for all activities
   const { data: activityCategoriesData } = await supabase
