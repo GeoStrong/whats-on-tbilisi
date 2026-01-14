@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
-  // Set cache header for the next/image output for optimized images
+  // Set cache header for the next/image output for optimized images and add security headers
   async headers() {
     return [
       {
@@ -31,6 +31,36 @@ const nextConfig: NextConfig = {
             key: "Cache-Control",
             value:
               "public, max-age=31536000, immutable, stale-while-revalidate=31536000",
+          },
+        ],
+      },
+      {
+        // Security headers for all routes
+        source: "/:path(.*)",
+        headers: [
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=(self), payment=()",
           },
         ],
       },

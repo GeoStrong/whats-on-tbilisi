@@ -100,9 +100,11 @@ const Feed: React.FC = () => {
                     <p className="text-center">
                       See where you friends are going
                     </p>
-                    <ParticipationHistory
-                      participations={followedParticipations}
-                    />
+                    <div className="p-4">
+                      <ParticipationHistory
+                        participations={followedParticipations}
+                      />
+                    </div>
                   </TabsContent>
                 </Tabs>
               </>

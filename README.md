@@ -133,6 +133,20 @@ The application uses Supabase (PostgreSQL). Key tables:
 - `activity_comments` - Comments on activities
 - `saved_activities` - Bookmarked activities
 
+## Documentation
+
+### Production & Deployment
+
+- [Production Launch Guide](docs/LAUNCH.md) - Complete launch strategy and checklist
+- [Production Readiness Checklist](docs/PRODUCTION_CHECKLIST.md) - Pre-launch verification
+- [Supabase RLS Policies](docs/supabase-rls-policies.sql) - Database security policies
+- [API Reference](docs/API.md) - API endpoint documentation
+
+### Legal & Compliance
+
+- [Privacy Policy](/privacy) - Data collection and privacy rights
+- [Terms of Service](/terms) - Acceptable use and liability
+
 ## API Documentation
 
 See [docs/API.md](docs/API.md) for detailed API documentation.

@@ -1204,7 +1204,8 @@ export const getFollowedUsersParticipation = async (userId: string) => {
         const { data } = await supabase
           .from("activity_participants")
           .select(`*`)
-          .eq("user_id", fid);
+          .eq("user_id", fid)
+          .order("created_at", { ascending: false });
         return data as ActivityParticipantsEntity[];
       }),
     )
@@ -1217,57 +1218,108 @@ export const getFollowedUsersParticipation = async (userId: string) => {
         const activity = (await getActivityById(
           participation.activity_id,
         )) as ActivityEntity[];
+
+        // Get participant count for this activity
+        const { count } = await supabase
+          .from("activity_participants")
+          .select("*", { count: "exact", head: true })
+          .eq("activity_id", participation.activity_id);
+
+        // Get activity categories
+        const categories = await getCategoriesByActivityId(
+          participation.activity_id,
+        );
+
         return {
           userId: user.id,
           userName: user.name,
           userAvatar: user.avatar_path,
           activityId: activity[0]?.id,
           activityTitle: activity[0]?.title,
+          activityImage:
+            typeof activity[0]?.image === "string" ? activity[0]?.image : null,
+          activityLocation: activity[0]?.location || "",
+          activityCategories: categories
+            ? categories.map((c) => c?.name || "").filter(Boolean)
+            : [],
           participationDate: participation.created_at,
           activityStatus: activity[0]?.status,
           activityDate: activity[0]?.date,
+          activityTime: activity[0]?.time,
+          participantCount: count || 0,
         };
       }),
     )
   ).flat() as UserParticipationHistory[];
 
-  return fullInfo;
+  // Sort by participation date (most recent first)
+  return fullInfo.sort(
+    (a, b) =>
+      new Date(b.participationDate).getTime() -
+      new Date(a.participationDate).getTime(),
+  );
 };
 
 export const getUserParticipationHistory = async (userId: string) => {
   const { data, error } = (await supabase
     .from("activity_participants")
     .select(`*`)
-    .eq("user_id", userId)) as {
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })) as {
     data: ActivityParticipantsEntity[];
     error: PostgrestError | null;
   };
 
+  if (error) {
+    console.error("Error fetching user participation history:", error);
+    return [];
+  }
+
+  if (!data || data.length === 0) {
+    return [];
+  }
+
+  const user = (await getUserById(userId)) as UserProfile;
+
   const fullInfo = (
     await Promise.all(
       data.map(async (participation) => {
-        const user = (await getUserById(userId)) as UserProfile;
         const activity = (await getActivityById(
           participation.activity_id,
         )) as ActivityEntity[];
+
+        // Get participant count for this activity
+        const { count } = await supabase
+          .from("activity_participants")
+          .select("*", { count: "exact", head: true })
+          .eq("activity_id", participation.activity_id);
+
+        // Get activity categories
+        const categories = await getCategoriesByActivityId(
+          participation.activity_id,
+        );
+
         return {
           userId: user.id,
           userName: user.name,
           userAvatar: user.avatar_path,
           activityId: activity[0]?.id,
           activityTitle: activity[0]?.title,
+          activityImage:
+            typeof activity[0]?.image === "string" ? activity[0]?.image : null,
+          activityLocation: activity[0]?.location || "",
+          activityCategories: categories
+            ? categories.map((c) => c?.name || "").filter(Boolean)
+            : [],
           participationDate: participation?.created_at,
           activityStatus: activity[0]?.status,
           activityDate: activity[0]?.date,
+          activityTime: activity[0]?.time,
+          participantCount: count || 0,
         };
       }),
     )
   ).flat() as UserParticipationHistory[];
-
-  if (error) {
-    console.error("Error fetching user participation history:", error);
-    return [];
-  }
 
   return fullInfo;
 };
