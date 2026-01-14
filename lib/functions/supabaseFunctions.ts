@@ -1242,22 +1242,34 @@ const getCategoriesByActivityIds = async (
     .in("activity_id", activityIds);
 
   const categoriesByActivity = new Map<number | string, Category[]>();
-  (activityCategoriesData || []).forEach((item: any) => {
-    const category = item.categories;
-    if (!category) return;
+  ((activityCategoriesData as unknown as ActivityCategoryJoinResult[]) || []).forEach(
+    (item) => {
+      const category = item.categories;
+      if (!category) return;
 
-    const activityId = item.activity_id;
-    if (!categoriesByActivity.has(activityId)) {
-      categoriesByActivity.set(activityId, []);
-    }
-    categoriesByActivity.get(activityId)!.push({
-      id: category.id,
-      name: category.name,
-      icon: category.icon,
-      color: category.color,
-      category: category.category,
-    } as Category);
-  });
+      const activityId = item.activity_id;
+      const existingCategories = categoriesByActivity.get(activityId);
+      if (existingCategories) {
+        existingCategories.push({
+          id: category.id,
+          name: category.name,
+          icon: category.icon,
+          color: category.color,
+          category: category.category,
+        });
+      } else {
+        categoriesByActivity.set(activityId, [
+          {
+            id: category.id,
+            name: category.name,
+            icon: category.icon,
+            color: category.color,
+            category: category.category,
+          },
+        ]);
+      }
+    },
+  );
 
   return categoriesByActivity;
 };
