@@ -19,11 +19,11 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <>
-      {/* <div className="flex justify-center">
+      <div className="hidden justify-center">
         <div className="mt-5 rounded-full border bg-gray-600 p-4 text-white">
           {getPWADisplayMode()}
         </div>
-      </div> */}
+      </div>
       <Toaster position="top-right" richColors />
       <VerificationDialogWrapper />
       <SignupSuccessDialog />

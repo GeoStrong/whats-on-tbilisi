@@ -2,8 +2,10 @@ import Link from "next/link";
 import React from "react";
 import { BsFacebook, BsGithub, BsInstagram, BsLinkedin } from "react-icons/bs";
 import FooterNavMobile from "./footerNavMobile";
+import { getPWADisplayMode } from "@/lib/functions/helperFunctions";
 
 const Footer: React.FC = () => {
+  const isTWA = getPWADisplayMode() === "standalone";
   return (
     <>
       <footer className="border-t bg-white py-3 dark:border-gray-600 dark:bg-gray-900 md:px-6">
@@ -61,7 +63,9 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-0 h-20 w-full bg-white dark:bg-gray-900 md:hidden">
+        <div
+          className={`fixed bottom-0 ${isTWA ? "h-20" : "h-12"} w-full bg-white dark:bg-gray-900 md:hidden`}
+        >
           <FooterNavMobile />
         </div>
       </footer>

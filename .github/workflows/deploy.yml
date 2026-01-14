@@ -10,6 +10,13 @@ on:
       - main
       - develop
 
+# Allow the Vercel action to create deployments, set commit statuses, and write PR comments
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: write
+  statuses: write
+
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
