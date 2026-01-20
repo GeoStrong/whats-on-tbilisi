@@ -47,6 +47,7 @@ const LandingHeader: React.FC = () => {
               alt="Avatar"
               className="h-full w-full object-cover"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzKOB8ub4HWmnT1EeuxSgrlNeYl6n5k7B08zBrqLuj1YJnsWFo1RFE3TnhJWEJFvmRVJR6bJO2KYXCn7hwowQ4osv59gov_f68iDLls5r3Q9uYrx_Fj360pJdSgVrlRuyxs92ry3PAhhNksm5D-tKZHQlodLdEIEkAtFL1J173IqE4iFJTPlJ8A1BC4lj2K9JC1EynWdARCYHdSd-HGKH2b8BKtgOm1QsjOtQZiFajVXODrlvFU0KV_ya7fp-ft6lWIS5M2bQ_8uk"
+              alt="User avatar"
             />
           </div>
         </div>
