@@ -1,0 +1,6 @@
+
+> whatson-tbilisi@0.1.0 dev
+> next dev --turbopack --no-turbopack
+
+error: unknown option '--no-turbopack'
+(Did you mean --turbopack?)

@@ -1,10 +1,10 @@
 import React from "react";
-import Feed from "@/components/feed/Feed";
+import LandingPage from "@/components/landing/LandingPage";
 
 const App: React.FC = async () => {
   return (
     <>
-      <Feed />
+      <LandingPage />
     </>
   );
 };

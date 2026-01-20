@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import Footer from "@/components/footer/footer";
 import StoreProvider from "@/lib/store/storeProvider";
-import MainLayout from "@/components/general/mainLayout";
 import ProgressiveBarProvider from "@/components/general/progressiveBarProvider";
 import { UserInitializer } from "@/components/auth/userInitializer";
+import LayoutManager from "@/components/general/LayoutManager";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { QueryProvider } from "@/lib/react-query/QueryProvider";
 import { ImageCacheProvider } from "@/lib/context/ImageCacheContext";
@@ -58,10 +57,7 @@ export default function RootLayout({
                     defaultTheme="system"
                   >
                     <UserInitializer />
-                    <main className="flex min-h-[90dvh] flex-col pb-10">
-                      <MainLayout>{children}</MainLayout>
-                    </main>
-                    <Footer />
+                    <LayoutManager>{children}</LayoutManager>
                   </ThemeProvider>
                 </ImageCacheProvider>
               </QueryProvider>
