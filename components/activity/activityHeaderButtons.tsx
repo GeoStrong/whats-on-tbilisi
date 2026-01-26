@@ -71,7 +71,7 @@ const ActivityHeaderButtons: React.FC<{
                 Delete
               </DialogTrigger>
               <DialogContent>
-                <DialogHeader className="w-2/3 text-center">
+                <DialogHeader className="text-center md:w-2/3">
                   <DialogTitle>
                     Are you absolutely sure you want to delete?
                   </DialogTitle>

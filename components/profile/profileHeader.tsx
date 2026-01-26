@@ -17,7 +17,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { redirect } from "next/navigation";
 import {
   deleteImageFromStorage,
   getImageUrl,
@@ -27,19 +26,9 @@ import UsersRealtimeFollows from "../users/usersRealtimeFollows";
 
 interface ProfileHeaderProps {
   user: UserProfile | null;
-  edit: boolean;
-  onEditHandle: React.Dispatch<React.SetStateAction<boolean>>;
-  onSaveHandle: () => void;
-  onTabChange: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({
-  user,
-  edit,
-  onEditHandle,
-  onSaveHandle,
-  onTabChange,
-}) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -77,10 +66,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     }
   };
 
-  const handleCancel = () => {
-    onEditHandle(false);
-  };
-
   useEffect(() => {
     (async () => {
       const image = await getImageUrl(user?.avatar_path || "");
@@ -90,9 +75,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
   return (
     <>
-      <Card className="dark:bg-gray-800">
+      <Card className="w-full dark:bg-gray-800 md:w-1/2 lg:w-1/3">
         <CardContent className="pt-6">
-          <div className="flex flex-col gap-6 md:flex-row">
+          <div className="flex flex-col gap-6">
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <input
@@ -150,20 +135,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               <div className="space-y-2">
                 <h2 className="text-lg">{user?.name}</h2>
                 {user && (
-                  <div className="w-full justify-center md:flex">
-                    <div className="md:w-1/2">
-                      <UsersRealtimeFollows
-                        userId={user.id}
-                        userName={user.name}
-                      />
-                    </div>
+                  <div className="w-full">
+                    <UsersRealtimeFollows
+                      userId={user.id}
+                      userName={user.name}
+                    />
                   </div>
                 )}
 
                 {user && <p className="text-muted-foreground">{user.email}</p>}
               </div>
 
-              {!edit && user?.additionalInfo && (
+              {user?.additionalInfo && (
                 <p className="text-muted-foreground">{user?.additionalInfo}</p>
               )}
 
@@ -179,27 +162,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                       })}
                   </span>
                 </div>
-              </div>
-
-              <div className="flex gap-2">
-                {edit ? (
-                  <>
-                    <Button variant="outline" onClick={handleCancel}>
-                      Cancel
-                    </Button>
-                    <Button onClick={onSaveHandle}>Save Changes</Button>
-                  </>
-                ) : (
-                  <Button
-                    onClick={() => {
-                      onEditHandle(true);
-                      onTabChange("account");
-                      redirect("#account");
-                    }}
-                  >
-                    Edit Profile
-                  </Button>
-                )}
               </div>
             </div>
           </div>

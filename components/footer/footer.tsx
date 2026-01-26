@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div
-          className={`fixed bottom-0 ${isTWA ? "h-20" : "h-12"} w-full bg-white dark:bg-gray-900 md:hidden`}
+          className={`fixed bottom-0 ${isTWA ? "h-20" : "h-18"} w-full bg-white dark:bg-gray-900 md:hidden`}
         >
           <FooterNavMobile />
         </div>

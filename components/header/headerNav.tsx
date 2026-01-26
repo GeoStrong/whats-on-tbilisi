@@ -117,27 +117,26 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 />
               )}
             </li>
-            <li
-              className={`relative flex flex-col items-center gap-1 hover:text-primary ${pathname === "/create-activity" && "border-primary text-primary"}`}
-            >
-              <Link
-                href="/create-activity"
-                className="mb-1 flex h-12 items-center gap-1 rounded-full bg-primary px-3 py-1 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                aria-label="Create Activity"
-                aria-current={
-                  pathname === "/create-activity" ? "page" : undefined
-                }
+            {isAuthenticated && (
+              <li
+                className={`relative flex flex-col items-center gap-1 hover:text-primary ${pathname === "/create-activity" && "border-primary text-primary"}`}
               >
-                <AiOutlinePlusCircle className="text-base" aria-hidden="true" />
-                Create Activity
-              </Link>
-              {pathname === "/create-activity" && (
-                <motion.div
-                  layoutId="underline"
-                  className="absolute bottom-0 h-[2px] w-full bg-primary"
-                />
-              )}
-            </li>
+                <Link
+                  href="/create-activity"
+                  className="mb-1 flex h-12 items-center gap-1 rounded-full bg-primary px-3 py-1 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  aria-label="Create Activity"
+                  aria-current={
+                    pathname === "/create-activity" ? "page" : undefined
+                  }
+                >
+                  <AiOutlinePlusCircle
+                    className="text-base"
+                    aria-hidden="true"
+                  />
+                  Create Activity
+                </Link>
+              </li>
+            )}
 
             <li className={`hover:text-primary`}>
               {isLoading ? (

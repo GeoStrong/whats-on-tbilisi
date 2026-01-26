@@ -17,7 +17,7 @@ const ProfileActivitiesCard: React.FC<ProfileActivitiesCardProps> = ({
 }) => {
   return (
     <>
-      <Card className="dark:bg-gray-800">
+      <Card className="border-none shadow-none hover:shadow-none dark:bg-gray-800">
         <CardHeader>
           <CardTitle className="text-lg">{title}</CardTitle>
           <CardDescription className="text-base">{description}</CardDescription>
@@ -29,7 +29,7 @@ const ProfileActivitiesCard: React.FC<ProfileActivitiesCardProps> = ({
             </p>
           </CardDescription>
         ) : (
-          <CardDescription className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-2 md:grid-cols-3">
+          <CardDescription className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-2 lg:grid-cols-3">
             {activities.map((activity) => (
               <div
                 key={activity.id}

@@ -38,6 +38,7 @@ const ActivityLocation: React.FC<{ activity: ActivityEntity }> = ({
                 categoryIcon: category?.icon,
               },
             ]}
+            displayMapButtons={false}
           />
         ) : (
           <Skeleton className="h-40 w-full" />

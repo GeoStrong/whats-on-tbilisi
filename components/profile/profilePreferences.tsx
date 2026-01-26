@@ -34,11 +34,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-const ProfilePreferencesTab: React.FC = () => {
+const ProfilePreferences: React.FC = () => {
   const { theme, setTheme } = useThemeSwitch();
   return (
     <>
-      <TabsContent value="preferences" className="space-y-4">
+      <div className="space-y-4">
         {/* <Card className="dark:bg-gray-800">
           <CardHeader>
             <CardTitle className="text-lg">Notifications</CardTitle>
@@ -95,7 +95,7 @@ const ProfilePreferencesTab: React.FC = () => {
           </CardContent>
         </Card> */}
 
-        <Card className="dark:bg-gray-800 md:hidden">
+        <Card className="border-none shadow-none hover:shadow-none dark:bg-gray-800">
           <CardHeader>
             <CardTitle className="">Display Preferences</CardTitle>
             <CardDescription className="text-base">
@@ -196,8 +196,8 @@ const ProfilePreferencesTab: React.FC = () => {
             </div>
           </CardContent>
         </Card> */}
-      </TabsContent>
+      </div>
     </>
   );
 };
-export default ProfilePreferencesTab;
+export default ProfilePreferences;

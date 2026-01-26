@@ -1,18 +1,16 @@
 "use client";
 
 import React from "react";
-import ProfileActivities from "@/components/profile/profileActivities";
 import useGetUserProfile from "@/lib/hooks/useGetUserProfile";
 import { redirect } from "next/navigation";
+import ProfileActivities from "@/components/profile/profileActivities";
 
 const ProfileActivitiesPage: React.FC = () => {
-  const { isAuthenticated, user } = useGetUserProfile();
+  const { user, isAuthenticated } = useGetUserProfile();
 
   if (!isAuthenticated) redirect("/");
 
-  return (
-    <div className="p-2">{user && <ProfileActivities userId={user.id} />}</div>
-  );
+  return <>{user && <ProfileActivities userId={user.id} />}</>;
 };
 
 export default ProfileActivitiesPage;

@@ -1,19 +1,18 @@
 import React from "react";
-import CreateActivityLayout from "@/components/create-activity/createActivityLayout";
+import { CreateActivityWizard } from "@/components/create-activity/wizard";
 import { env } from "@/lib/utils/env";
 
-const Map: React.FC = () => {
-  // Use NEXT_PUBLIC_ prefix so it's available on client side
-
+const CreateActivityPage: React.FC = () => {
   const key = env.googleMapsApiKey || "";
 
   return (
-    <>
-      <h1 className="mt-5 text-center text-3xl font-bold">
+    <div className="mx-auto max-w-4xl px-4 py-6">
+      <h1 className="mb-6 text-center text-3xl font-bold">
         Create a New Public Activity
       </h1>
-      <CreateActivityLayout mapKey={key} />
-    </>
+      <CreateActivityWizard mapKey={key} />
+    </div>
   );
 };
-export default Map;
+
+export default CreateActivityPage;

@@ -20,7 +20,7 @@ import PoiMarkers from "./poiMarkers";
 import { Poi } from "@/lib/types";
 import { useDispatch } from "react-redux";
 import { mapActions } from "@/lib/store/mapSlice";
-import { useLocalStorage, useLocation } from "react-use";
+import { useLocalStorage } from "react-use";
 import { zoomToLocation } from "@/lib/functions/helperFunctions";
 import FloatingCursorPin from "./floatingCursorPin";
 import useMapPinFloat from "@/lib/hooks/useMapPinFloat";
@@ -39,6 +39,8 @@ interface MapProps {
   displayActivities?: boolean;
   mapHeight?: string;
   selectedActivity?: Poi[];
+  displayMapButtons?: boolean;
+  showStaticMarker?: boolean;
 }
 
 const GEORGIA_BOUNDS = {
@@ -52,6 +54,8 @@ const MapComponent: React.FC<MapProps> = ({
   displayActivities = true,
   mapHeight = "h-dvh md:min-h-[500px]",
   selectedActivity,
+  displayMapButtons = true,
+  showStaticMarker = false,
 }) => {
   const map = useMap();
   const dispatch = useDispatch();
@@ -72,7 +76,6 @@ const MapComponent: React.FC<MapProps> = ({
   const hasSetTbilisiRef = useRef(false);
   const { resolvedTheme } = useTheme();
   const { isFullscreen } = useSelector((state: RootState) => state.map);
-  const { pathname } = useLocation();
 
   useEffect(() => {
     if (!map) return;
@@ -291,7 +294,7 @@ const MapComponent: React.FC<MapProps> = ({
         gestureHandling={"greedy"}
         defaultZoom={selectedActivity ? 16 : 11}
         minZoom={6}
-        streetViewControl={pathname?.includes("/activities/") ? false : true}
+        streetViewControl={displayMapButtons}
         streetViewControlOptions={{
           position: ControlPosition.INLINE_END_BLOCK_CENTER,
         }}
@@ -313,6 +316,14 @@ const MapComponent: React.FC<MapProps> = ({
           <PoiMarkers pois={selectedActivity} enableClick={false} />
         ) : null}
 
+        {/* Static marker for address selection (no floating cursor) */}
+        {showStaticMarker && latLng && !isFloatingEnabled && (
+          <AdvancedMarker position={latLng}>
+            <FloatingCursorPin />
+          </AdvancedMarker>
+        )}
+
+        {/* Floating marker for interactive pin placement */}
         {(latLng || clickedLatLng) && isFloatingEnabled && (
           <AdvancedMarker position={latLng || clickedLatLng!}>
             <FloatingCursorPin />
@@ -335,7 +346,7 @@ const MapComponent: React.FC<MapProps> = ({
           </div>
         )}
 
-        {!pathname?.includes("/activities/") && (
+        {displayMapButtons && (
           <MapControl position={ControlPosition.RIGHT_CENTER}>
             <div className="m-2 flex flex-col gap-2">
               <button
@@ -403,12 +414,16 @@ const MapWrapper: React.FC<{
   displayActivities?: boolean;
   selectedActivityLocation?: Poi[];
   skipAPIProvider?: boolean;
+  displayMapButtons?: boolean;
+  showStaticMarker?: boolean;
 }> = ({
   API_KEY,
   height,
   displayActivities,
   selectedActivityLocation,
   skipAPIProvider = false,
+  displayMapButtons = true,
+  showStaticMarker = false,
 }) => {
   const [mapError, setMapError] = useState<string | null>(null);
 
@@ -542,6 +557,8 @@ const MapWrapper: React.FC<{
       mapHeight={height}
       displayActivities={displayActivities}
       selectedActivity={selectedActivityLocation}
+      displayMapButtons={displayMapButtons}
+      showStaticMarker={showStaticMarker}
     />
   );
 

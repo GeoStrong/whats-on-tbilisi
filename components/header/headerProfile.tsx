@@ -40,7 +40,9 @@ const HeaderProfile: React.FC<{ user: UserProfile | null }> = ({ user }) => {
             <Link href="/profile" className="cursor-pointer">
               <DropdownMenuItem>Profile</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <Link href="/profile/preferences" className="cursor-pointer">
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
