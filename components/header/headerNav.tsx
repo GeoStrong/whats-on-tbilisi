@@ -122,7 +122,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
             >
               <Link
                 href="/create-activity"
-                className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="mb-1 flex h-12 items-center gap-1 rounded-full bg-primary px-3 py-1 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 aria-label="Create Activity"
                 aria-current={
                   pathname === "/create-activity" ? "page" : undefined

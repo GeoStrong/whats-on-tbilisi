@@ -9,12 +9,13 @@ import { useUser } from "@/lib/hooks/useUser";
 const UserCard: React.FC<{
   userId: string;
   children?: React.ReactNode;
-}> = ({ userId, children }) => {
+  displayFollowButton?: boolean;
+}> = ({ userId, children, displayFollowButton = true }) => {
   const { data: activeUser } = useUser(userId);
 
   return (
     <>
-      <div className="mb-4 flex items-center justify-between border-b pb-3 dark:border-b-gray-600">
+      <div className="flex items-center justify-between">
         <Link
           className="flex items-center gap-4"
           href={userId ? `/users/${userId}` : "#"}
@@ -23,7 +24,9 @@ const UserCard: React.FC<{
           <p className="">{activeUser?.name}</p>
         </Link>
         <div className="flex items-center gap-3">
-          {userId && <UserFollowButton userId={userId} />}
+          {userId && displayFollowButton && (
+            <UserFollowButton userId={userId} />
+          )}
           {children}
         </div>
       </div>

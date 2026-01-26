@@ -1,24 +1,24 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import MapWrapper from "../map/map";
-import { ActivityEntity } from "@/lib/types";
+import { ActivityEntity, Category } from "@/lib/types";
 import { Skeleton } from "../ui/skeleton";
 import { env } from "@/lib/utils/env";
+import { getCategoriesByActivityId } from "@/lib/functions/supabaseFunctions";
 
 const ActivityLocation: React.FC<{ activity: ActivityEntity }> = ({
   activity,
 }) => {
-  // const [mapKey, setMapKey] = useState<string>("");
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetch("/api/use-secret");
-
-  //     const { key } = await response.json();
-  //     setMapKey(key);
-  //   })();
-  // }, []);
-
+  const [category, setCategory] = useState<Category | null>(null);
   const mapKey = env.googleMapsApiKey || "";
+
+  useEffect(() => {
+    (async () => {
+      const categories = await getCategoriesByActivityId(activity.id);
+      setCategory(categories?.[0] || null);
+    })();
+  }, [activity.id]);
 
   return (
     <>
@@ -31,7 +31,12 @@ const ActivityLocation: React.FC<{ activity: ActivityEntity }> = ({
             height="h-52"
             displayActivities={false}
             selectedActivityLocation={[
-              { key: activity.id, location: activity.googleLocation! },
+              {
+                key: activity.id,
+                location: activity.googleLocation!,
+                categoryColor: category?.color,
+                categoryIcon: category?.icon,
+              },
             ]}
           />
         ) : (

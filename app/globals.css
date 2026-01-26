@@ -93,6 +93,11 @@ body {
   .leading-relaxed {
     line-height: 1.75;
   }
+  .linear {
+    background: linear-gradient(90deg, #6c6ee8 0%, #6738d5 100%);
+    -webkit-text-fill-color: transparent;
+    @apply bg-clip-text text-2xl font-bold;
+  }
   .linear-light {
     background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
     -webkit-text-fill-color: transparent;

@@ -1242,34 +1242,34 @@ const getCategoriesByActivityIds = async (
     .in("activity_id", activityIds);
 
   const categoriesByActivity = new Map<number | string, Category[]>();
-  ((activityCategoriesData as unknown as ActivityCategoryJoinResult[]) || []).forEach(
-    (item) => {
-      const category = item.categories;
-      if (!category) return;
+  (
+    (activityCategoriesData as unknown as ActivityCategoryJoinResult[]) || []
+  ).forEach((item) => {
+    const category = item.categories;
+    if (!category) return;
 
-      const activityId = item.activity_id;
-      const existingCategories = categoriesByActivity.get(activityId);
-      if (existingCategories) {
-        existingCategories.push({
+    const activityId = item.activity_id;
+    const existingCategories = categoriesByActivity.get(activityId);
+    if (existingCategories) {
+      existingCategories.push({
+        id: category.id,
+        name: category.name,
+        icon: category.icon,
+        color: category.color,
+        category: category.category,
+      });
+    } else {
+      categoriesByActivity.set(activityId, [
+        {
           id: category.id,
           name: category.name,
           icon: category.icon,
           color: category.color,
           category: category.category,
-        });
-      } else {
-        categoriesByActivity.set(activityId, [
-          {
-            id: category.id,
-            name: category.name,
-            icon: category.icon,
-            color: category.color,
-            category: category.category,
-          },
-        ]);
-      }
-    },
-  );
+        },
+      ]);
+    }
+  });
 
   return categoriesByActivity;
 };
@@ -1318,9 +1318,7 @@ export const getFollowedUsersParticipation = async (userId: string) => {
     .select("*")
     .in("id", userIds);
 
-  const userMap = new Map(
-    (users || []).map((u) => [u.id, u as UserProfile]),
-  );
+  const userMap = new Map((users || []).map((u) => [u.id, u as UserProfile]));
 
   // Batch fetch all activities
   const { data: activities } = await supabase
@@ -1343,22 +1341,22 @@ export const getFollowedUsersParticipation = async (userId: string) => {
   const fullInfo = data.map((participation) => {
     const user = userMap.get(participation.user_id);
     const activity = activityMap.get(participation.activity_id);
-    const categories = categoriesByActivity.get(participation.activity_id) || [];
+    const categories =
+      categoriesByActivity.get(participation.activity_id) || [];
+
     const count = participantCounts.get(participation.activity_id) || 0;
 
     return {
       userId: user?.id,
       userName: user?.name,
       userAvatar: user?.avatar_path,
-      activityId: activity?.id,
-      activityTitle: activity?.title,
-      activityImage: typeof activity?.image === "string" ? activity?.image : null,
-      activityLocation: activity?.location || "",
-      activityCategories: categories.map((c) => c?.name || "").filter(Boolean),
+      activity: activity,
+      activityCategories: categories
+        .map((c) => {
+          return { name: c?.name, color: c?.color };
+        })
+        .filter(Boolean),
       participationDate: participation.created_at,
-      activityStatus: activity?.status,
-      activityDate: activity?.date,
-      activityTime: activity?.time,
       participantCount: count,
     };
   }) as UserParticipationHistory[];
@@ -1415,22 +1413,19 @@ export const getUserParticipationHistory = async (userId: string) => {
   // Map participation data with fetched information
   const fullInfo = data.map((participation) => {
     const activity = activityMap.get(participation.activity_id);
-    const categories = categoriesByActivity.get(participation.activity_id) || [];
+    const categories =
+      categoriesByActivity.get(participation.activity_id) || [];
     const count = participantCounts.get(participation.activity_id) || 0;
 
     return {
       userId: user.id,
       userName: user.name,
       userAvatar: user.avatar_path,
-      activityId: activity?.id,
-      activityTitle: activity?.title,
-      activityImage: typeof activity?.image === "string" ? activity?.image : null,
-      activityLocation: activity?.location || "",
-      activityCategories: categories.map((c) => c?.name || "").filter(Boolean),
+      activity: activity,
+      activityCategories: categories
+        .map((c) => ({ name: c?.name, color: c?.color }))
+        .filter(Boolean),
       participationDate: participation?.created_at,
-      activityStatus: activity?.status,
-      activityDate: activity?.date,
-      activityTime: activity?.time,
       participantCount: count,
     };
   }) as UserParticipationHistory[];

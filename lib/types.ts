@@ -51,15 +51,16 @@ export interface UserParticipationHistory {
   userId: string;
   userName: string;
   userAvatar: string | undefined;
-  activityId: string;
-  activityTitle: string;
-  activityImage: string | null;
-  activityLocation: string;
-  activityCategories: string[];
+  activity: ActivityEntity;
+  // activityId: string;
+  // activityTitle: string;
+  // activityImage: string | null;
+  // activityLocation: string;
+  activityCategories: Partial<Category[]>;
   participationDate: string;
-  activityStatus?: "active" | "inactive" | "pending";
-  activityDate: string;
-  activityTime: string;
+  // activityStatus?: "active" | "inactive" | "pending";
+  // activityDate: string;
+  // activityTime: string;
   participantCount?: number;
 }
 
@@ -117,7 +118,12 @@ export interface SavedActivityEntity {
   activity_id: string;
 }
 
-export type Poi = { key: string; location: google.maps.LatLngLiteral };
+export type Poi = {
+  key: string;
+  location: google.maps.LatLngLiteral;
+  categoryColor?: string;
+  categoryIcon?: string;
+};
 
 export type FollowersEntity = {
   user_id: string;

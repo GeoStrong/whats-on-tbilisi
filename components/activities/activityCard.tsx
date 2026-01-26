@@ -19,6 +19,7 @@ import { MdDateRange } from "react-icons/md";
 import useMapZoom from "@/lib/hooks/useMapZoom";
 import useOptimizedImage from "@/lib/hooks/useOptimizedImage";
 import OptimizedImage from "../ui/optimizedImage";
+import UserCard from "../users/userCard";
 
 interface ActivityCardProps {
   activity: ActivityEntity;
@@ -66,7 +67,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       }}
     >
       <CardHeader className="relative flex-shrink-0 p-0">
-        <div className="group relative aspect-video h-48 w-full overflow-hidden rounded-t-xl bg-white">
+        <div className="group relative aspect-video w-full overflow-hidden rounded-t-xl bg-white">
           <OptimizedImage
             src={activityImage}
             width={100}
@@ -91,25 +92,22 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             ))}
           </div>
         </div>
-        <CardTitle className="min-h-[3rem] px-4 pt-4 text-xl leading-tight md:px-6 md:text-2xl">
+        <CardTitle className="px-4 pt-4 text-left text-xl leading-tight md:px-6 md:text-2xl">
           {activity.title}
         </CardTitle>
-        <CardDescription className="h-[4rem] px-4 pt-4 text-sm leading-tight md:px-6 md:text-lg">
-          {activity.description.slice(0, 50) + "..."}
-        </CardDescription>
       </CardHeader>
-      <CardContent className="flex h-[1rem] flex-shrink-0 items-start justify-between gap-3 p-4 md:p-6">
+      <CardContent className="p-4 md:p-6">
         <div className="min-w-0 flex-1">
-          <p className="break-words text-base leading-snug">
+          {/* <p className="break-words text-base leading-snug">
             {activity.location && activity.location.toLocaleString()}
-          </p>
-          {activity.hostName && (
+          </p> */}
+          {/* {activity.hostName && (
             <p className="mt-1 text-sm text-muted-foreground">
               {activity.hostName}
             </p>
-          )}
+          )} */}
         </div>
-        {activity.googleLocation && (
+        {/* {activity.googleLocation && (
           <Link
             href="/map"
             onClick={(e) => {
@@ -123,25 +121,32 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           >
             <ImLocation2 className="text-primary" aria-hidden="true" />
           </Link>
-        )}
-      </CardContent>
-      <CardFooter className="mt-2 flex flex-col items-start p-4 pt-4 md:p-6">
+        )} */}
         <p className="flex items-center gap-1 text-base text-muted-foreground">
-          <BiTimeFive className="flex-shrink-0" />
-          <span>{activity.time && activity.time.toLocaleString()}</span>
+          <ImLocation2 className="flex-shrink-0" />
+          <span>
+            {activity.location.length <= 30
+              ? activity.location
+              : activity.location.slice(0, 30) + "..."}
+          </span>
         </p>
         <p className="flex items-center gap-1 text-base text-muted-foreground">
           <MdDateRange className="flex-shrink-0" />
           <span>
             {activity.date &&
               new Date(activity.date).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-                weekday: "short",
+                month: "short",
                 day: "numeric",
               })}
+            ,
           </span>
+          <span>{activity.time && activity.time.toLocaleString()}</span>
         </p>
+      </CardContent>
+      <CardFooter className="mt-auto block w-full border-t px-4 py-2 md:px-6 md:py-4">
+        {activity.user_id && (
+          <UserCard userId={activity.user_id} displayFollowButton={false} />
+        )}
       </CardFooter>
     </Card>
   );

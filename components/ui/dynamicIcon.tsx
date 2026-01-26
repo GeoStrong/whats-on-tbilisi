@@ -3,17 +3,20 @@ import React from "react";
 
 type IconProps = {
   name: string;
+  className?: string;
 };
 
-const DynamicIcon: React.FC<IconProps> = ({ name }) => {
-  const IconComponent = (Icons as Record<string, React.ComponentType>)[name];
+const DynamicIcon: React.FC<IconProps> = ({ name, className }) => {
+  const IconComponent = (
+    Icons as Record<string, React.ComponentType<{ className?: string }>>
+  )[name];
 
   if (!IconComponent) {
     console.warn(`MUI icon "${name}" not found`);
     return null;
   }
 
-  return <IconComponent />;
+  return <IconComponent className={className} />;
 };
 
 export default DynamicIcon;

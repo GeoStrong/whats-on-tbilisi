@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ActivityEntity, Category, Poi } from "../types";
 import useAddSearchQuery from "./useAddSearchQuery";
-import {
-  useActivities,
-  useActivitiesByCategory,
-} from "./useActivities";
+import { useActivities, useActivitiesByCategory } from "./useActivities";
 import { useCategory } from "./useCategories";
 
 const useActivitiesFilter = () => {
@@ -30,44 +27,34 @@ const useActivitiesFilter = () => {
   const selectedCategories = useMemo(() => {
     return categoryCSV ? categoryCSV.split(",") : [];
   }, [categoryCSV]);
-  
+
   // Create stable string representation for dependency comparison
   const selectedCategoriesKey = useMemo(() => {
     return selectedCategories.join(",");
   }, [selectedCategories]);
 
   // Fetch activities using React Query - all hooks called unconditionally
-  const { data: singleCategoryActivities, isLoading: singleCategoryLoading } = useActivitiesByCategory(
-    singleCategoryId || null,
-  );
+  const { data: singleCategoryActivities, isLoading: singleCategoryLoading } =
+    useActivitiesByCategory(singleCategoryId || null);
   // Use server-side filtering for search and date when no categories selected
-  const { data: allActivities, isLoading: allActivitiesLoading } = useActivities({
-    limit: 100,
-    filters:
-      !singleCategoryId && selectedCategories.length === 0
-        ? {
-            search: search || undefined,
-            date: date || undefined,
-          }
-        : undefined,
-  });
-  
+  const { data: allActivities, isLoading: allActivitiesLoading } =
+    useActivities({
+      limit: 100,
+      filters:
+        !singleCategoryId && selectedCategories.length === 0
+          ? {
+              search: search || undefined,
+              date: date || undefined,
+            }
+          : undefined,
+    });
+
   // Fetch activities for each selected category (max 10 to avoid too many hooks)
-  const category1Query = useActivitiesByCategory(
-    selectedCategories[0] || null,
-  );
-  const category2Query = useActivitiesByCategory(
-    selectedCategories[1] || null,
-  );
-  const category3Query = useActivitiesByCategory(
-    selectedCategories[2] || null,
-  );
-  const category4Query = useActivitiesByCategory(
-    selectedCategories[3] || null,
-  );
-  const category5Query = useActivitiesByCategory(
-    selectedCategories[4] || null,
-  );
+  const category1Query = useActivitiesByCategory(selectedCategories[0] || null);
+  const category2Query = useActivitiesByCategory(selectedCategories[1] || null);
+  const category3Query = useActivitiesByCategory(selectedCategories[2] || null);
+  const category4Query = useActivitiesByCategory(selectedCategories[3] || null);
+  const category5Query = useActivitiesByCategory(selectedCategories[4] || null);
 
   // Create stable array reference using JSON.stringify for deep comparison
   const multipleCategoryActivities = useMemo(() => {
@@ -81,23 +68,23 @@ const useActivitiesFilter = () => {
     ].filter(Boolean) as ActivityEntity[][];
     return queries.flat();
   }, [
-    selectedCategoriesKey,
+    selectedCategories.length,
     category1Query.data,
     category2Query.data,
     category3Query.data,
     category4Query.data,
     category5Query.data,
   ]);
-  
+
   // Create stable string representation of activities arrays to prevent infinite loops
   const singleCategoryActivitiesKey = useMemo(() => {
     return JSON.stringify(singleCategoryActivities || []);
   }, [singleCategoryActivities]);
-  
+
   const multipleCategoryActivitiesKey = useMemo(() => {
     return JSON.stringify(multipleCategoryActivities || []);
   }, [multipleCategoryActivities]);
-  
+
   const allActivitiesKey = useMemo(() => {
     return JSON.stringify(allActivities || []);
   }, [allActivities]);
@@ -113,8 +100,13 @@ const useActivitiesFilter = () => {
   useEffect(() => {
     // Don't update if still loading to prevent unnecessary re-renders
     if (singleCategoryId && singleCategoryLoading) return;
-    if (!singleCategoryId && selectedCategories.length === 0 && allActivitiesLoading) return;
-    
+    if (
+      !singleCategoryId &&
+      selectedCategories.length === 0 &&
+      allActivitiesLoading
+    )
+      return;
+
     let baseActivities: ActivityEntity[] = [];
 
     // Priority: singleCategoryId > selectedCategories > all activities
@@ -161,6 +153,10 @@ const useActivitiesFilter = () => {
     allActivitiesLoading,
     search,
     date,
+    selectedCategories.length,
+    singleCategoryActivities,
+    multipleCategoryActivities,
+    allActivities,
   ]);
 
   // Set category from query result
@@ -188,15 +184,30 @@ const useActivitiesFilter = () => {
   useEffect(() => {
     if (!activities) return;
 
-    const locations =
-      activities
-        .filter((a) => a.googleLocation)
-        .map((a) => ({
-          key: `activity-${a.id}`,
-          location: a.googleLocation!,
-        })) || null;
+    const fetchLocationsWithCategories = async () => {
+      const { getCategoriesByActivityId } = await import(
+        "../functions/supabaseFunctions"
+      );
 
-    setActivityLocations(locations);
+      const locationsPromises = activities
+        .filter((a) => a.googleLocation)
+        .map(async (a) => {
+          const categories = await getCategoriesByActivityId(a.id);
+          const firstCategory = categories?.[0];
+
+          return {
+            key: `activity-${a.id}`,
+            location: a.googleLocation!,
+            categoryColor: firstCategory?.color,
+            categoryIcon: firstCategory?.icon,
+          };
+        });
+
+      const locations = await Promise.all(locationsPromises);
+      setActivityLocations(locations || null);
+    };
+
+    fetchLocationsWithCategories();
   }, [activities]);
 
   return {

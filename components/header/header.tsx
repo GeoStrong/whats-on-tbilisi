@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { IoMdMegaphone } from "react-icons/io";
 import HeaderNav from "./headerNav";
 import AuthDialog from "../auth/authForm";
 import useGetUserProfile from "@/lib/hooks/useGetUserProfile";
@@ -35,7 +35,14 @@ const Header: React.FC = () => {
         className="linear-yellow flex items-center gap-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         aria-label="What'sOnTbilisi Home"
       >
-        <IoMdMegaphone className="text-4xl text-primary" />
+        <Image
+          src="/icon.svg"
+          alt="What'sOnTbilisi logo"
+          width={40}
+          height={40}
+          priority
+          className="drop-shadow-sm"
+        />
         <span className="gradient-primary hidden bg-clip-text text-2xl font-bold text-transparent lg:inline">
           What&apos;sOnTbilisi
         </span>

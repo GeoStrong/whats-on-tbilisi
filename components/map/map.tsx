@@ -30,14 +30,8 @@ import useActivitiesFilter from "@/lib/hooks/useActvitiesFilter";
 import MapLoadingLayout from "./mapLayoutLoading";
 import Papa from "papaparse";
 import { useTheme } from "next-themes";
-import {
-  MapPin,
-  ZoomIn,
-  ZoomOut,
-  Maximize,
-  Minimize,
-  Home,
-} from "lucide-react";
+import { ZoomIn, ZoomOut, Maximize, Minimize, Home } from "lucide-react";
+import { MdMyLocation } from "react-icons/md";
 import { toast } from "sonner";
 import MapUserLocation from "./mapUserLocation";
 
@@ -390,7 +384,7 @@ const MapComponent: React.FC<MapProps> = ({
               title="Locate Me"
               aria-label="Locate Me"
             >
-              <MapPin
+              <MdMyLocation
                 className={`h-5 w-5 text-gray-700 dark:text-gray-200 ${
                   isLocating ? "animate-pulse" : ""
                 }`}

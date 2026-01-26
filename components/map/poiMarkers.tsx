@@ -38,7 +38,11 @@ const PoiMarkers: React.FC<PoiMarkesProps> = ({ pois, enableClick = true }) => {
             position={poi.location}
             clickable
           >
-            <HoverPin id={poi.key} />
+            <HoverPin
+              id={poi.key}
+              categoryColor={poi.categoryColor}
+              categoryIcon={poi.categoryIcon}
+            />
           </AdvancedMarker>
         ))}
     </>

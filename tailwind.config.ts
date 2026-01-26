@@ -76,6 +76,10 @@ export default {
       pattern:
         /text-(blue|purple|indigo|orange|teal|gray|pink|red|green|yellow)-(100|200|500|600|700)/,
     },
+    {
+      pattern:
+        /fill-(blue|purple|indigo|orange|teal|gray|pink|red|green|yellow)-(100|200|500|600|700)/,
+    },
   ],
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
