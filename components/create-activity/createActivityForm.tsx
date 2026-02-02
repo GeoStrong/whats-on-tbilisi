@@ -11,6 +11,8 @@ import { FaMapMarkedAlt } from "react-icons/fa";
 // import { useLocation } from "react-use";
 import Image from "next/image";
 import PlacesAutocomplete from "./PlacesAutocomplete";
+import RecurringDatePicker from "./RecurringDatePicker";
+import { useState } from "react";
 
 interface CreateActivityProps {
   formik: FormikProps<NewActivityEntity>;
@@ -32,6 +34,10 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
   // const { pathname } = useLocation();
 
   // const isCreatePage = pathname === "/create-activity";
+
+  const [isSameDay, setIsSameDay] = useState(true);
+  const [recurringDays, setRecurringDays] = useState<string[]>([]);
+  const [isRecurring, setIsRecurring] = useState(false);
 
   useEffect(() => {
     if (latLng) {
@@ -59,14 +65,32 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
         });
       }
     }
+
+    formik.setFieldValue("recurringDays", recurringDays);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [latLng]);
+  }, [latLng, recurringDays]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       formik.setFieldValue("image", file);
       handleImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleToggleSameDay = () => {
+    setIsSameDay(!isSameDay);
+    if (isSameDay) {
+      formik.setFieldValue("endDate", formik.values.date);
+    } else {
+      formik.setFieldValue("endDate", "");
+    }
+  };
+
+  const handleRecurringToggle = () => {
+    setIsRecurring(!isRecurring);
+    if (!isRecurring) {
+      setRecurringDays([]); // Clear recurring days if toggled off
     }
   };
 
@@ -127,6 +151,39 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
             className="text-sm text-red-500"
           />
         </div>
+
+        {/* Same Day Toggle */}
+        <div className="flex items-center gap-2">
+          <label htmlFor="sameDayToggle" className="text-sm font-medium">
+            Same Day
+          </label>
+          <input
+            id="sameDayToggle"
+            type="checkbox"
+            checked={isSameDay}
+            onChange={handleToggleSameDay}
+          />
+        </div>
+
+        {/* End Date */}
+        {!isSameDay && (
+          <div>
+            <label htmlFor="endDate">End Date</label>
+            <Field
+              className="dark:border-gray-600"
+              as={Input}
+              id="endDate"
+              name="endDate"
+              type="date"
+              min={formik.values.date}
+            />
+            <ErrorMessage
+              name="endDate"
+              component="div"
+              className="text-sm text-red-500"
+            />
+          </div>
+        )}
 
         {/* Time */}
         <div>
@@ -341,6 +398,48 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
               className="mt-2 h-32 w-32 rounded-md object-cover"
               priority={false}
             />
+          )}
+        </div>
+
+        {/* Recurring Activity */}
+        <div>
+          <label className="text-sm font-medium">Recurring Activity</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="recurringActivity"
+              checked={isRecurring}
+              onChange={handleRecurringToggle}
+            />
+            <label htmlFor="recurringActivity" className="text-sm">
+              Is this activity recurring?
+            </label>
+          </div>
+          {isRecurring && (
+            <div className="mt-2">
+              <RecurringDatePicker
+                selectedDates={recurringDays}
+                onChange={setRecurringDays}
+                placeholder="Select recurring days"
+              />
+              {recurringDays.length > 0 && (
+                <div className="mt-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Selected dates:
+                  </p>
+                  <div className="mt-1 flex flex-wrap gap-2">
+                    {recurringDays.map((date, index) => (
+                      <span
+                        key={index}
+                        className="rounded-md bg-primary/10 px-2 py-1 text-xs dark:bg-primary/20"
+                      >
+                        {date}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

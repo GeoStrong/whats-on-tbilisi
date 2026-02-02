@@ -5,7 +5,7 @@ import { Skeleton } from "@mui/material";
 
 const WizardSkeleton: React.FC = () => {
   return (
-    <div className="w-full rounded-xl bg-white shadow-sm dark:bg-gray-800">
+    <div className="w-full rounded-xl border bg-white shadow-lg dark:bg-gray-800">
       {/* Step Indicator Skeleton */}
       <div className="border-b px-4 py-4 dark:border-gray-700">
         <div className="hidden items-center justify-center gap-4 md:flex">

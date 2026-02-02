@@ -124,7 +124,7 @@ const WizardStep1: React.FC<WizardStep1Props> = ({
                 className={`border text-sm transition-all dark:border-gray-600 ${
                   selected
                     ? "border-primary bg-primary text-white hover:bg-primary/90 hover:text-white"
-                    : "hover:border-primary hover:bg-primary/5"
+                    : "hover:border-primary hover:bg-primary/5 hover:text-black dark:hover:bg-primary dark:hover:text-white"
                 }`}
                 onClick={() =>
                   handleCategoryToggle(category.id as ActivityCategories)

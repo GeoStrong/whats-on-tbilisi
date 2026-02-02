@@ -72,6 +72,8 @@ export interface ActivityEntity {
   date: Date | string | null;
   time: Date | string;
   endTime: Date | string | null;
+  endDate?: Date | string | null;
+  recurringDays?: string[] | null;
   location: string;
   googleLocation?: google.maps.LatLngLiteral | null;
   categories?: ActivityCategories[] | string[];

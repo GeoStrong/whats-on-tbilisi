@@ -20,7 +20,6 @@ import defaultActivityImg from "@/public/images/default-activity-img.png";
 import ActivityParticipation from "./activityParticipation";
 import Share from "../general/share";
 
-import { useEffectOnce } from "react-use";
 import { getCategoriesByActivityId } from "@/lib/functions/supabaseFunctions";
 import { isString } from "@/lib/functions/helperFunctions";
 import BookmarkButton from "../general/bookmarkButton";
@@ -48,14 +47,10 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
   open = false,
 }) => {
   const { isMobile } = useScreenSize();
-  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+  const [snap, setSnap] = useState<number | string | null>(1);
   const [categories, setCategories] = useState<(Category | null)[]>([]);
   const { user } = useGetUserProfile();
   const [isUserParticipant, setIsUserParticipant] = useState<boolean>(false);
-
-  useEffectOnce(() => {
-    setSnap(1);
-  });
 
   const { imageUrl: activityImage } = useOptimizedImage(activity.image, {
     quality: 50,

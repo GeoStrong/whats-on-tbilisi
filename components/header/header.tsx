@@ -36,7 +36,7 @@ const Header: React.FC = () => {
         aria-label="What'sOnTbilisi Home"
       >
         <Image
-          src="/icon.svg"
+          src="/favicon.png"
           alt="What'sOnTbilisi logo"
           width={40}
           height={40}

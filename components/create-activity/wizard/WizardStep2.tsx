@@ -17,6 +17,8 @@ import {
   FaLink,
   FaMapMarkedAlt,
   FaSearchLocation,
+  FaCalendarTimes,
+  FaCalendarPlus,
 } from "react-icons/fa";
 import {
   Dialog,
@@ -25,6 +27,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import RecurringDatePicker from "../RecurringDatePicker";
+import DateObject from "react-date-object";
 
 interface WizardStep2Props {
   formState: WizardFormState;
@@ -42,6 +46,9 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
   const dispatch = useDispatch();
   const { latLng, isFullscreen } = useSelector((state: RootState) => state.map);
   const [isMapDialogOpen, setIsMapDialogOpen] = useState(false);
+  const [isSameDay, setIsSameDay] = useState(true);
+  const [recurringDays, setRecurringDays] = useState<string[]>([]);
+  const [isRecurring, setIsRecurring] = useState(false);
 
   // Enable/disable floating pin based on dialog state
   useEffect(() => {
@@ -49,7 +56,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
   }, [isMapDialogOpen, dispatch]);
 
   // Sync latLng from redux to form state when it changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (latLng) {
       updateFormState({ googleLocation: latLng });
 
@@ -77,6 +84,26 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
   const handleConfirmLocation = () => {
     setIsMapDialogOpen(false);
   };
+
+  const handleToggleSameDay = () => {
+    setIsSameDay(!isSameDay);
+    if (isSameDay) {
+      updateFormState({ endDate: formState.date });
+    } else {
+      updateFormState({ endDate: "" });
+    }
+  };
+
+  const handleRecurringToggle = () => {
+    setIsRecurring(!isRecurring);
+    if (!isRecurring) {
+      setRecurringDays([]); // Clear recurring days if toggled off
+    }
+  };
+
+  useEffect(() => {
+    updateFormState({ recurringDays });
+  }, [recurringDays, updateFormState]);
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -138,7 +165,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
         )}
       </div>
       {(errors.location || errors.googleLocation) && (
-        <p className="text-sm text-red-500">
+        <p className="text-base text-red-500">
           {errors.location || errors.googleLocation}
         </p>
       )}
@@ -149,10 +176,10 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
         <div className="flex flex-col gap-2">
           <label
             htmlFor="wizard-date"
-            className="flex items-center gap-2 text-sm font-medium"
+            className="flex items-center gap-2 text-base font-medium"
           >
             <FaCalendarAlt className="text-primary" />
-            Date & Time *
+            Date
           </label>
           <Input
             id="wizard-date"
@@ -163,14 +190,16 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             min={new Date().toISOString().split("T")[0]}
             className="dark:border-gray-600"
           />
-          {errors.date && <p className="text-sm text-red-500">{errors.date}</p>}
+          {errors.date && (
+            <p className="text-base text-red-500">{errors.date}</p>
+          )}
         </div>
 
         {/* Start Time */}
         <div className="flex flex-col gap-2">
           <label
             htmlFor="wizard-time"
-            className="flex items-center gap-2 text-sm font-medium"
+            className="flex items-center gap-2 text-base font-medium"
           >
             <FaClock className="text-primary" />
             Start Time *
@@ -183,14 +212,16 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             onChange={(e) => updateFormState({ time: e.target.value })}
             className="dark:border-gray-600"
           />
-          {errors.time && <p className="text-sm text-red-500">{errors.time}</p>}
+          {errors.time && (
+            <p className="text-base text-red-500">{errors.time}</p>
+          )}
         </div>
 
         {/* End Time */}
         <div className="flex flex-col gap-2">
           <label
             htmlFor="wizard-endTime"
-            className="flex items-center gap-2 text-sm font-medium"
+            className="flex items-center gap-2 text-base font-medium"
           >
             <FaClock className="text-gray-400" />
             End Time
@@ -203,6 +234,109 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             onChange={(e) => updateFormState({ endTime: e.target.value })}
             className="dark:border-gray-600"
           />
+          {errors.endTime && (
+            <p className="text-base text-red-500">{errors.endTime}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-between gap-3 md:flex-row">
+        <div className="flex flex-1 flex-col gap-2">
+          {/* Same Day Toggle */}
+          <div className="flex items-center gap-2">
+            <label htmlFor="sameDayToggle" className="text-base font-medium">
+              Ends same Day
+            </label>
+            <input
+              id="sameDayToggle"
+              type="checkbox"
+              checked={isSameDay}
+              onChange={handleToggleSameDay}
+            />
+          </div>
+
+          {/* End Date */}
+          {!isSameDay && (
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="wizard-endDate"
+                className="flex items-center gap-2 text-base font-medium"
+              >
+                <FaCalendarTimes className="text-primary" />
+                End Date
+              </label>
+              <Input
+                id="wizard-endDate"
+                name="endDate"
+                type="date"
+                value={String(formState.endDate) || ""}
+                onChange={(e) => updateFormState({ endDate: e.target.value })}
+                min={String(formState.date)}
+                className="dark:border-gray-600"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Recurring Activity */}
+        <div className="flex flex-1 flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <label htmlFor="recurringActivity" className="text-base">
+              Is this activity recurring?
+            </label>
+            <input
+              type="checkbox"
+              id="recurringActivity"
+              checked={isRecurring}
+              onChange={handleRecurringToggle}
+            />
+          </div>
+          {isRecurring && (
+            <div className="recurring-days-picker flex w-full flex-col gap-2">
+              <label
+                htmlFor="recurringDays"
+                className="flex items-center gap-2 text-base font-medium"
+              >
+                <FaCalendarPlus className="text-primary" />
+                Select Recurring Days:
+              </label>
+              <RecurringDatePicker
+                selectedDates={recurringDays}
+                onChange={(dates) => {
+                  setRecurringDays(dates);
+                  updateFormState({ recurringDays: dates });
+                }}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="flex-1">
+          {isRecurring && recurringDays.length > 0 && (
+            <div className="selected-dates">
+              <h4>Selected Recurring Dates:</h4>
+              <ul className="mt-2 flex h-28 flex-col gap-1 overflow-y-auto rounded-md border-2 p-2 px-4 dark:border-gray-600">
+                {recurringDays.map((date, index) => (
+                  <li key={index} className="date-item flex">
+                    <span className="inline-block w-32">{date}</span>
+                    <button
+                      type="button"
+                      className="text-sm text-red-500 underline"
+                      onClick={() => {
+                        const updatedDates = recurringDays.filter(
+                          (_, i) => i !== index,
+                        );
+                        setRecurringDays(updatedDates);
+                        updateFormState({ recurringDays: updatedDates });
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 
@@ -212,7 +346,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
         <div className="flex flex-col gap-2">
           <label
             htmlFor="wizard-maxAttendees"
-            className="flex items-center gap-2 text-sm font-medium"
+            className="flex items-center gap-2 text-base font-medium"
           >
             <FaUsers className="text-primary" />
             Max Participants
@@ -239,7 +373,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
         <div className="flex flex-col gap-2">
           <label
             htmlFor="wizard-targetAudience"
-            className="flex items-center gap-2 text-sm font-medium"
+            className="flex items-center gap-2 text-base font-medium"
           >
             <FaUsers className="text-gray-400" />
             Target Audience
@@ -260,7 +394,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
         <div className="flex flex-col gap-2">
           <label
             htmlFor="wizard-link"
-            className="flex items-center gap-2 text-sm font-medium"
+            className="flex items-center gap-2 text-base font-medium"
           >
             <FaLink className="text-gray-400" />
             External Link

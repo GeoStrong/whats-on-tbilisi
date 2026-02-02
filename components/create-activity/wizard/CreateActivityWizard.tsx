@@ -95,6 +95,8 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
         date: formState.date,
         time: formState.time,
         endTime: formState.endTime || null,
+        endDate: formState.endDate || null,
+        recurringDays: formState.recurringDays || null,
         location: formState.location,
         link: formState.link || null,
         status: "active",
@@ -221,7 +223,7 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
 
   return (
     <APIProvider apiKey={mapKey} libraries={["places"]}>
-      <div className="w-full rounded-xl bg-white shadow-sm dark:bg-gray-800">
+      <div className="w-full rounded-xl border bg-white shadow-lg dark:bg-gray-800">
         {/* Step Indicator */}
         <div className="border-b px-4 dark:border-gray-700">
           <WizardStepIndicator

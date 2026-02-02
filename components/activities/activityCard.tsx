@@ -4,34 +4,74 @@ import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import defaultActivityImg from "@/public/images/default-activity-img.png";
 import { Category, ActivityEntity } from "@/lib/types";
-import Link from "next/link";
 import { ImLocation2 } from "react-icons/im";
 import { getCategoriesByActivityId } from "@/lib/functions/supabaseFunctions";
-import { BiTimeFive } from "react-icons/bi";
 import { MdDateRange } from "react-icons/md";
-import useMapZoom from "@/lib/hooks/useMapZoom";
 import useOptimizedImage from "@/lib/hooks/useOptimizedImage";
 import OptimizedImage from "../ui/optimizedImage";
 import UserCard from "../users/userCard";
+import useMapZoom from "@/lib/hooks/useMapZoom";
+
+type ActivityVariant = "featured" | "ongoing" | "upcoming" | "past";
 
 interface ActivityCardProps {
   activity: ActivityEntity;
+  variant?: ActivityVariant;
   setSearchParams?: (query: string, value: string) => void;
 }
 
+const getVariantStyles = (variant: ActivityVariant): string => {
+  const baseStyles = "transition-all duration-250";
+
+  const variants: Record<ActivityVariant, string> = {
+    featured: `${baseStyles} shadow-lg hover:shadow-xl`,
+    ongoing: `${baseStyles}  shadow-md hover:shadow-lg`,
+    upcoming: `${baseStyles} hover:border-primary`,
+    past: `${baseStyles} shadow-sm`,
+  };
+
+  return variants[variant] || variants.upcoming;
+};
+
+const getStatusBadgeStyles = (variant: ActivityVariant): string => {
+  const baseStyles =
+    "absolute top-0 left-3 inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-sm";
+
+  const variants: Record<ActivityVariant, string> = {
+    featured: `${baseStyles} bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200`,
+    ongoing: `${baseStyles} bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 animate-pulse`,
+    upcoming: `${baseStyles} bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200`,
+    past: `${baseStyles} bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300`,
+  };
+
+  return variants[variant];
+};
+
+const getStatusBadgeLabel = (variant: ActivityVariant): string => {
+  const labels: Record<ActivityVariant, string> = {
+    featured: "🌟 Featured",
+    ongoing: "🔴 Live",
+    upcoming: "📅 Coming",
+    past: "✓ Completed",
+  };
+  return labels[variant];
+};
+
 const ActivityCard: React.FC<ActivityCardProps> = ({
   activity,
+  variant = "upcoming",
   setSearchParams,
 }) => {
   const [categories, setCategories] = useState<(Category | null)[]>([]);
-  const { handleLocationClick } = useMapZoom(activity.id);
+  const {
+    /* handleLocationClick */
+  } = useMapZoom(activity.id);
 
   useEffect(() => {
     (async () => {
@@ -49,7 +89,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
 
   return (
     <Card
-      className="flex h-full cursor-pointer flex-col transition-all duration-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-800"
+      className={`flex h-full cursor-pointer flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:bg-slate-800 ${getVariantStyles(variant)}`}
       onClick={() => {
         if (setSearchParams)
           return setSearchParams("activity", activity.id.toString());
@@ -80,6 +120,13 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             containerClassName="h-full w-full"
           />
         </div>
+
+        {/* Status Badge */}
+        <div className={getStatusBadgeStyles(variant)}>
+          <span>{getStatusBadgeLabel(variant)}</span>
+        </div>
+
+        {/* Category Badges */}
         <div className="absolute top-0 flex h-4 w-full justify-end px-2 text-right">
           <div className="flex w-2/3 flex-wrap items-center justify-end gap-2">
             {categories.map((category) => (
@@ -92,11 +139,11 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             ))}
           </div>
         </div>
-        <CardTitle className="px-4 pt-4 text-left text-xl leading-tight md:px-6 md:text-2xl">
+        <CardTitle className="px-4 pt-4 text-left text-lg font-semibold leading-tight md:px-5 md:py-3 md:text-xl">
           {activity.title}
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-4 md:p-6">
+      <CardContent className="px-4 py-3 md:px-5 md:py-4">
         <div className="min-w-0 flex-1">
           {/* <p className="break-words text-base leading-snug">
             {activity.location && activity.location.toLocaleString()}
@@ -122,7 +169,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             <ImLocation2 className="text-primary" aria-hidden="true" />
           </Link>
         )} */}
-        <p className="flex items-center gap-1 text-base text-muted-foreground">
+        <p className="flex items-center gap-2 text-sm text-muted-foreground">
           <ImLocation2 className="flex-shrink-0" />
           <span>
             {activity.location.length <= 30
@@ -130,7 +177,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
               : activity.location.slice(0, 30) + "..."}
           </span>
         </p>
-        <p className="flex items-center gap-1 text-base text-muted-foreground">
+        <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
           <MdDateRange className="flex-shrink-0" />
           <span>
             {activity.date &&
@@ -142,8 +189,13 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           </span>
           <span>{activity.time && activity.time.toLocaleString()}</span>
         </p>
+        {activity.likes !== undefined && activity.likes > 0 && (
+          <p className="mt-2 text-xs text-muted-foreground">
+            ❤️ {activity.likes} {activity.likes === 1 ? "like" : "likes"}
+          </p>
+        )}
       </CardContent>
-      <CardFooter className="mt-auto block w-full border-t px-4 py-2 md:px-6 md:py-4">
+      <CardFooter className="mt-auto block w-full border-t border-border/50 px-4 py-2 md:px-5 md:py-3">
         {activity.user_id && (
           <UserCard userId={activity.user_id} displayFollowButton={false} />
         )}

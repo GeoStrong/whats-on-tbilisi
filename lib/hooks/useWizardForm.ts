@@ -32,6 +32,7 @@ const step2Schema = Yup.object({
     .required("Date is required")
     .min(new Date().setHours(0, 0, 0, 0), "Date cannot be in the past"),
   time: Yup.string().required("Time is required"),
+  endTime: Yup.string().required("End time is required"),
 });
 
 // Full schema for final submission
@@ -57,6 +58,7 @@ const fullSchema = Yup.object({
     .required("Date is required")
     .min(new Date().setHours(0, 0, 0, 0), "Date cannot be in the past"),
   time: Yup.string().required("Time is required"),
+  endTime: Yup.string().required("End time is required"),
 });
 
 const getSchemaForStep = (step: number) => {

@@ -13,6 +13,8 @@ export interface WizardFormState {
   date: Date | string | null;
   time: string;
   endTime: string;
+  endDate: Date | string | null;
+  recurringDays: string[];
   targetAudience: string | null;
   link: string;
   maxAttendees: number | null;
@@ -56,6 +58,8 @@ export const initialWizardState: WizardFormState = {
   date: null,
   time: "",
   endTime: "",
+  endDate: null,
+  recurringDays: [],
   targetAudience: null,
   link: "",
   maxAttendees: null,

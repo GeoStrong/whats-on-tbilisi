@@ -24,8 +24,9 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: "icon",
-      url: "/icon.svg",
-      type: "image/svg+xml",
+      url: "/favicon.png",
+      type: "image/png",
+      sizes: "48x48",
     },
     {
       rel: "apple-touch-icon",
@@ -43,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />
         <link rel="apple-touch-icon" href="/apple-icon.svg" sizes="180x180" />
       </head>
       <body className={`${myFont.variable} antialiased`}>
