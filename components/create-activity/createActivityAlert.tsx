@@ -23,6 +23,7 @@ interface CreateActivityAlertProps {
   isActivityCreated: boolean;
   activityId?: string;
   activityTitle?: string;
+  handleCloseDrawer?: () => void;
 }
 
 const CreateActivityAlert: React.FC<CreateActivityAlertProps> = ({
@@ -30,6 +31,7 @@ const CreateActivityAlert: React.FC<CreateActivityAlertProps> = ({
   isActivityCreated,
   activityId,
   activityTitle,
+  handleCloseDrawer,
 }) => {
   const router = useRouter();
   const { user } = useGetUserProfile();
@@ -48,6 +50,8 @@ const CreateActivityAlert: React.FC<CreateActivityAlertProps> = ({
   const createPostMutation = useCreateFeedPost(user!);
 
   const handleGoToFeed = async () => {
+    if (handleCloseDrawer) handleCloseDrawer();
+
     if (!activityId || !user) {
       router.push("/");
       return;

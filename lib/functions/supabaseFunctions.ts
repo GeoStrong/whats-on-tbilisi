@@ -832,6 +832,7 @@ export const createFeedPost = async (
   activityId: string,
   userId: string,
   comment?: string | null,
+  isUpdated: boolean = false,
 ) => {
   if (!activityId || !userId) {
     throw new Error("Missing required fields: activityId and userId");
@@ -844,6 +845,7 @@ export const createFeedPost = async (
         user_id: userId,
         activity_id: activityId,
         comment: comment || null,
+        isUpdatedPost: isUpdated,
       },
     ])
     .select()
@@ -944,6 +946,7 @@ export const getFeedPostsFromFollowedUsers = async (userId: string) => {
         updated_at: item.updated_at,
         activity: activity as ActivityEntity,
         author: author as UserProfile,
+        isUpdatedPost: item.isUpdatedPost,
       };
     })
     .filter((post: any): post is FeedPostWithActivity => post !== null)

@@ -110,6 +110,7 @@ const useModifyActivity: (props: useModifyActivityProps) => {
       title: values.title,
       description: values.description,
       date: values.date,
+      endDate: values.endDate,
       time: values.time,
       endTime: values.endTime || null,
       location: values.location,
@@ -168,7 +169,7 @@ const useModifyActivity: (props: useModifyActivityProps) => {
 
   useEffect(() => {
     dispatch(mapActions.setIsFloatingEnabled(enableMapFloating));
-  }, [dispatch, enableMapFloating]);
+  }, [enableMapFloating]);
 
   const formikComponent = (
     <Formik

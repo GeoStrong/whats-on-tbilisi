@@ -52,15 +52,8 @@ export interface UserParticipationHistory {
   userName: string;
   userAvatar: string | undefined;
   activity: ActivityEntity;
-  // activityId: string;
-  // activityTitle: string;
-  // activityImage: string | null;
-  // activityLocation: string;
   activityCategories: Partial<Category[]>;
   participationDate: string;
-  // activityStatus?: "active" | "inactive" | "pending";
-  // activityDate: string;
-  // activityTime: string;
   participantCount?: number;
 }
 
@@ -96,8 +89,8 @@ export interface ActivityEntity {
   rating?: number;
   reviews?: string[];
   status?: "active" | "inactive" | "pending";
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date | string;
+  updated_at?: Date | string;
   participants?: ActivityParticipantsEntity[] | null;
   likes?: number;
   dislikes?: number;
@@ -138,6 +131,7 @@ export interface FeedPostEntity {
   user_id: string;
   activity_id: string;
   comment: string | null;
+  isUpdatedPost: boolean;
   created_at: Date | string;
   updated_at: Date | string;
 }

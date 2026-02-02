@@ -8,7 +8,6 @@ import {
   getActivitiesByUserId,
   getActivityById,
 } from "@/lib/functions/supabaseFunctions";
-import { ActivityEntity } from "@/lib/types";
 import { queryKeys } from "@/lib/react-query/queryKeys";
 import {
   PaginationParams,

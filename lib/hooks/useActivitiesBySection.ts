@@ -78,8 +78,8 @@ export const useActivitiesBySection = (
 
     // Sort ongoing by creation date descending (newest first)
     ongoing.sort((a, b) => {
-      const dateA = new Date(a.createdAt || 0).getTime();
-      const dateB = new Date(b.createdAt || 0).getTime();
+      const dateA = new Date(a.created_at || 0).getTime();
+      const dateB = new Date(b.created_at || 0).getTime();
       return dateB - dateA;
     });
 

@@ -31,6 +31,7 @@ const ActivityUpdate: React.FC<{
     title,
     description,
     date,
+    endDate,
     time,
     endTime,
     location,
@@ -56,6 +57,10 @@ const ActivityUpdate: React.FC<{
     title,
     description,
     date: typeof date === "string" ? date?.toLocaleString().split("T")[0] : "",
+    endDate:
+      typeof endDate === "string"
+        ? endDate?.toLocaleString().split("T")[0]
+        : "",
     time,
     endTime,
     location,
@@ -83,6 +88,7 @@ const ActivityUpdate: React.FC<{
     <>
       <Drawer
         direction={isMobile ? "bottom" : "right"}
+        open={isDrawerOpen}
         onOpenChange={(drawerState) => {
           setIsDrawerOpen(drawerState);
         }}
@@ -91,7 +97,7 @@ const ActivityUpdate: React.FC<{
         setActiveSnapPoint={setSnap}
         fadeFromIndex={0}
       >
-        <DrawerTrigger className="h-10 w-1/2 rounded-md border bg-white px-8 text-black md:w-auto">
+        <DrawerTrigger className="h-10 w-1/2 rounded-md border bg-white px-8 text-black shadow-sm md:w-auto">
           Edit
         </DrawerTrigger>
         <DrawerContent className="w-full">
@@ -112,6 +118,9 @@ const ActivityUpdate: React.FC<{
                 isActivityCreated={false}
                 activityId={activity.id}
                 activityTitle={activity.title}
+                handleCloseDrawer={() => {
+                  setIsDrawerOpen(false);
+                }}
               />
             </DrawerHeader>
           </APIProvider>

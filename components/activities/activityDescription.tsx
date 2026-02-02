@@ -34,7 +34,7 @@ import UserCard from "../users/userCard";
 const snapPoints = [0.5, 1];
 
 interface ActivityDescriptionProps {
-  buttonRef: React.RefObject<HTMLButtonElement>;
+  buttonRef: React.RefObject<HTMLButtonElement | null>;
   activity: ActivityEntity;
   setSearchParams: (query: string, value: string) => void;
   open?: boolean;

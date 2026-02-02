@@ -79,17 +79,26 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
     setIsEditing(true);
   }, []);
 
-  const formattedDate = useMemo(
-    () =>
-      new Date(post.created_at).toLocaleDateString("en-US", {
+  const formattedDate = useMemo(() => {
+    const activityDate = post.created_at;
+
+    if (!activityDate) return;
+
+    const date = new Date(activityDate);
+
+    const isUpdated = post.isUpdatedPost;
+
+    return `${isUpdated ? "Updated at" : "Created at"} ${date.toLocaleDateString(
+      "en-US",
+      {
         month: "short",
         day: "numeric",
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-      }),
-    [post.created_at],
-  );
+      },
+    )}`;
+  }, [post.created_at, post.isUpdatedPost]);
 
   return (
     <div className="border-b bg-card p-2 pb-4 dark:border-slate-700 dark:bg-slate-800 md:p-4">
@@ -98,9 +107,7 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
           <UserAvatar avatarPath={post.author?.avatar_path} size={12} />
           <div>
             <p className="font-semibold">{post.author?.name}</p>
-            <p className="text-xs text-muted-foreground">
-              Created at {formattedDate}
-            </p>
+            <p className="text-xs text-muted-foreground">{formattedDate}</p>
           </div>
         </div>
         {isOwnPost && (

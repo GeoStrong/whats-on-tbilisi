@@ -86,13 +86,21 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
   };
 
   const handleToggleSameDay = () => {
-    setIsSameDay(!isSameDay);
-    if (isSameDay) {
+    const newIsSameDay = !isSameDay;
+    setIsSameDay(newIsSameDay);
+
+    if (newIsSameDay) {
       updateFormState({ endDate: formState.date });
     } else {
       updateFormState({ endDate: "" });
     }
   };
+
+  useEffect(() => {
+    if (isSameDay && formState.date) {
+      updateFormState({ endDate: formState.date });
+    }
+  }, [isSameDay, formState.date, updateFormState]); // Ensure endDate updates when date changes and isSameDay is true
 
   const handleRecurringToggle = () => {
     setIsRecurring(!isRecurring);
@@ -223,7 +231,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             htmlFor="wizard-endTime"
             className="flex items-center gap-2 text-base font-medium"
           >
-            <FaClock className="text-gray-400" />
+            <FaClock className="text-primary" />
             End Time
           </label>
           <Input
