@@ -63,9 +63,19 @@ const getStatusBadgeLabel = (variant: ActivityVariant): string => {
   return labels[variant];
 };
 
+export const determineActivityVariant = (
+  activity: ActivityEntity,
+): ActivityVariant => {
+  const status = activity.status || "active";
+
+  if (status === "inactive") return "past";
+  if (status === "pending") return "ongoing";
+  return "upcoming";
+};
+
 const ActivityCard: React.FC<ActivityCardProps> = ({
   activity,
-  variant = "upcoming",
+  variant = determineActivityVariant(activity),
   setSearchParams,
 }) => {
   const [categories, setCategories] = useState<(Category | null)[]>([]);
@@ -145,55 +155,32 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       </CardHeader>
       <CardContent className="px-4 py-3 md:px-5 md:py-4">
         <div className="min-w-0 flex-1">
-          {/* <p className="break-words text-base leading-snug">
-            {activity.location && activity.location.toLocaleString()}
-          </p> */}
-          {/* {activity.hostName && (
-            <p className="mt-1 text-sm text-muted-foreground">
-              {activity.hostName}
-            </p>
-          )} */}
-        </div>
-        {/* {activity.googleLocation && (
-          <Link
-            href="/map"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (activity.googleLocation) {
-                handleLocationClick(activity.googleLocation);
-              }
-            }}
-            className="flex-shrink-0 rounded-md border-2 border-primary bg-transparent p-2 transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-            aria-label={`View location on map: ${activity.location}`}
-          >
-            <ImLocation2 className="text-primary" aria-hidden="true" />
-          </Link>
-        )} */}
-        <p className="flex items-center gap-2 text-sm text-muted-foreground">
-          <ImLocation2 className="flex-shrink-0" />
-          <span>
-            {activity.location.length <= 30
-              ? activity.location
-              : activity.location.slice(0, 30) + "..."}
-          </span>
-        </p>
-        <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-          <MdDateRange className="flex-shrink-0" />
-          <span>
-            {activity.date &&
-              new Date(activity.date).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-              })}
-            ,
-          </span>
-          <span>{activity.time && activity.time.toLocaleString()}</span>
-        </p>
-        {activity.likes !== undefined && activity.likes > 0 && (
-          <p className="mt-2 text-xs text-muted-foreground">
-            ❤️ {activity.likes} {activity.likes === 1 ? "like" : "likes"}
+          <p className="flex items-center gap-2 text-sm text-muted-foreground">
+            <ImLocation2 className="flex-shrink-0" />
+            <span>
+              {activity.location.length <= 30
+                ? activity.location
+                : activity.location.slice(0, 30) + "..."}
+            </span>
           </p>
-        )}
+          <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+            <MdDateRange className="flex-shrink-0" />
+            <span>
+              {activity.date &&
+                new Date(activity.date).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}
+              ,
+            </span>
+            <span>{activity.time && activity.time.toLocaleString()}</span>
+          </p>
+          {activity.likes !== undefined && activity.likes > 0 && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              ❤️ {activity.likes} {activity.likes === 1 ? "like" : "likes"}
+            </p>
+          )}
+        </div>
       </CardContent>
       <CardFooter className="mt-auto block w-full border-t border-border/50 px-4 py-2 md:px-5 md:py-3">
         {activity.user_id && (

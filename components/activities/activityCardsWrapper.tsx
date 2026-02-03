@@ -95,7 +95,7 @@ const ActivityCards: React.FC = () => {
       />
 
       <ActivitySection
-        title="📅 Upcoming Activities"
+        title="Upcoming Activities"
         description="Events happening soon"
         activities={future}
         variant="upcoming"
@@ -103,7 +103,7 @@ const ActivityCards: React.FC = () => {
         onSearch={handleSearch}
       />
       <ActivitySection
-        title="⏳ Ongoing Activities"
+        title="Ongoing Activities"
         description="Registrations are open now"
         activities={ongoing}
         variant="ongoing"
@@ -112,7 +112,7 @@ const ActivityCards: React.FC = () => {
       />
 
       <ActivitySection
-        title="🏁 Past Activities"
+        title="Past Activities"
         description="Browse your activity history"
         activities={past}
         variant="past"

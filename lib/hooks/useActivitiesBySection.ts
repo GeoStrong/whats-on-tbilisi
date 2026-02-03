@@ -4,10 +4,10 @@ import { useMemo } from "react";
 import { ActivityEntity } from "../types";
 
 /**
- * Categorizes activities into sections based on status and dates
- * - featured: active status, sorted by engagement (likes + comments)
+ * Categorizes activities into sections based on status
+ * - featured: featured flag (can overlap with other sections)
  * - ongoing: pending status
- * - future: active status with date > today
+ * - future: active status
  * - past: inactive status
  */
 export const useActivitiesBySection = (
@@ -23,9 +23,6 @@ export const useActivitiesBySection = (
       };
     }
 
-    const now = new Date();
-    now.setHours(0, 0, 0, 0); // Start of today
-
     const featured: ActivityEntity[] = [];
     const ongoing: ActivityEntity[] = [];
     const future: ActivityEntity[] = [];
@@ -33,32 +30,17 @@ export const useActivitiesBySection = (
 
     activities.forEach((activity) => {
       const status = activity.status || "active";
-      const activityDate = activity.date ? new Date(activity.date) : null;
 
-      if (!activityDate) {
-        // If no date, treat as pending/ongoing
-        if (status === "pending") {
-          ongoing.push(activity);
-        }
-        return;
+      if (activity.featured) {
+        featured.push(activity);
       }
 
-      activityDate.setHours(0, 0, 0, 0); // Normalize to start of day
-
-      if (status === "active") {
-        if (activityDate < now) {
-          // Past date = featured (already happened, can show engagement)
-          featured.push(activity);
-        } else {
-          // Future date = future section
-          future.push(activity);
-        }
-      } else if (status === "pending") {
-        // Pending = ongoing
-        ongoing.push(activity);
-      } else if (status === "inactive") {
-        // Inactive = past
+      if (status === "inactive") {
         past.push(activity);
+      } else if (status === "pending") {
+        ongoing.push(activity);
+      } else {
+        future.push(activity);
       }
     });
 

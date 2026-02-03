@@ -101,6 +101,7 @@ export interface ActivityFilters {
   date?: string;
   categories?: string[];
   userId?: string;
+  excludePast?: boolean;
 }
 
 export interface PaginatedResult<T> {

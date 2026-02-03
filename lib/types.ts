@@ -94,6 +94,7 @@ export interface ActivityEntity {
   participants?: ActivityParticipantsEntity[] | null;
   likes?: number;
   dislikes?: number;
+  featured?: boolean;
 }
 
 export interface CommentEntity {

@@ -3,6 +3,7 @@ import { ActivityEntity, Category, Poi } from "../types";
 import useAddSearchQuery from "./useAddSearchQuery";
 import { useActivities, useActivitiesByCategory } from "./useActivities";
 import { useCategory } from "./useCategories";
+import { determineActivityVariant } from "@/components/activities/activityCard";
 
 const useActivitiesFilter = () => {
   const [activities, setActivities] = useState<ActivityEntity[] | null>(null);
@@ -36,7 +37,7 @@ const useActivitiesFilter = () => {
   // Fetch activities using React Query - all hooks called unconditionally
   const { data: singleCategoryActivities, isLoading: singleCategoryLoading } =
     useActivitiesByCategory(singleCategoryId || null);
-  // Use server-side filtering for search and date when no categories selected
+  // Fetch ALL activities (including past) for client-side filtering by status
   const { data: allActivities, isLoading: allActivitiesLoading } =
     useActivities({
       limit: 100,
@@ -45,9 +46,43 @@ const useActivitiesFilter = () => {
           ? {
               search: search || undefined,
               date: date || undefined,
+              // Don't exclude past here - we need them for "past" filter
+              excludePast: false,
             }
           : undefined,
     });
+
+  // Apply featured, ongoing, past, and upcoming filters
+  const filteredActivities = useMemo(() => {
+    if (!allActivities) return [];
+
+    const filter = searchParams.get("filter");
+
+    return allActivities.filter((activity) => {
+      const variant = determineActivityVariant(activity);
+
+      // Handle specific filter selections
+      if (filter === "featured") {
+        return activity.featured;
+      }
+      if (filter === "ongoing") {
+        return variant === "ongoing";
+      }
+      if (filter === "past") {
+        return variant === "past";
+      }
+      if (filter === "upcoming") {
+        return variant === "upcoming";
+      }
+
+      // Default: "All" filter - show all activities
+      return true;
+    });
+  }, [allActivities, searchParams]);
+
+  useEffect(() => {
+    setActivities(filteredActivities);
+  }, [filteredActivities]);
 
   // Fetch activities for each selected category (max 10 to avoid too many hooks)
   const category1Query = useActivitiesByCategory(selectedCategories[0] || null);

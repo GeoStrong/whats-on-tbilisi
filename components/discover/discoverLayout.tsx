@@ -25,42 +25,15 @@ const DiscoverLayout: React.FC = () => {
     handleSearch("date", value);
   };
 
-  const setQuickDate = (type: string) => {
-    const today = new Date();
+  const filterOptions = ["All", "Featured", "Ongoing", "Past", "Upcoming"];
 
-    const format = (d: Date) => d.toISOString().split("T")[0];
-
-    if (type === "Today") {
-      const d = format(today);
-      setSelectedDate(d);
-      handleSearch("date", d);
-      return;
+  const isActiveFilter = (filter: string) => {
+    const currentFilter = searchParams.get("filter");
+    // "All" is active when no filter is set or filter is explicitly "all"
+    if (filter === "All") {
+      return !currentFilter || currentFilter === "all";
     }
-
-    if (type === "Tomorrow") {
-      const d = new Date(today.setDate(today.getDate() + 1));
-      const f = format(d);
-      setSelectedDate(f);
-      handleSearch("date", f);
-      return;
-    }
-
-    if (type === "Weekend") {
-      handleSearch("date", "weekend");
-      setSelectedDate("");
-      return;
-    }
-
-    if (type === "This month") {
-      handleSearch("date", "month");
-      setSelectedDate("");
-      return;
-    }
-
-    if (type === "All") {
-      setSelectedDate("");
-      handleSearch("date", "");
-    }
+    return currentFilter === filter.toLowerCase();
   };
 
   return (
@@ -87,18 +60,18 @@ const DiscoverLayout: React.FC = () => {
 
                 <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-center">
                   <div className="flex flex-wrap justify-center gap-2 md:flex-nowrap md:overflow-x-auto">
-                    {["Today", "Tomorrow", "Weekend", "This month", "All"].map(
-                      (b) => (
-                        <Button
-                          key={b}
-                          variant="outline"
-                          onClick={() => setQuickDate(b)}
-                          className="whitespace-nowrap rounded-full border-2 px-4 py-2 dark:border-slate-700 dark:bg-slate-800"
-                        >
-                          {b}
-                        </Button>
-                      ),
-                    )}
+                    {filterOptions.map((filter) => (
+                      <Button
+                        key={filter}
+                        variant="outline"
+                        onClick={() =>
+                          handleSearch("filter", filter.toLowerCase())
+                        }
+                        className={`whitespace-nowrap rounded-full border-2 px-4 py-2 dark:border-slate-700 dark:bg-slate-800 ${isActiveFilter(filter) ? "bg-primary text-white" : ""}`}
+                      >
+                        {filter}
+                      </Button>
+                    ))}
                   </div>
 
                   <Input
