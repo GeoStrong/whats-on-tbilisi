@@ -28,7 +28,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import useActivitiesFilter from "@/lib/hooks/useActvitiesFilter";
 import MapLoadingLayout from "./mapLayoutLoading";
-import Papa from "papaparse";
+// import Papa from "papaparse";
 import { useTheme } from "next-themes";
 import { ZoomIn, ZoomOut, Maximize, Minimize, Home } from "lucide-react";
 import { MdMyLocation } from "react-icons/md";
@@ -241,6 +241,7 @@ const MapComponent: React.FC<MapProps> = ({
 
     (async () => {
       try {
+        const Papa = (await import("papaparse")).default;
         const res = await fetch("/ge.csv");
         const text = await res.text();
         const parsed = Papa.parse(text, {

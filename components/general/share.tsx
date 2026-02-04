@@ -12,7 +12,7 @@ import {
 import { ActivityEntity } from "@/lib/types";
 import defaultActivityImg from "@/public/images/default-activity-img.png";
 import Socials from "./socials";
-import { useLocation } from "react-use";
+// import { useLocation } from "react-use";
 import { Button } from "../ui/button";
 import useOptimizedImage from "@/lib/hooks/useOptimizedImage";
 import OptimizedImage from "../ui/optimizedImage";
@@ -21,11 +21,11 @@ const Share: React.FC<{
   children: React.ReactNode;
   activity: ActivityEntity;
 }> = ({ children, activity }) => {
-  const { href } = useLocation();
+  // const { href } = useLocation();
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = useCallback(() => {
-    navigator.clipboard.writeText(href || "");
+    navigator.clipboard.writeText(window.location.href || "");
     setTimeout(() => {
       setCopied(true);
     }, 100);

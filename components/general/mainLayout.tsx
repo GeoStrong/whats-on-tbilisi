@@ -4,7 +4,7 @@ import React from "react";
 import Header from "@/components/header/header";
 import Container from "@/components/container/container";
 import SmartActivityCategoriesCarousel from "@/components/activities/smartActivityCategoriesCarousel";
-import { useLocation } from "react-use";
+import { usePathname } from "next/navigation";
 import SearchSection from "./searchSection";
 import { Toaster } from "../ui/sonner";
 import SignupSuccessDialog from "@/components/auth/signupSuccessDialog";
@@ -12,7 +12,7 @@ import VerificationDialogWrapper from "../auth/verificationDialog";
 import { getPWADisplayMode } from "@/lib/functions/helperFunctions";
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
 
   const displayCategories = pathname === "/activities" || pathname === "/map";
   const displaySearchSection = pathname === "/activities";

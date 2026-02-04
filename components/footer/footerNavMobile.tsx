@@ -2,14 +2,14 @@
 
 import React from "react";
 import Link from "next/link";
-import { useLocation } from "react-use";
+import { usePathname } from "next/navigation";
 import { FiMapPin } from "react-icons/fi";
 import { AiOutlineAppstore, AiOutlinePlusCircle } from "react-icons/ai";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { BiHomeAlt2 } from "react-icons/bi";
 
 const FooterNavMobile: React.FC = () => {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
 
   return (
     <footer

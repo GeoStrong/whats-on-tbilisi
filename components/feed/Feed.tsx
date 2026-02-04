@@ -33,7 +33,7 @@ const Feed: React.FC = () => {
       if (!participantsInfo) return;
       setFollowedParticipations(participantsInfo);
     })();
-  }, [followedParticipations, userId]);
+  }, [userId]);
 
   if (userLoading && !user) {
     return (

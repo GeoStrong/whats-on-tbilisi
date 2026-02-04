@@ -2,12 +2,12 @@
 
 import React from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { useLocation } from "react-use";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import defaultUserImg from "@/public/images/default-user.png";
 
 const ProfileAvatar: React.FC<{ image?: string }> = ({ image }) => {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
 
   const activeProfile = pathname === "/profile";
 
