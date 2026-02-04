@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "dev": "pnpm --filter whatson-tbilisi-web dev",
+    "build": "pnpm --filter whatson-tbilisi-web build",
+    "start": "pnpm --filter whatson-tbilisi-web start",
+    "lint": "pnpm --filter whatson-tbilisi-web lint",
+    "test": "pnpm --filter whatson-tbilisi-web test",
+    "test:watch": "pnpm --filter whatson-tbilisi-web test:watch",
+    "test:coverage": "pnpm --filter whatson-tbilisi-web test:coverage",
+    "test:e2e": "pnpm --filter whatson-tbilisi-web test:e2e",
+    "test:e2e:ui": "pnpm --filter whatson-tbilisi-web test:e2e:ui"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.947.0",

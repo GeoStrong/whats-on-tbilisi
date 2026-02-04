@@ -1,0 +1,20 @@
+{
+  "extends": "../config/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@whatson/ui/*": [
+        "src/*"
+      ],
+      "@whatson/shared": [
+        "../shared/src/index.ts"
+      ],
+      "@whatson/shared/*": [
+        "../shared/src/*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
