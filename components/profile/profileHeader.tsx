@@ -51,7 +51,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
       if (!user) throw new Error("Not signed in");
 
       if (avatarUrl !== "") {
-        await deleteImageFromStorage(`${user.avatar_path}`);
+        await deleteImageFromStorage(`${user.avatar_path}`, user.id);
       }
 
       const uploadedUrl = await handleUploadUserAvatar(user, file);

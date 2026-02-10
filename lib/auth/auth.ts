@@ -45,6 +45,32 @@ export const signOut = async () => {
   if (error) throw error;
 };
 
+/**
+ * Change the current user's password after reauthenticating.
+ * @param email - User's email address
+ * @param currentPassword - User's current password
+ * @param newPassword - User's new password
+ * @throws Error if reauthentication or update fails
+ */
+export const changePassword = async (
+  email: string,
+  currentPassword: string,
+  newPassword: string,
+) => {
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password: currentPassword,
+  });
+
+  if (signInError) throw signInError;
+
+  const { error: updateError } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  if (updateError) throw updateError;
+};
+
 export const getSession = async () => {
   const {
     data: { session },

@@ -517,13 +517,16 @@ export const getCachedOptimizedImageUrl = (
   return entry.url;
 };
 
-export const deleteImageFromStorage = async (imagePath: string | null) => {
+export const deleteImageFromStorage = async (
+  imagePath: string | null,
+  userId?: string,
+) => {
   if (!imagePath) return;
   try {
     const res = await fetch(`/api/delete-image`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filePath: imagePath }),
+      body: JSON.stringify({ filePath: imagePath, userId }),
     });
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
@@ -601,7 +604,7 @@ export const deleteActivityByUser = async (
     // Best-effort image cleanup – don't fail the whole delete if this throws
     if (activity?.image) {
       try {
-        await deleteImageFromStorage(activity.image as string);
+        await deleteImageFromStorage(activity.image as string, userId);
       } catch (imageErr) {
         console.error(
           "Failed to delete activity image from storage:",
@@ -1435,4 +1438,146 @@ export const getUserParticipationHistory = async (userId: string) => {
   }) as UserParticipationHistory[];
 
   return fullInfo;
+};
+
+// ──────────────────────────────────────────────
+// Discover Search helpers
+// ──────────────────────────────────────────────
+
+/**
+ * Search users by name or email
+ */
+export const searchUsers = async (
+  query: string,
+  limit = 20,
+): Promise<UserProfile[]> => {
+  if (!query || query.trim().length === 0) return [];
+
+  const searchTerm = `%${query.trim()}%`;
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("id, name, email, phone, avatar_path, created_at")
+    .or(`name.ilike.${searchTerm},email.ilike.${searchTerm}`)
+    .order("name", { ascending: true })
+    .limit(limit);
+
+  if (error) {
+    console.error("Error searching users:", error);
+    return [];
+  }
+
+  return (data || []) as UserProfile[];
+};
+
+/**
+ * Search comments by text content
+ */
+export const searchComments = async (
+  query: string,
+  limit = 20,
+): Promise<
+  (CommentEntity & { activity_title?: string; user_name?: string })[]
+> => {
+  if (!query || query.trim().length === 0) return [];
+
+  const searchTerm = `%${query.trim()}%`;
+
+  const { data, error } = await supabase
+    .from("activity_comments")
+    .select(
+      "id, activity_id, user_id, text, created_at, updated_at, parent_comment_id",
+    )
+    .ilike("text", searchTerm)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("Error searching comments:", error);
+    return [];
+  }
+
+  if (!data || data.length === 0) return [];
+
+  // Enrich with activity titles and user names
+  const activityIds = [...new Set(data.map((c: any) => c.activity_id))];
+  const userIds = [...new Set(data.map((c: any) => c.user_id))];
+
+  const [activitiesRes, usersRes] = await Promise.all([
+    supabase.from("activities").select("id, title").in("id", activityIds),
+    supabase.from("users").select("id, name").in("id", userIds),
+  ]);
+
+  const activityMap = new Map(
+    (activitiesRes.data || []).map((a: any) => [a.id, a.title]),
+  );
+  const userMap = new Map(
+    (usersRes.data || []).map((u: any) => [u.id, u.name]),
+  );
+
+  return data.map((c: any) => ({
+    ...c,
+    parent_comment_id: c.parent_comment_id || null,
+    activity_title: activityMap.get(c.activity_id) || "Unknown Activity",
+    user_name: userMap.get(c.user_id) || "Unknown User",
+  }));
+};
+
+/**
+ * Search feed posts by comment text, with activity & author info
+ */
+export const searchFeedPosts = async (
+  query: string,
+  limit = 20,
+): Promise<FeedPostWithActivity[]> => {
+  if (!query || query.trim().length === 0) return [];
+
+  const searchTerm = `%${query.trim()}%`;
+
+  const { data, error } = await supabase
+    .from("feed_posts")
+    .select(`*, activities (*)`)
+    .ilike("comment", searchTerm)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("Error searching feed posts:", error);
+    return [];
+  }
+
+  if (!data || data.length === 0) return [];
+
+  const userIds = [...new Set(data.map((p: any) => p.user_id))];
+
+  const { data: usersData } = await supabase
+    .from("users")
+    .select("id, email, name, avatar_path, created_at")
+    .in("id", userIds);
+
+  const usersMap = new Map(
+    (usersData || []).map((u: any) => [u.id, u as UserProfile]),
+  );
+
+  return data
+    .map((item: any) => {
+      const activity = Array.isArray(item.activities)
+        ? item.activities[0]
+        : item.activities;
+      const author = usersMap.get(item.user_id);
+      if (!activity || !author) return null;
+
+      return {
+        id: item.id,
+        user_id: item.user_id,
+        activity_id: item.activity_id,
+        comment: item.comment,
+        isUpdatedPost: item.isUpdatedPost ?? false,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+        activity,
+        author,
+      } as FeedPostWithActivity;
+    })
+    .filter(Boolean) as FeedPostWithActivity[];
 };

@@ -66,6 +66,19 @@ export const queryKeys = {
     byActivityId: (activityId: string, userId?: string) =>
       [...queryKeys.feedPosts.all, "activity", activityId, userId] as const,
   },
+
+  // Discover Search
+  discoverSearch: {
+    all: ["discoverSearch"] as const,
+    activities: (query: string) =>
+      [...queryKeys.discoverSearch.all, "activities", query] as const,
+    users: (query: string) =>
+      [...queryKeys.discoverSearch.all, "users", query] as const,
+    comments: (query: string) =>
+      [...queryKeys.discoverSearch.all, "comments", query] as const,
+    posts: (query: string) =>
+      [...queryKeys.discoverSearch.all, "posts", query] as const,
+  },
 } as const;
 
 

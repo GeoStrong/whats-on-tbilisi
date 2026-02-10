@@ -46,13 +46,13 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
   const titleText = titleParts.join(" ");
 
   return (
-    <section className="mt-10 scroll-mt-16">
+    <section className="scroll-mt-16">
       {/* Section Header */}
       <div className="mb-4 flex items-end justify-between">
         <div className="flex-1">
           <h2 className="section-title-enhanced">
             {emoji && <span className="text-3xl">{emoji}</span>}
-            <span>{titleText}</span>
+            <span className="text-lg md:text-2xl">{titleText}</span>
             {activities.length > 0 && (
               <Badge variant="secondary" className="ml-2 text-xs">
                 {activities.length}

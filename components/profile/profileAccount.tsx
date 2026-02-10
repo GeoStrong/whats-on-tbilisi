@@ -13,7 +13,7 @@ import {
 import { Label } from "../ui/label";
 import { UserProfile } from "@/lib/types";
 import { Button } from "../ui/button";
-import { signOut } from "@/lib/auth/auth";
+import { changePassword, signOut } from "@/lib/auth/auth";
 import { useDispatch } from "react-redux";
 import { userActions } from "@/lib/store/userSlice";
 import { AppDispatch } from "@/lib/store/store";
@@ -21,6 +21,15 @@ import { handleUploadUserInformation } from "@/lib/profile/profile";
 import { toast } from "sonner";
 import { logger } from "@/lib/utils/logger";
 import { redirect } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 interface ProfileAccountProps {
   user: UserProfile | null;
@@ -30,6 +39,12 @@ interface FormValues {
   name: string;
   phone: string;
   bio: string;
+}
+
+interface PasswordFormValues {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
 const validationSchema = Yup.object().shape({
@@ -43,8 +58,19 @@ const validationSchema = Yup.object().shape({
   bio: Yup.string().max(100, "Bio cannot exceed 100 characters").nullable(),
 });
 
+const passwordValidationSchema = Yup.object().shape({
+  currentPassword: Yup.string().required("Current password is required"),
+  newPassword: Yup.string()
+    .min(8, "New password must be at least 8 characters")
+    .required("New password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("newPassword")], "Passwords must match")
+    .required("Please confirm your new password"),
+});
+
 const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   if (!user) {
@@ -87,6 +113,42 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
       logger.error("Failed to logout", error);
       // toast.error("Failed to logout. Please try again.");
       return redirect("/");
+    }
+  };
+
+  const handlePasswordSubmit = async (
+    values: PasswordFormValues,
+    {
+      setSubmitting,
+      resetForm,
+      setFieldError,
+    }: FormikHelpers<PasswordFormValues>,
+  ) => {
+    try {
+      await changePassword(
+        user.email,
+        values.currentPassword,
+        values.newPassword,
+      );
+      toast.success("Password updated successfully");
+      resetForm();
+      setIsPasswordDialogOpen(false);
+    } catch (error) {
+      logger.error("Failed to change password", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to change password. Please try again.";
+
+      if (errorMessage.toLowerCase().includes("new password")) {
+        setFieldError("newPassword", errorMessage);
+      } else {
+        setFieldError("currentPassword", errorMessage);
+      }
+
+      toast.error(errorMessage);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -218,14 +280,130 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                 </div>
 
                 {/* Log Out */}
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={handleLogout}
-                  className="p-5 text-sm"
-                >
-                  Log out
-                </Button>
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Dialog
+                    open={isPasswordDialogOpen}
+                    onOpenChange={setIsPasswordDialogOpen}
+                  >
+                    <DialogTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="p-5 text-sm"
+                      >
+                        Change Password
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Change Password</DialogTitle>
+                        <DialogDescription>
+                          Enter your current password to update it.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <Formik
+                        initialValues={{
+                          currentPassword: "",
+                          newPassword: "",
+                          confirmPassword: "",
+                        }}
+                        validationSchema={passwordValidationSchema}
+                        onSubmit={handlePasswordSubmit}
+                      >
+                        {({ isSubmitting }) => (
+                          <Form noValidate className="space-y-4">
+                            <div className="space-y-2">
+                              <Label
+                                className="text-base"
+                                htmlFor="current-password"
+                              >
+                                Current password
+                              </Label>
+                              <Field
+                                as={Input}
+                                id="current-password"
+                                name="currentPassword"
+                                type="password"
+                                autoComplete="current-password"
+                                className="p-5 dark:border-gray-500"
+                              />
+                              <ErrorMessage
+                                name="currentPassword"
+                                component="div"
+                                className="text-sm text-red-500"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label
+                                className="text-base"
+                                htmlFor="new-password"
+                              >
+                                New password
+                              </Label>
+                              <Field
+                                as={Input}
+                                id="new-password"
+                                name="newPassword"
+                                type="password"
+                                autoComplete="new-password"
+                                className="p-5 dark:border-gray-500"
+                              />
+                              <ErrorMessage
+                                name="newPassword"
+                                component="div"
+                                className="text-sm text-red-500"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label
+                                className="text-base"
+                                htmlFor="confirm-password"
+                              >
+                                Confirm new password
+                              </Label>
+                              <Field
+                                as={Input}
+                                id="confirm-password"
+                                name="confirmPassword"
+                                type="password"
+                                autoComplete="new-password"
+                                className="p-5 dark:border-gray-500"
+                              />
+                              <ErrorMessage
+                                name="confirmPassword"
+                                component="div"
+                                className="text-sm text-red-500"
+                              />
+                            </div>
+
+                            <DialogFooter>
+                              <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                aria-busy={isSubmitting}
+                              >
+                                {isSubmitting
+                                  ? "Updating..."
+                                  : "Update Password"}
+                              </Button>
+                            </DialogFooter>
+                          </Form>
+                        )}
+                      </Formik>
+                    </DialogContent>
+                  </Dialog>
+
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={handleLogout}
+                    className="p-5 text-sm"
+                  >
+                    Log out
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </Form>

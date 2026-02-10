@@ -80,7 +80,7 @@ const DiscoverFilters: React.FC<DiscoverFiltersProps> = ({
           </SheetContent>
         </Sheet>
       </div>
-      <div className="hidden h-fit w-full rounded-xl bg-white p-4 shadow-md dark:bg-slate-800 md:w-64 lg:block">
+      <div className="hidden h-fit w-full rounded-xl border bg-white p-4 shadow-md dark:bg-slate-800 md:w-64 lg:block">
         <div className="mb-4">
           <DiscoverClearFilters
             onSearch={setSearch}

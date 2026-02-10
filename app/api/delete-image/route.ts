@@ -9,12 +9,39 @@ async function handleDelete(request: NextRequest) {
   const body = await request.json();
   const { filePath, userId } = body;
 
+  const normalizeFilePath = (rawPath: string) => {
+    try {
+      const url = new URL(rawPath);
+      let path = decodeURIComponent(url.pathname);
+
+      if (path.startsWith("/")) {
+        path = path.slice(1);
+      }
+
+      // If the signed URL is path-style, strip the bucket prefix.
+      const [firstSegment, ...rest] = path.split("/");
+      if (firstSegment === env.r2.bucket && rest.length > 0) {
+        return rest.join("/");
+      }
+
+      return path;
+    } catch {
+      return rawPath;
+    }
+  };
+
   if (!filePath) {
     throw createError.validation("Missing filePath");
   }
 
+  const normalizedPath = normalizeFilePath(filePath);
+
+  if (!normalizedPath) {
+    throw createError.validation("Invalid file path");
+  }
+
   // Validate file path format
-  if (filePath.includes('..') || filePath.startsWith('/')) {
+  if (normalizedPath.includes("..") || normalizedPath.startsWith("/")) {
     throw createError.validation("Invalid file path");
   }
 
@@ -22,7 +49,7 @@ async function handleDelete(request: NextRequest) {
   if (userId) {
     await requireAuthorization(request, userId);
     // Additional check: filePath should contain userId
-    if (!filePath.includes(userId)) {
+    if (!normalizedPath.includes(userId)) {
       throw createError.authorization("You can only delete your own files");
     }
   }
@@ -30,7 +57,7 @@ async function handleDelete(request: NextRequest) {
   await r2.send(
     new DeleteObjectCommand({
       Bucket: env.r2.bucket,
-      Key: filePath,
+      Key: normalizedPath,
     }),
   );
 

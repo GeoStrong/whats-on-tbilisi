@@ -99,7 +99,10 @@ const useModifyActivity: (props: useModifyActivityProps) => {
     if (initialValues.image === values.image) {
       imageUrl = initialValues.image;
     } else {
-      await deleteImageFromStorage(initialValues.image?.toString() || null);
+      await deleteImageFromStorage(
+        initialValues.image?.toString() || null,
+        user?.id,
+      );
       imageUrl = isFile(values.image)
         ? await handleUploadFile("activities", values.image, user!)
         : values.image;

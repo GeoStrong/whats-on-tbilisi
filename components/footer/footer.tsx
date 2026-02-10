@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
               Terms of Service
             </Link>
           </div>
-          <div className="flex flex-col items-center justify-evenly gap-3 md:flex-row">
+          <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
             <div className=""></div>
             <p className="text-center text-sm text-gray-500 dark:text-gray-400">
               © 2025 What&apos;sOn-Tbilisi. All rights reserved.

@@ -224,8 +224,23 @@ const useActivitiesFilter = () => {
         "../functions/supabaseFunctions"
       );
 
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
       const locationsPromises = activities
-        .filter((a) => a.googleLocation)
+        .filter((a) => {
+          if (!a.googleLocation) return false;
+          // Exclude inactive activities
+          if ((a.status || "active") === "inactive") return false;
+          // Exclude activities whose end date (or date) has already passed
+          const activityEndDate = a.endDate || a.date;
+          if (activityEndDate) {
+            const end = new Date(activityEndDate as string);
+            end.setHours(23, 59, 59, 999);
+            if (end < now) return false;
+          }
+          return true;
+        })
         .map(async (a) => {
           const categories = await getCategoriesByActivityId(a.id);
           const firstCategory = categories?.[0];
