@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { authActions } from "@/lib/store/authSlice";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface AuthDialogProps {
   open: boolean;
@@ -27,6 +28,7 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
   const [isSignin, setIsSignin] = useState(true);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const SignSchema = Yup.object().shape({
     fullName: isSignin
@@ -156,6 +158,21 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
                   </div>
 
                   {error && <p className="text-sm text-red-500">{error}</p>}
+
+                  <div className="flex justify-end">
+                    {isSignin && (
+                      <button
+                        type="button"
+                        className="text-xs text-muted-foreground underline underline-offset-4 hover:text-primary/80"
+                        onClick={() => {
+                          onOpenChange(false);
+                          router.push("/forgot-password");
+                        }}
+                      >
+                        Forgot your password?
+                      </button>
+                    )}
+                  </div>
 
                   <Button
                     type="submit"

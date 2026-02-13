@@ -15,7 +15,7 @@ const GENERIC_MESSAGE =
   "If an account exists for that email, we've sent a password reset link.";
 
 const devAllowlist = RESEND_DEV_ALLOWLIST.split(",")
-  .map((email) => email.trim().toLowerCase())
+  .map((email: string) => email.trim().toLowerCase())
   .filter(Boolean);
 
 function jsonResponse(body: Record<string, unknown>, status: number = 200) {
@@ -130,7 +130,7 @@ async function sendResetEmail(recipientEmail: string, resetLink: string) {
   });
 }
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -150,7 +150,9 @@ Deno.serve(async (req) => {
   let email = "";
   try {
     const body = await req.json();
-    email = String(body?.email || "").trim().toLowerCase();
+    email = String(body?.email || "")
+      .trim()
+      .toLowerCase();
   } catch {
     return jsonResponse({ ok: true, message: GENERIC_MESSAGE }, 200);
   }

@@ -10,7 +10,7 @@ const SUPPORT_EMAIL = "support@whatson-tbilisi.giorgijobava.tech";
 const MIN_PASSWORD_LENGTH = 8;
 
 const devAllowlist = RESEND_DEV_ALLOWLIST.split(",")
-  .map((email) => email.trim().toLowerCase())
+  .map((email: string) => email.trim().toLowerCase())
   .filter(Boolean);
 
 function jsonResponse(body: Record<string, unknown>, status: number = 200) {
@@ -44,7 +44,10 @@ function formatUtcTimestamp(isoDate: string) {
   });
 }
 
-async function sendPasswordChangedEmail(recipientEmail: string, changedAt: string) {
+async function sendPasswordChangedEmail(
+  recipientEmail: string,
+  changedAt: string,
+) {
   if (!RESEND_API_KEY || !RESEND_FROM) {
     return;
   }
@@ -69,7 +72,9 @@ async function sendPasswordChangedEmail(recipientEmail: string, changedAt: strin
     headers: {
       Authorization: `Bearer ${RESEND_API_KEY}`,
       "Content-Type": "application/json",
-      "Idempotency-Key": await sha256Hex(`${recipientEmail}:${changedAt}:password-changed`),
+      "Idempotency-Key": await sha256Hex(
+        `${recipientEmail}:${changedAt}:password-changed`,
+      ),
     },
     body: JSON.stringify({
       from: RESEND_FROM,
@@ -114,7 +119,7 @@ async function sendPasswordChangedEmail(recipientEmail: string, changedAt: strin
   });
 }
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
