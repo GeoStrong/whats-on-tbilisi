@@ -45,5 +45,5 @@ next-env.d.ts
 .env.sentry-build-plugin
 
 # supabase edge functions
-/supabase
+/*supabase
 /supabase/functions

@@ -7,13 +7,13 @@ import { resetPasswordWithToken } from "@/lib/auth/auth";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 import { toast } from "sonner";
 import * as Yup from "yup";
 
 type ResetStatus = "idle" | "submitting" | "success" | "error";
 
-const ResetPasswordPage: React.FC = () => {
+const ResetPasswordContent: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [status, setStatus] = useState<ResetStatus>("idle");
@@ -157,6 +157,23 @@ const ResetPasswordPage: React.FC = () => {
         )}
       </div>
     </div>
+  );
+};
+
+const ResetPasswordLoadingFallback: React.FC = () => (
+  <div className="mx-auto flex min-h-[65vh] w-full max-w-md flex-col justify-center px-4">
+    <div className="rounded-xl border bg-card p-6 shadow-sm">
+      <h1 className="text-2xl font-semibold">Set a new password</h1>
+      <p className="mt-2 text-sm text-muted-foreground">Loading…</p>
+    </div>
+  </div>
+);
+
+const ResetPasswordPage: React.FC = () => {
+  return (
+    <Suspense fallback={<ResetPasswordLoadingFallback />}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 };
 
