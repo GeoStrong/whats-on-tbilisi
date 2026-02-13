@@ -87,6 +87,12 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>,
   ) => {
+    if (!user?.email_verified_at) {
+      toast.error("Please verify your email to update your profile");
+      setSubmitting(false);
+      return;
+    }
+
     try {
       await handleUploadUserInformation(
         user,
@@ -124,6 +130,12 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
       setFieldError,
     }: FormikHelpers<PasswordFormValues>,
   ) => {
+    if (!user?.email_verified_at) {
+      toast.error("Please verify your email to change your password");
+      setSubmitting(false);
+      return;
+    }
+
     try {
       await changePassword(
         user.email,

@@ -31,6 +31,7 @@ import OptimizedImage from "../ui/optimizedImage";
 import { ActivityEntity, UserProfile } from "@/lib/types";
 import { fetchUserInfo } from "@/lib/profile/profile";
 import ExpandableContainer from "../general/expandableContainer";
+import { toast } from "sonner";
 
 const snapPoints = [0.5, 1];
 
@@ -48,6 +49,8 @@ const ActivityComments: React.FC<{
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [firstCommentUser, setFirstCommentUser] =
     useState<Partial<UserProfile> | null>(null);
+
+  const isUserVerified = !!user?.email_verified_at;
 
   const { comments, addComment, editComment, removeComment, refresh } =
     useComments(activity.id || "");
@@ -78,6 +81,30 @@ const ActivityComments: React.FC<{
   });
 
   const groupedComments = groupCommentsOneLevel(comments || []);
+
+  const handleCommentSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+    if (!user?.id) return;
+
+    if (!isUserVerified) {
+      toast.error("Please verify your email to comment");
+      return;
+    }
+
+    if (!commentTextInput) return;
+
+    if (editingCommentId) {
+      await editComment(editingCommentId, user.id, commentTextInput);
+      setEditingCommentId(null);
+    } else {
+      await addComment(user.id, commentTextInput, commentParentId);
+    }
+    setCommentTextInput("");
+    setCommentParentId(null);
+    await refresh();
+  };
 
   return (
     <>
@@ -204,27 +231,7 @@ const ActivityComments: React.FC<{
                 <Form
                   action=""
                   className="relative flex w-full items-center justify-between gap-3"
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    if (!commentTextInput || !user?.id) return;
-                    if (editingCommentId) {
-                      await editComment(
-                        editingCommentId,
-                        user.id,
-                        commentTextInput,
-                      );
-                      setEditingCommentId(null);
-                    } else {
-                      await addComment(
-                        user.id,
-                        commentTextInput,
-                        commentParentId,
-                      );
-                    }
-                    setCommentTextInput("");
-                    setCommentParentId(null);
-                    await refresh();
-                  }}
+                  onSubmit={handleCommentSubmit}
                 >
                   <Input
                     type="text"
@@ -232,10 +239,14 @@ const ActivityComments: React.FC<{
                     onChange={(event) => {
                       setCommentTextInput(event.target.value);
                     }}
-                    className="h-12 rounded-full border !text-lg dark:border-gray-500"
+                    disabled={!isUserVerified}
+                    placeholder={
+                      !isUserVerified ? "Verify email to comment" : ""
+                    }
+                    className="h-12 rounded-full border !text-lg dark:border-gray-500 disabled:opacity-50"
                   />
                   <AnimatePresence>
-                    {commentTextInput !== "" && (
+                    {commentTextInput !== "" && isUserVerified && (
                       <motion.div
                         key="modal"
                         initial={{ opacity: 0, scale: 0 }}
@@ -374,27 +385,7 @@ const ActivityComments: React.FC<{
                 <Form
                   action=""
                   className="relative flex w-[85%] items-center justify-between gap-3"
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    if (!commentTextInput || !user?.id) return;
-                    if (editingCommentId) {
-                      await editComment(
-                        editingCommentId,
-                        user.id,
-                        commentTextInput,
-                      );
-                      setEditingCommentId(null);
-                    } else {
-                      await addComment(
-                        user.id,
-                        commentTextInput,
-                        commentParentId,
-                      );
-                    }
-                    setCommentTextInput("");
-                    setCommentParentId(null);
-                    await refresh();
-                  }}
+                  onSubmit={handleCommentSubmit}
                 >
                   <Input
                     type="text"
@@ -402,10 +393,14 @@ const ActivityComments: React.FC<{
                     onChange={(event) => {
                       setCommentTextInput(event.target.value);
                     }}
-                    className="h-12 rounded-full border pr-16 dark:border-gray-500"
+                    disabled={!isUserVerified}
+                    placeholder={
+                      !isUserVerified ? "Verify email to comment" : ""
+                    }
+                    className="h-12 rounded-full border pr-16 dark:border-gray-500 disabled:opacity-50"
                   />
                   <AnimatePresence>
-                    {commentTextInput !== "" && (
+                    {commentTextInput !== "" && isUserVerified && (
                       <motion.div
                         key="modal"
                         initial={{ opacity: 0, scale: 0 }}

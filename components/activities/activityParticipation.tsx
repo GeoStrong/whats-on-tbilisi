@@ -3,6 +3,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Smile } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -69,9 +70,9 @@ const ActivityParticipation: React.FC<{
         </DrawerTrigger>
         <DrawerContent className={`w-full ${isNested && "md:w-2/6"}`}>
           <DrawerHeader>
-            <DrawerTitle className="mb-3 text-center text-xl">
+            <DrawerTitle className="mb-3 flex items-center justify-center gap-2 text-center text-xl">
               <span className="linear-light">Join the Activity!</span>
-              😃
+              <Smile className="h-6 w-6 text-primary" />
             </DrawerTitle>
             <DrawerDescription className="text-base">
               Please provide any additional information you&apos;d like the

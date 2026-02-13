@@ -40,10 +40,8 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
     return null;
   }
 
-  // Extract emoji from title (first character if emoji, otherwise empty)
-  const titleParts = title.split(" ");
-  const emoji = /\p{Emoji}/u.test(titleParts[0]) ? titleParts.shift() : "";
-  const titleText = titleParts.join(" ");
+  // Title handling (emoji extraction no longer needed)
+  const titleText = title;
 
   return (
     <section className="scroll-mt-16">
@@ -51,7 +49,6 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
       <div className="mb-4 flex items-end justify-between">
         <div className="flex-1">
           <h2 className="section-title-enhanced">
-            {emoji && <span className="text-3xl">{emoji}</span>}
             <span className="text-lg md:text-2xl">{titleText}</span>
             {activities.length > 0 && (
               <Badge variant="secondary" className="ml-2 text-xs">

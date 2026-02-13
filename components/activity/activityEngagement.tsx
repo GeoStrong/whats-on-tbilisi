@@ -11,6 +11,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AiFillDislike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 const ActivityEngagement: React.FC<{
   user: UserProfile | null;
@@ -24,6 +25,7 @@ const ActivityEngagement: React.FC<{
     null,
   );
   const dispatch = useDispatch();
+  const isUserVerified = !!user?.email_verified_at;
 
   const userId = useMemo(() => user?.id, [user?.id]);
 
@@ -45,6 +47,11 @@ const ActivityEngagement: React.FC<{
         return;
       }
 
+      if (!isUserVerified) {
+        toast.error("Please verify your email to like or dislike");
+        return;
+      }
+
       await toggleActivityReaction(activityId, reaction, userId);
 
       const updated = await getActivityReactions(activityId);
@@ -58,7 +65,7 @@ const ActivityEngagement: React.FC<{
         setUserReaction(reaction);
       }
     },
-    [activityId, userId, userReaction, dispatch],
+    [activityId, userId, userReaction, dispatch, isUserVerified],
   );
 
   return (
@@ -66,8 +73,10 @@ const ActivityEngagement: React.FC<{
       <button
         className={`flex items-center gap-2 ${
           userReaction === "like" ? "text-blue-500" : ""
-        }`}
+        } ${!isUserVerified ? "opacity-50 cursor-not-allowed" : ""}`}
         onClick={() => handleReaction("like")}
+        disabled={!isUserVerified}
+        title={!isUserVerified ? "Verify email to like" : ""}
       >
         <AiFillLike className="text-lg md:text-2xl" />
         <span>{likes}</span>
@@ -76,8 +85,10 @@ const ActivityEngagement: React.FC<{
       <button
         className={`flex items-center gap-2 ${
           userReaction === "dislike" ? "text-red-500" : ""
-        }`}
+        } ${!isUserVerified ? "opacity-50 cursor-not-allowed" : ""}`}
         onClick={() => handleReaction("dislike")}
+        disabled={!isUserVerified}
+        title={!isUserVerified ? "Verify email to dislike" : ""}
       >
         <AiFillDislike className="text-lg md:text-2xl" />
         <span>{dislikes}</span>

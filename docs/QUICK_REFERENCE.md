@@ -4,28 +4,28 @@
 
 ---
 
-## 🎯 What Was Done
+## [TARGET] What Was Done
 
-✅ **Security:** Removed exposed API key, added auth checks, security headers  
-✅ **Compliance:** Privacy Policy, Terms of Service, GDPR-ready  
-✅ **Infrastructure:** CI/CD pipeline, rate limiter, RLS policies  
-✅ **Docs:** Launch guide, checklist, moderation framework  
-✅ **Build:** Zero errors, all tests pass
-
----
-
-## 🚀 Launch Timeline
-
-| Phase                      | Duration | Status        |
-| -------------------------- | -------- | ------------- |
-| **Staging Setup**          | 1 week   | 📍 Start here |
-| **Testing & Optimization** | 2 weeks  | ⏳ Next       |
-| **Pre-Launch**             | 1 week   | ⏳ Later      |
-| **Production Launch**      | 1 day    | 📅 Week 4     |
+[OK] **Security:** Removed exposed API key, added auth checks, security headers  
+[OK] **Compliance:** Privacy Policy, Terms of Service, GDPR-ready  
+[OK] **Infrastructure:** CI/CD pipeline, rate limiter, RLS policies  
+[OK] **Docs:** Launch guide, checklist, moderation framework  
+[OK] **Build:** Zero errors, all tests pass
 
 ---
 
-## 🔥 Critical: Do These First
+## [SETUP] Launch Timeline
+
+| Phase                      | Duration | Status                |
+| -------------------------- | -------- | --------------------- |
+| **Staging Setup**          | 1 week   | [LOCATION] Start here |
+| **Testing & Optimization** | 2 weeks  | [WAIT] Next           |
+| **Pre-Launch**             | 1 week   | [WAIT] Later          |
+| **Production Launch**      | 1 day    | [DATE] Week 4         |
+
+---
+
+## [FIRE] Critical: Do These First
 
 ### 1. Enable Supabase RLS (Database Security)
 
@@ -86,7 +86,7 @@ R2_ENDPOINT=xxx
 
 ---
 
-## 📋 Pre-Launch Checklist (One Page)
+## [CHECKLIST] Pre-Launch Checklist (One Page)
 
 - [ ] **Security**
 
@@ -128,7 +128,7 @@ R2_ENDPOINT=xxx
 
 ---
 
-## 📂 Key Files Reference
+## [FILES] Key Files Reference
 
 ### Documentation
 
@@ -164,7 +164,7 @@ R2_ENDPOINT=xxx
 
 ---
 
-## 💡 Quick How-Tos
+## [IDEA] Quick How-Tos
 
 ### How to Apply Rate Limiting
 
@@ -222,7 +222,7 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 
 ---
 
-## 🚨 Emergency Contacts
+## [ALERT] Emergency Contacts
 
 | Service      | Issue              | Contact                          |
 | ------------ | ------------------ | -------------------------------- |
@@ -234,9 +234,9 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 
 ---
 
-## 📊 Success Metrics (First Week)
+## [CHART] Success Metrics (First Week)
 
-🎯 **Target:** < 1% error rate, > 99.5% uptime, 50+ sign-ups
+[TARGET] **Target:** < 1% error rate, > 99.5% uptime, 50+ sign-ups
 
 | Metric          | Target  | Tool             |
 | --------------- | ------- | ---------------- |
@@ -247,7 +247,7 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 
 ---
 
-## 🎓 Team Learning Path
+## [LEARN] Team Learning Path
 
 **Product Manager:**
 
@@ -281,17 +281,17 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 
 ---
 
-## 🛑 What NOT to Do
+## [STOP] What NOT to Do
 
-❌ Deploy to production before enabling RLS (database unprotected)  
-❌ Commit `.env.local` to git (secrets leak)  
-❌ Use `main` branch for feature development (breaks prod)  
-❌ Ignore Sentry alerts (bugs spread)  
-❌ Skip backup testing (data loss risk)
+[ERROR] Deploy to production before enabling RLS (database unprotected)  
+[ERROR] Commit `.env.local` to git (secrets leak)  
+[ERROR] Use `main` branch for feature development (breaks prod)  
+[ERROR] Ignore Sentry alerts (bugs spread)  
+[ERROR] Skip backup testing (data loss risk)
 
 ---
 
-## ✅ Next Step
+## [OK] Next Step
 
 → **Read:** `docs/LAUNCH.md` (full launch guide)  
 → **Then:** Follow pre-launch checklist above  
@@ -301,7 +301,7 @@ const { data, error } = await supabase.auth.signInWithPassword({...});
 
 **Questions?** Check `docs/` folder or contact the team lead.
 
-**Build Status:** ✅ Zero errors, ready to deploy
+**Build Status:** [OK] Zero errors, ready to deploy
 
 **Estimated Time to Launch:** 4–6 weeks from staging start
 

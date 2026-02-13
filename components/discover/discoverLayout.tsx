@@ -116,7 +116,7 @@ const DiscoverLayout: React.FC = () => {
           <h1 className="mb-8 text-4xl font-bold md:text-5xl">Discover</h1>
 
           {/* Unified Search Bar */}
-          <div className="mb-6 rounded-xl bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
+          <div className="mb-6 rounded-xl border bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
             <DiscoverSearch search={search} onSearch={setSearch} />
           </div>
 

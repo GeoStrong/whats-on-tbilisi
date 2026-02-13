@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { r2 } from "@/lib/r2/r2";
-import { createError } from "@/lib/utils/errorHandler";
+import { createError, errorHandler } from "@/lib/utils/errorHandler";
 import { env } from "@/lib/utils/env";
-import { withVerified } from "@/lib/middleware/auth";
 
 async function handleGetSignedUrl(request: NextRequest) {
   const body = await request.json();
@@ -35,4 +34,13 @@ async function handleGetSignedUrl(request: NextRequest) {
   return NextResponse.json({ signedUrl });
 }
 
-export const POST = withVerified(handleGetSignedUrl);
+export const POST = async (request: NextRequest) => {
+  try {
+    return await handleGetSignedUrl(request);
+  } catch (error) {
+    const appError = errorHandler.handle(error);
+    return NextResponse.json(errorHandler.toApiResponse(appError), {
+      status: appError.statusCode,
+    });
+  }
+};

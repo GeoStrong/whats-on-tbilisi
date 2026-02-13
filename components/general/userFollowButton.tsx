@@ -32,6 +32,12 @@ const UserFollowButton: React.FC<{ userId: string; className?: string }> = ({
 
   const handleClickFollow = async () => {
     if (!followerId) return;
+
+    if (!user?.email_verified_at) {
+      toast.error("Please verify your email to follow users");
+      return;
+    }
+
     await handleFollowUser(userId, followerId);
     toast.success("Followed");
     setIsUserFollowing(true);
@@ -59,11 +65,17 @@ const UserFollowButton: React.FC<{ userId: string; className?: string }> = ({
           className={className}
           variant="outline"
           onClick={handleClickUnfollow}
+          disabled={!user?.email_verified_at}
         >
           Unfollow
         </Button>
       ) : (
-        <Button className={className} onClick={handleClickFollow}>
+        <Button
+          className={className}
+          onClick={handleClickFollow}
+          disabled={!user?.email_verified_at}
+          title={!user?.email_verified_at ? "Verify email to follow" : ""}
+        >
           Follow
         </Button>
       )}
