@@ -6,6 +6,7 @@ export type UserProfile = {
   avatar_path?: string;
   created_at: Date | string;
   additionalInfo?: string;
+  email_verified_at?: Date | string | null;
 };
 
 export type ActivityCategories =

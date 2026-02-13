@@ -46,6 +46,48 @@ export const signOut = async () => {
 };
 
 /**
+ * Send a verification email using the Supabase Edge Function.
+ * Requires a valid user session.
+ */
+export const sendVerificationEmail = async () => {
+  const { data, error } = await supabase.functions.invoke("send-verification");
+  if (error) throw error;
+  return data;
+};
+
+/**
+ * Request a password reset email.
+ * Response is intentionally generic to avoid account enumeration.
+ */
+export const requestPasswordReset = async (email: string) => {
+  const { data, error } = await supabase.functions.invoke(
+    "request-password-reset",
+    {
+      body: { email },
+    },
+  );
+
+  if (error) throw error;
+  return data;
+};
+
+/**
+ * Reset password using one-time reset token.
+ */
+export const resetPasswordWithToken = async (
+  token: string,
+  password: string,
+  confirmPassword: string,
+) => {
+  const { data, error } = await supabase.functions.invoke("reset-password", {
+    body: { token, password, confirmPassword },
+  });
+
+  if (error) throw error;
+  return data;
+};
+
+/**
  * Change the current user's password after reauthenticating.
  * @param email - User's email address
  * @param currentPassword - User's current password

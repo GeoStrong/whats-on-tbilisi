@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { r2 } from "@/lib/r2/r2";
-import { withAuth, requireAuthorization } from "@/lib/middleware/auth";
+import { withVerified, requireAuthorization } from "@/lib/middleware/auth";
 import { createError } from "@/lib/utils/errorHandler";
 import { env } from "@/lib/utils/env";
 
@@ -64,4 +64,4 @@ async function handleDelete(request: NextRequest) {
   return NextResponse.json({ ok: true });
 }
 
-export const POST = withAuth(handleDelete);
+export const POST = withVerified(handleDelete);

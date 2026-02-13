@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import { authActions } from "@/lib/store/authSlice";
@@ -12,10 +12,29 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { sendVerificationEmail } from "@/lib/auth/auth";
+import { toast } from "sonner";
 
 const SignupSuccessDialog: React.FC = () => {
   const { signupSuccessOpen } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+  const [isSending, setIsSending] = useState(false);
+
+  const handleResend = async () => {
+    setIsSending(true);
+    try {
+      await sendVerificationEmail();
+      toast.success("Verification email sent.");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Couldn't resend the verification email.";
+      toast.error(message);
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   return (
     <Dialog
@@ -31,7 +50,14 @@ const SignupSuccessDialog: React.FC = () => {
             in.
           </DialogDescription>
         </DialogHeader>
-        <div className="mt-4 flex justify-end">
+        <div className="mt-4 flex flex-wrap justify-end gap-2">
+          <Button
+            variant="outline"
+            onClick={handleResend}
+            disabled={isSending}
+          >
+            {isSending ? "Sending..." : "Resend email"}
+          </Button>
           <Button
             onClick={() => dispatch(authActions.setSignupSuccessOpen(false))}
           >

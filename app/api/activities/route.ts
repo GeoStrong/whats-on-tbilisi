@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { withAuth } from "@/lib/middleware/auth";
+import { withVerified } from "@/lib/middleware/auth";
 import { createError } from "@/lib/utils/errorHandler";
 
-export const POST = withAuth(async (request: NextRequest) => {
+export const POST = withVerified(async (request: NextRequest) => {
   try {
     const { title, date, endDate, time, endTime, recurringDays } =
       await request.json();

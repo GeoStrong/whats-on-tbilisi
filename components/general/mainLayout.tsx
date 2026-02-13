@@ -10,6 +10,7 @@ import { Toaster } from "../ui/sonner";
 import SignupSuccessDialog from "@/components/auth/signupSuccessDialog";
 import VerificationDialogWrapper from "../auth/verificationDialog";
 import { getPWADisplayMode } from "@/lib/functions/helperFunctions";
+import VerifyEmailBanner from "@/components/auth/verifyEmailBanner";
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
@@ -28,6 +29,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <VerificationDialogWrapper />
       <SignupSuccessDialog />
       <Header />
+      <VerifyEmailBanner />
       {displayCategories && <SmartActivityCategoriesCarousel />}
       {displaySearchSection && <SearchSection />}
       <Container>{children}</Container>

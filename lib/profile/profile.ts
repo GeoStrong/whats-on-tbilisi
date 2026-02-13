@@ -33,7 +33,6 @@ export const handleUploadUserInformation = async (
     .from("users")
     .update([
       {
-        ...user,
         name,
         phone,
         additionalInfo: bio,
@@ -111,7 +110,7 @@ export const isActivitySaved = async (userId: string, activityId: string) => {
 export const fetchUserInfo = async (userId: string) => {
   const { data, error } = await supabase
     .from("users")
-    .select("id, name, email, phone, avatar_path")
+    .select("id, name, email, phone, avatar_path, email_verified_at")
     .eq("id", userId)
     .single();
 

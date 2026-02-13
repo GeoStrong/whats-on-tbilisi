@@ -33,6 +33,29 @@ export async function requireAuth(request: NextRequest) {
 }
 
 /**
+ * Require email-verified user for sensitive actions.
+ */
+export async function requireVerified(request: NextRequest) {
+  const { user, supabase } = await requireAuth(request);
+
+  const { data: profile, error } = await supabase
+    .from('users')
+    .select('email_verified_at')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw createError.database('Failed to verify user status', { error });
+  }
+
+  if (!profile?.email_verified_at) {
+    throw createError.authorization('Email verification required');
+  }
+
+  return { user, supabase };
+}
+
+/**
  * Wrapper for API route handlers that require authentication
  */
 export function withAuth<T>(
@@ -41,6 +64,25 @@ export function withAuth<T>(
   return async (request: NextRequest, ...args: unknown[]) => {
     try {
       const { user, supabase } = await requireAuth(request);
+      return await handler(request, { user, supabase });
+    } catch (error) {
+      const appError = errorHandler.handle(error);
+      return NextResponse.json(errorHandler.toApiResponse(appError), {
+        status: appError.statusCode,
+      });
+    }
+  };
+}
+
+/**
+ * Wrapper for API route handlers that require verified users
+ */
+export function withVerified<T>(
+  handler: (request: NextRequest, context: { user: any; supabase: any }) => Promise<T>,
+) {
+  return async (request: NextRequest, ...args: unknown[]) => {
+    try {
+      const { user, supabase } = await requireVerified(request);
       return await handler(request, { user, supabase });
     } catch (error) {
       const appError = errorHandler.handle(error);

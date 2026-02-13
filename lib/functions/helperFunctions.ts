@@ -1,3 +1,4 @@
+import { supabase } from "../supabase/supabaseClient";
 import { CommentEntity, Poi, UserProfile } from "../types";
 
 export const isString = (value: unknown) => {
@@ -191,3 +192,23 @@ export const formatRelativeTime = (dateString?: string) => {
     day: "numeric",
   });
 };
+
+export async function isUserVerified(): Promise<boolean> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return false;
+
+  const { data: profile, error } = await supabase
+    .from("users")
+    .select("email_verified_at")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error || !profile?.email_verified_at) {
+    return false;
+  }
+
+  return true;
+}

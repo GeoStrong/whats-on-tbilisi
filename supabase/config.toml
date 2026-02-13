@@ -1,0 +1,8 @@
+[functions.verify-email]
+verify_jwt = false
+
+[functions.request-password-reset]
+verify_jwt = false
+
+[functions.reset-password]
+verify_jwt = false

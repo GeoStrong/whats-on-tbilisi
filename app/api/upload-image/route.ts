@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { r2 } from "@/lib/r2/r2";
-import { withAuth } from "@/lib/middleware/auth";
+import { withVerified } from "@/lib/middleware/auth";
 import { errorHandler, createError } from "@/lib/utils/errorHandler";
 import { env } from "@/lib/utils/env";
 
@@ -51,4 +51,4 @@ async function handleUpload(request: NextRequest) {
   return NextResponse.json({ signedUrl });
 }
 
-export const POST = withAuth(handleUpload);
+export const POST = withVerified(handleUpload);

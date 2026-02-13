@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { useDispatch } from "react-redux";
 import { useEffectOnce } from "react-use";
@@ -13,7 +13,11 @@ import { mapActions } from "@/lib/store/mapSlice";
 import { authActions } from "@/lib/store/authSlice";
 import useGetUserProfile from "@/lib/hooks/useGetUserProfile";
 import useWizardForm from "@/lib/hooks/useWizardForm";
-import { handleUploadFile, isFile } from "@/lib/functions/helperFunctions";
+import {
+  handleUploadFile,
+  isFile,
+  isUserVerified,
+} from "@/lib/functions/helperFunctions";
 import {
   postNewActivity,
   postNewActivityCategories,
@@ -41,6 +45,7 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
   const { user, isLoading, isAuthenticated } = useGetUserProfile();
   const { invalidateAll: invalidateAllActivities } = useInvalidateActivities();
   const createPostMutation = useCreateFeedPost(user!);
+  const [isVerified, setIsVerified] = useState<boolean | null>(null);
 
   const {
     formState,
@@ -192,6 +197,14 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
     }
   };
 
+  useEffect(() => {
+    async function checkVerification() {
+      const verified = await isUserVerified();
+      setIsVerified(verified);
+    }
+    checkVerification();
+  }, []);
+
   // Loading state
   if (isLoading) {
     return (
@@ -218,6 +231,17 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
           </Button>
         </div>
       </APIProvider>
+    );
+  }
+
+  if (isVerified === false) {
+    return (
+      <div className="flex w-full flex-col items-center gap-4 rounded-xl border bg-white p-8 shadow-md dark:bg-gray-800">
+        <p className="text-center text-xl">
+          Please verify your email to create an activity. Check your inbox for
+          the verification email.
+        </p>
+      </div>
     );
   }
 

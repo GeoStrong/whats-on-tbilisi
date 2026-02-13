@@ -12,10 +12,11 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Label } from "../ui/label";
-import { signIn, signUp } from "@/lib/auth/auth";
+import { sendVerificationEmail, signIn, signUp } from "@/lib/auth/auth";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { authActions } from "@/lib/store/authSlice";
+import { toast } from "sonner";
 
 interface AuthDialogProps {
   open: boolean;
@@ -48,6 +49,15 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
         window.location.reload();
       } else {
         await signUp(values.email, values.password, values.fullName);
+        try {
+          await sendVerificationEmail();
+        } catch (emailError: unknown) {
+          const message =
+            emailError instanceof Error
+              ? emailError.message
+              : "We couldn't send your verification email. Please resend from your profile.";
+          toast.error(message);
+        }
         onOpenChange(false);
         dispatch(authActions.setSignupSuccessOpen(true));
         return;

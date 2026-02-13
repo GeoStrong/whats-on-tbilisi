@@ -1,6 +1,7 @@
 const requiredEnvVars = {
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   R2_ENDPOINT: process.env.R2_ENDPOINT,
   R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
   R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
@@ -34,6 +35,7 @@ export const env = {
     url: requiredEnvVars.NEXT_PUBLIC_SUPABASE_URL!,
     anonKey: requiredEnvVars.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   },
+  siteUrl: requiredEnvVars.NEXT_PUBLIC_SITE_URL!,
   r2: {
     endpoint: requiredEnvVars.R2_ENDPOINT!,
     accessKeyId: requiredEnvVars.R2_ACCESS_KEY_ID!,
