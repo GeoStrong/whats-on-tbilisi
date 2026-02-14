@@ -3,10 +3,14 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiMapPin } from "react-icons/fi";
-import { AiOutlineAppstore, AiOutlinePlusCircle } from "react-icons/ai";
-import { BiSearchAlt2 } from "react-icons/bi";
-import { BiHomeAlt2 } from "react-icons/bi";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  AddSquareIcon,
+  Calendar03Icon,
+  Home04Icon,
+  Route02Icon,
+  Search02Icon,
+} from "@hugeicons/core-free-icons";
 
 const FooterNavMobile: React.FC = () => {
   const pathname = usePathname();
@@ -25,9 +29,10 @@ const FooterNavMobile: React.FC = () => {
             aria-label="Feed"
             aria-current={pathname === "/" ? "page" : undefined}
           >
-            <BiHomeAlt2
-              className={`text-2xl ${pathname === "/" && "text-primary"}`}
-              aria-hidden="true"
+            <HugeiconsIcon
+              icon={Home04Icon}
+              className={`h-6 w-6 ${pathname === "/" && "text-primary"}`}
+              strokeWidth={pathname === "/" ? 2 : 1.5}
             />
           </Link>
         </li>
@@ -38,22 +43,23 @@ const FooterNavMobile: React.FC = () => {
             aria-label="Activities"
             aria-current={pathname === "/activities" ? "page" : undefined}
           >
-            <AiOutlineAppstore
-              className={`text-2xl ${pathname === "/activities" && "text-primary"}`}
-              aria-hidden="true"
+            <HugeiconsIcon
+              icon={Calendar03Icon}
+              className={`h-6 w-6 ${pathname === "/activities" && "text-primary"}`}
+              strokeWidth={pathname === "/activities" ? 2 : 1.5}
             />
           </Link>
         </li>
         <li className="flex items-start">
           <Link
             href="/create-activity"
-            className="-translate-y-2 rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="Create Activity"
             aria-current={pathname === "/create-activity" ? "page" : undefined}
           >
-            <AiOutlinePlusCircle
-              className={`text-4xl ${pathname === "/create-activity" && "text-primary"}`}
-              aria-hidden="true"
+            <HugeiconsIcon
+              icon={AddSquareIcon}
+              className={`h-8 w-8 ${pathname === "/create-activity" && "text-primary"}`}
             />
           </Link>
         </li>
@@ -64,9 +70,10 @@ const FooterNavMobile: React.FC = () => {
             aria-label="Search and Discover"
             aria-current={pathname === "/discover" ? "page" : undefined}
           >
-            <BiSearchAlt2
-              className={`text-2xl ${pathname === "/discover" && "text-primary"}`}
-              aria-hidden="true"
+            <HugeiconsIcon
+              icon={Search02Icon}
+              className={`h-6 w-6 ${pathname === "/discover" && "text-primary"}`}
+              strokeWidth={pathname === "/discover" ? 2 : 1.5}
             />
           </Link>
         </li>
@@ -77,9 +84,10 @@ const FooterNavMobile: React.FC = () => {
             aria-label="Map"
             aria-current={pathname === "/map" ? "page" : undefined}
           >
-            <FiMapPin
-              className={`text-2xl ${pathname === "/map" && "text-primary"}`}
-              aria-hidden="true"
+            <HugeiconsIcon
+              icon={Route02Icon}
+              className={`h-6 w-6 ${pathname === "/map" && "text-primary"}`}
+              strokeWidth={pathname === "/map" ? 2 : 1.5}
             />
           </Link>
         </li>

@@ -5,14 +5,19 @@ import Link from "next/link";
 import { LayoutGroup, motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
-import { User } from "lucide-react";
 import HeaderProfile from "./headerProfile";
 import HeaderProfileLoader from "./headerProfileLoader";
-import { AiOutlineAppstore } from "react-icons/ai";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { FiMapPin } from "react-icons/fi";
 import { UserProfile } from "@/lib/types";
-import { BiHomeAlt2, BiSearchAlt2 } from "react-icons/bi";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  AddSquareIcon,
+  Calendar03Icon,
+  Home04Icon,
+  Route02Icon,
+  Search02Icon,
+  User03Icon,
+} from "@hugeicons/core-free-icons";
 
 interface HeaderNavProps {
   onAuthClick: () => void;
@@ -46,8 +51,16 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 aria-label="Feed"
                 aria-current={pathname === "/" ? "page" : undefined}
               >
-                <BiHomeAlt2 className="text-base" aria-hidden="true" />
-                Feed
+                <HugeiconsIcon
+                  icon={Home04Icon}
+                  className="h-6 w-6"
+                  strokeWidth={2}
+                />
+                <span
+                  className={`text-sm ${pathname === "/" && "font-semibold"} `}
+                >
+                  Feed
+                </span>
               </Link>
               {pathname === "/" && (
                 <motion.div
@@ -65,8 +78,16 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 aria-label="Activities"
                 aria-current={pathname === "/activities" ? "page" : undefined}
               >
-                <AiOutlineAppstore className="text-base" aria-hidden="true" />
-                Activities
+                <HugeiconsIcon
+                  icon={Calendar03Icon}
+                  className="h-6 w-6"
+                  strokeWidth={2}
+                />
+                <span
+                  className={`text-sm ${pathname === "/activities" && "font-semibold"} `}
+                >
+                  Activities
+                </span>
               </Link>
               {pathname === "/activities" && (
                 <motion.div
@@ -76,22 +97,26 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
               )}
             </li>
             <li
-              className={`relative flex flex-col items-center gap-1 hover:text-primary ${pathname === "/search" && "border-primary text-primary"}`}
+              className={`relative flex flex-col items-center gap-1 hover:text-primary ${pathname === "/discover" && "border-primary text-primary"}`}
             >
               <Link
                 href="/discover"
                 className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 aria-label="Search and Discover"
-                aria-current={
-                  pathname === "/discover" || pathname === "/search"
-                    ? "page"
-                    : undefined
-                }
+                aria-current={pathname === "/discover" ? "page" : undefined}
               >
-                <BiSearchAlt2 className="text-lg" aria-hidden="true" />
-                Search
+                <HugeiconsIcon
+                  icon={Search02Icon}
+                  className="h-6 w-6"
+                  strokeWidth={2}
+                />
+                <span
+                  className={`text-sm ${pathname === "/discover" && "font-semibold"} `}
+                >
+                  Search
+                </span>
               </Link>
-              {pathname === "/search" && (
+              {pathname === "/discover" && (
                 <motion.div
                   layoutId="underline"
                   className="absolute bottom-0 h-[2px] w-full bg-primary"
@@ -107,8 +132,16 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 aria-label="Map"
                 aria-current={pathname === "/map" ? "page" : undefined}
               >
-                <FiMapPin className="text-base" aria-hidden="true" />
-                Map
+                <HugeiconsIcon
+                  icon={Route02Icon}
+                  className="h-6 w-6"
+                  strokeWidth={2}
+                />
+                <span
+                  className={`text-sm ${pathname === "/map" && "font-semibold"} `}
+                >
+                  Map
+                </span>
               </Link>
               {pathname === "/map" && (
                 <motion.div
@@ -129,10 +162,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                     pathname === "/create-activity" ? "page" : undefined
                   }
                 >
-                  <AiOutlinePlusCircle
-                    className="text-base"
-                    aria-hidden="true"
-                  />
+                  <HugeiconsIcon icon={AddSquareIcon} />
                   Create Activity
                 </Link>
               </li>
@@ -148,7 +178,11 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                   className="gap-2 border"
                   aria-label="Sign in to your account"
                 >
-                  <User className="h-5 w-5" aria-hidden="true" />
+                  <HugeiconsIcon
+                    icon={User03Icon}
+                    className="h-5 w-5"
+                    strokeWidth={2}
+                  />
                   <span className="md:inline">Sign In</span>
                 </Button>
               ) : (
