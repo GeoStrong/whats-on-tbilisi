@@ -51,3 +51,28 @@ global.console = {
   warn: jest.fn(),
 }
 
+// Mock i18n hooks/components in unit tests
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key, options) => {
+      if (options && typeof options === 'object') {
+        return Object.entries(options).reduce(
+          (acc, [token, value]) => acc.replace(`{{${token}}}`, String(value)),
+          key,
+        )
+      }
+      return key
+    },
+    i18n: {
+      language: 'en',
+      resolvedLanguage: 'en',
+      changeLanguage: jest.fn(),
+    },
+  }),
+  I18nextProvider: ({ children }) => children,
+  initReactI18next: {
+    type: '3rdParty',
+    init: jest.fn(),
+  },
+}))
+

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/supabaseClient";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 type VerifyStatus = "idle" | "verifying" | "success" | "error";
 
@@ -13,6 +14,7 @@ const VerifyEmailContent: React.FC = () => {
   const token = searchParams?.get?.("token");
   const [status, setStatus] = useState<VerifyStatus>("idle");
   const [message, setMessage] = useState<string>("");
+  const { t } = useTranslation(["auth", "errors", "common"]);
   const hasRequestedRef = useRef(false);
   const isMountedRef = useRef(false);
 
@@ -28,7 +30,7 @@ const VerifyEmailContent: React.FC = () => {
     const verify = async () => {
       if (!token) {
         setStatus("error");
-        setMessage("Missing verification token.");
+        setMessage(t("errors:missingVerificationToken"));
         return;
       }
 
@@ -47,25 +49,25 @@ const VerifyEmailContent: React.FC = () => {
         setMessage(
           error?.message ||
             data?.message ||
-            "Verification failed. The link may be expired.",
+            t("errors:verificationFailedExpired"),
         );
         return;
       }
 
       setStatus("success");
-      setMessage(
-        "Your email has been verified. You can use your account now. ",
-      );
+      setMessage(t("auth:verifyEmail.success"));
     };
 
     verify();
-  }, [token]);
+  }, [t, token]);
 
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center gap-4 px-4 text-center">
-      <h1 className="text-2xl font-semibold">Email Verification</h1>
+      <h1 className="text-2xl font-semibold">{t("auth:verifyEmail.title")}</h1>
       {status === "verifying" && (
-        <p className="text-sm text-muted-foreground">Verifying your email…</p>
+        <p className="text-sm text-muted-foreground">
+          {t("auth:verifyEmail.verifying")}
+        </p>
       )}
       {status === "success" && (
         <p className="text-sm text-emerald-700">{message}</p>
@@ -73,7 +75,7 @@ const VerifyEmailContent: React.FC = () => {
       {status === "error" && <p className="text-sm text-red-600">{message}</p>}
       <div className="flex flex-wrap justify-center gap-2">
         <Link href="/">
-          <Button variant="outline">Go home</Button>
+          <Button variant="outline">{t("common:actions.goHome")}</Button>
         </Link>
       </div>
     </div>
@@ -81,11 +83,21 @@ const VerifyEmailContent: React.FC = () => {
 };
 
 const VerifyEmailLoadingFallback: React.FC = () => (
-  <div className="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center gap-4 px-4 text-center">
-    <h1 className="text-2xl font-semibold">Email Verification</h1>
-    <p className="text-sm text-muted-foreground">Loading…</p>
-  </div>
+  <VerifyEmailLoadingFallbackContent />
 );
+
+const VerifyEmailLoadingFallbackContent: React.FC = () => {
+  const { t } = useTranslation(["auth", "common"]);
+
+  return (
+    <div className="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center gap-4 px-4 text-center">
+      <h1 className="text-2xl font-semibold">{t("auth:verifyEmail.title")}</h1>
+      <p className="text-sm text-muted-foreground">
+        {t("common:actions.loading")}
+      </p>
+    </div>
+  );
+};
 
 const VerifyEmailPage: React.FC = () => {
   return (

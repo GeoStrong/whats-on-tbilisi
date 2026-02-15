@@ -1,5 +1,6 @@
 import { supabase } from "../supabase/supabaseClient";
 import { CommentEntity, Poi, UserProfile } from "../types";
+import { toLanguageTag } from "../i18n/format";
 
 export const isString = (value: unknown) => {
   return typeof value === "string";
@@ -173,7 +174,10 @@ export const getPWADisplayMode = () => {
   return "unknown";
 };
 
-export const formatRelativeTime = (dateString?: string) => {
+export const formatRelativeTime = (
+  dateString?: string,
+  locale: string = "en",
+) => {
   if (!dateString) return "";
   const date = new Date(dateString);
   const now = new Date();
@@ -187,10 +191,10 @@ export const formatRelativeTime = (dateString?: string) => {
   if (diffHours < 24) return `${diffHours}h ago`;
   if (diffDays < 7) return `${diffDays}d ago`;
 
-  return date.toLocaleDateString("en-US", {
+  return new Intl.DateTimeFormat(toLanguageTag(locale), {
     month: "short",
     day: "numeric",
-  });
+  }).format(date);
 };
 
 export async function isUserVerified(): Promise<boolean> {

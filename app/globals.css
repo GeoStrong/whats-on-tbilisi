@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: "myFont", sans-serif;
+  font-family: var(--font-myFont), var(--font-georgian), sans-serif;
 }
 
 @layer base {
@@ -70,6 +70,17 @@ body {
   }
   body {
     @apply bg-background -tracking-wider text-foreground md:tracking-normal;
+  }
+
+  html:lang(ka) body {
+    letter-spacing: 0;
+    line-height: 1.6;
+  }
+
+  html:lang(ka) h1,
+  html:lang(ka) h2,
+  html:lang(ka) h3 {
+    line-height: 1.35;
   }
 
   /* Typography Scale */

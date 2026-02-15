@@ -7,6 +7,7 @@ import UserAvatar from "../users/userAvatar";
 import { Card, CardContent } from "../ui/card";
 import { formatRelativeTime } from "@/lib/functions/helperFunctions";
 import FeedActivityCard from "../feed/FeedActivityCard";
+import { useTranslation } from "react-i18next";
 
 const ParticipationCard: React.FC<{
   participation: UserParticipationHistory;
@@ -45,15 +46,20 @@ const ParticipationCard: React.FC<{
   );
 };
 
-const EmptyState: React.FC<{ message?: string }> = ({ message }) => (
-  <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 px-6 py-16">
-    <h3 className="mb-2 text-lg font-semibold">No participation history</h3>
-    <p className="max-w-sm text-center text-sm text-muted-foreground">
-      {message ||
-        "Start exploring activities and join events to build your participation history."}
-    </p>
-  </div>
-);
+const EmptyState: React.FC<{ message?: string }> = ({ message }) => {
+  const { t } = useTranslation(["emptyStates", "feed"]);
+
+  return (
+    <div className="mt-2 flex flex-col items-center justify-center border border-slate-200 px-6 py-16 dark:border-slate-700">
+      <h3 className="mb-2 text-lg font-semibold">
+        {t("emptyStates:noParticipationHistory")}
+      </h3>
+      <p className="max-w-sm text-center text-sm text-muted-foreground">
+        {message || t("feed:startExploringParticipation")}
+      </p>
+    </div>
+  );
+};
 
 const ParticipationHistory: React.FC<{
   participations: UserParticipationHistory[] | null;

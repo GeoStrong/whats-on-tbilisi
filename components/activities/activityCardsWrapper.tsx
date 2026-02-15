@@ -9,6 +9,7 @@ import useActivitiesFilter from "@/lib/hooks/useActvitiesFilter";
 import { useActivitiesBySection } from "@/lib/hooks/useActivitiesBySection";
 import ActivitySection from "./activitySection";
 import ActivityDescription from "./activityDescription";
+import { useTranslation } from "react-i18next";
 
 const ActivityCards: React.FC = () => {
   const { activities, activeActivity } = useActivitiesFilter();
@@ -18,6 +19,7 @@ const ActivityCards: React.FC = () => {
   const pathname = usePathname();
   const { handleSearch } = useAddSearchQuery();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { t } = useTranslation(["activity"]);
 
   useEffect(() => {
     setGridStyles(
@@ -27,12 +29,11 @@ const ActivityCards: React.FC = () => {
     );
   }, [pathname]);
 
-  // Don't show sections on map view, use original single list
   if (pathname === "/map") {
     return (
       <>
         <h2 className="section-title mt-3 text-xl md:mt-1">
-          Featured Activities
+          {t("activity:featuredActivities")}
         </h2>
         {activities === null && (
           <div className="mt-5">
@@ -86,8 +87,8 @@ const ActivityCards: React.FC = () => {
   return (
     <div className="space-y-10">
       <ActivitySection
-        title="Featured Activities"
-        description="Trending events with the most engagement"
+        title={t("activity:featuredActivities")}
+        description={t("activity:featuredActivitiesDescription")}
         activities={featured}
         variant="featured"
         gridStyles={gridStyles}
@@ -95,16 +96,16 @@ const ActivityCards: React.FC = () => {
       />
 
       <ActivitySection
-        title="Upcoming Activities"
-        description="Events happening soon"
+        title={t("activity:upcomingActivities")}
+        description={t("activity:upcomingActivitiesDescription")}
         activities={future}
         variant="upcoming"
         gridStyles={gridStyles}
         onSearch={handleSearch}
       />
       <ActivitySection
-        title="Ongoing Activities"
-        description="Registrations are open now"
+        title={t("activity:ongoingActivities")}
+        description={t("activity:ongoingActivitiesDescription")}
         activities={ongoing}
         variant="ongoing"
         gridStyles={gridStyles}
@@ -112,8 +113,8 @@ const ActivityCards: React.FC = () => {
       />
 
       <ActivitySection
-        title="Past Activities"
-        description="Browse your activity history"
+        title={t("activity:pastActivities")}
+        description={t("activity:pastActivitiesDescription")}
         activities={past}
         variant="past"
         gridStyles={gridStyles}

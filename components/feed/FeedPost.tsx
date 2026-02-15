@@ -21,6 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
+import { useTranslation } from "react-i18next";
 
 interface FeedPostProps {
   user: UserProfile | null;
@@ -29,12 +30,12 @@ interface FeedPostProps {
 
 const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
   const userId = useMemo(() => user?.id, [user?.id]);
-
   const deletePostMutation = useDeleteFeedPost(user!);
   const updatePostMutation = useUpdateFeedPost(user!);
   const [isEditing, setIsEditing] = useState(false);
   const [editComment, setEditComment] = useState(post.comment || "");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const { t } = useTranslation(["feed", "errors", "common"]);
 
   const isOwnPost = useMemo(
     () => userId === post.user_id,
@@ -54,9 +55,9 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
       await deletePostMutation.mutateAsync(post.id);
       setIsDeleteDialogOpen(false);
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error(t("errors:errorDeletingPost"), error);
     }
-  }, [post.id, deletePostMutation]);
+  }, [deletePostMutation, post.id, t]);
 
   const handleSaveEdit = useCallback(async () => {
     try {
@@ -66,9 +67,9 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
       });
       setIsEditing(false);
     } catch (error) {
-      console.error("Error updating post:", error);
+      console.error(t("errors:errorUpdatingPost"), error);
     }
-  }, [post.id, editComment, updatePostMutation]);
+  }, [updatePostMutation, post.id, editComment, t]);
 
   const handleCancelEdit = useCallback(() => {
     setEditComment(postComment);
@@ -88,8 +89,8 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
 
     const isUpdated = post.isUpdatedPost;
 
-    return `${isUpdated ? "Updated at" : "Created at"} ${date.toLocaleDateString(
-      "en-US",
+    return `${isUpdated ? t("feed:updatedAt") : t("feed:createdAt")} ${date.toLocaleDateString(
+      "ka-GE",
       {
         month: "short",
         day: "numeric",
@@ -98,7 +99,7 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
         minute: "2-digit",
       },
     )}`;
-  }, [post.created_at, post.isUpdatedPost]);
+  }, [post.created_at, post.isUpdatedPost, t]);
 
   return (
     <div className="border-b bg-card p-2 pb-4 dark:border-slate-700 dark:bg-slate-800 md:p-4">
@@ -127,7 +128,7 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsDeleteDialogOpen(true)}
-                  className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                  className="h-8 w-8 p-0 text-destructive"
                   aria-label="Delete post"
                   disabled={deletePostMutation.isPending}
                 >
@@ -155,7 +156,7 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
               disabled={updatePostMutation.isPending}
             >
               <X className="mr-2 h-4 w-4" />
-              Cancel
+              {t("common:actions:cancel")}
             </Button>
             <Button
               size="sm"
@@ -163,7 +164,7 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
               disabled={updatePostMutation.isPending}
             >
               <Check className="mr-2 h-4 w-4" />
-              Save
+              {t("common:actions:save")}
             </Button>
           </div>
         </div>
@@ -200,22 +201,23 @@ const FeedPost: React.FC<FeedPostProps> = ({ user, post }) => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Post</AlertDialogTitle>
+            <AlertDialogTitle>{t("feed:postDelete.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this post? This action cannot be
-              undone.
+              {t("feed:postDelete.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deletePostMutation.isPending}>
-              Cancel
+              {t("common:actions:cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deletePostMutation.isPending}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {deletePostMutation.isPending ? "Deleting..." : "Delete"}
+              {deletePostMutation.isPending
+                ? t("common:actions:loading")
+                : t("common:actions:delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

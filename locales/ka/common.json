@@ -1,0 +1,29 @@
+{
+  "appName": "What'sOnTbilisi",
+  "actions": {
+    "save": "შენახვა",
+    "close": "დახურვა",
+    "cancel": "გაუქმება",
+    "goHome": "მთავარზე გადასვლა",
+    "backToHome": "მთავარზე დაბრუნება",
+    "continue": "გაგრძელება",
+    "loading": "იტვირთება...",
+    "delete": "წაშლა"
+  },
+  "language": {
+    "label": "ენა",
+    "description": "აირჩიეთ სასურველი ენა",
+    "switch": "ენის შეცვლა",
+    "english": "ინგლისური",
+    "georgian": "ქართული",
+    "short": {
+      "en": "EN",
+      "ka": "KA"
+    }
+  },
+  "inputs": {
+    "search": {
+      "placeholder": "მოძებნე აქტივობა, ღონისძიება და ა.შ"
+    }
+  }
+}

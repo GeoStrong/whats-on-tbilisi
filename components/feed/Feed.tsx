@@ -14,9 +14,11 @@ import { getFollowedUsersParticipation } from "@/lib/functions/supabaseFunctions
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { UserParticipationHistory } from "@/lib/types";
 import ParticipationHistory from "../general/participationHistory";
+import { useTranslation } from "react-i18next";
 
 const Feed: React.FC = () => {
   const { user, isLoading: userLoading, isAuthenticated } = useGetUserProfile();
+  const { t } = useTranslation(["feed"]);
   const [followedParticipations, setFollowedParticipations] = useState<
     UserParticipationHistory[] | null
   >(null);
@@ -56,13 +58,13 @@ const Feed: React.FC = () => {
           <UsersRealtimeFollows userId={user.id} userName={user.name} />
         </div>
         <Button variant="outline" className="mt-4 w-full" asChild>
-          <Link href="/profile">Open Profile</Link>
+          <Link href="/profile">{t("feed:openProfile")}</Link>
         </Button>
       </div>
 
       <div className="overflow-y-auto rounded-xl border shadow-md dark:border-slate-700 dark:bg-slate-800 md:col-span-4 md:col-start-3">
         <h1 className="my-6 text-center text-3xl font-bold md:text-4xl">
-          For you
+          {t("feed:titleForYou")}
         </h1>
         {postsLoading && !memoizedPosts.length ? (
           <FeedPostSkeleton />
@@ -71,11 +73,10 @@ const Feed: React.FC = () => {
             {memoizedPosts.length === 0 ? (
               <div className="flex w-full flex-col items-center justify-center gap-4">
                 <p className="text-center text-muted-foreground">
-                  You don&apos;t have any posts in your feed yet! Start by
-                  following users and activities you&apos;re interested in.
+                  {t("feed:empty.noPosts")}
                 </p>
                 <Button variant="outline" asChild>
-                  <Link href="/activities">View Activities</Link>
+                  <Link href="/activities">{t("feed:empty.viewActivities")}</Link>
                 </Button>
               </div>
             ) : (
@@ -84,10 +85,10 @@ const Feed: React.FC = () => {
                   <div className="flex w-full justify-center">
                     <TabsList>
                       <TabsTrigger className="text-base" value="posts">
-                        Posts
+                        {t("feed:tabs.posts")}
                       </TabsTrigger>
                       <TabsTrigger className="text-base" value="participation">
-                        Participation
+                        {t("feed:tabs.participation")}
                       </TabsTrigger>
                     </TabsList>
                   </div>
@@ -97,9 +98,7 @@ const Feed: React.FC = () => {
                     ))}
                   </TabsContent>
                   <TabsContent value="participation">
-                    <p className="text-center">
-                      See where you friends are going
-                    </p>
+                    <p className="text-center">{t("feed:participationDescription")}</p>
                     <div className="space-y-4">
                       <ParticipationHistory
                         participations={followedParticipations}

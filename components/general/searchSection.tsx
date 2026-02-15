@@ -4,8 +4,11 @@ import { Button } from "../ui/button";
 import Form from "next/form";
 import Image from "next/image";
 import tbilisiImg from "@/public/images/tbilisi.jpg";
+import { useTranslation } from "react-i18next";
 
 const SearchSection: React.FC = () => {
+  const { t } = useTranslation(["common", "navigation"]);
+
   return (
     <div className="relative mb-8 w-full">
       <Image
@@ -31,14 +34,14 @@ const SearchSection: React.FC = () => {
               type="text"
               name="search"
               className="h-8 rounded-full rounded-r-none border-2 border-white bg-white text-base text-black focus:border-primary md:h-11 md:p-6"
-              placeholder="Search Activities, Places"
+              placeholder={t("common:inputs:search:placeholder")}
             />
             <Button
               type="submit"
               className="h-8 rounded-full rounded-l-none border-2 border-primary bg-primary text-sm text-white hover:bg-primary/80 hover:text-white md:p-6 md:px-10"
               variant="outline"
             >
-              Search
+              {t("navigation:search")}
             </Button>
           </Form>
         </div>

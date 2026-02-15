@@ -13,6 +13,7 @@ import { FiSettings } from "react-icons/fi";
 import { FiFileText } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { LayoutGroup, motion } from "motion/react";
+import { useTranslation } from "react-i18next";
 
 interface ProfileLayoutProps {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
   const { user } = useGetUserProfile();
 
   const pathname = usePathname();
+  const { t } = useTranslation(["navigation"]);
 
   if (user === undefined) redirect("/");
 
@@ -38,7 +40,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
         <div className="flex flex-col gap-6">
           <Link href="/" className="mb-6 flex items-center gap-3">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Feed
+            {t("navigation:backToFeed")}
           </Link>
 
           <div className="flex flex-col gap-6 md:flex-row">
@@ -48,7 +50,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
               {/* Profile Navigation */}
               <nav
                 className="mb-6 flex gap-4 rounded-xl border p-5 shadow-md dark:bg-gray-800"
-                aria-label="Profile navigation"
+                aria-label={t("navigation:profileNavigation")}
               >
                 <LayoutGroup>
                   <ul className="flex w-full items-start justify-between gap-4 md:flex-row md:items-center md:gap-6">
@@ -60,7 +62,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
                       <Link
                         href="/profile"
                         className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:flex-row"
-                        aria-label="Activities"
+                        aria-label={t("navigation:myActivities")}
                         aria-current={isActive("/profile") ? "page" : undefined}
                       >
                         <BsCalendar2Event
@@ -68,7 +70,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
                           aria-hidden="true"
                         />
                         <span className="hidden text-base md:ml-1 md:block">
-                          My Activities
+                          {t("navigation:myActivities")}
                         </span>
                       </Link>
                       {isActive("/profile") && (
@@ -87,7 +89,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
                       <Link
                         href="/profile/posts"
                         className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:flex-row"
-                        aria-label="Posts"
+                        aria-label={t("navigation:myPosts")}
                         aria-current={
                           isActive("/profile/posts") ? "page" : undefined
                         }
@@ -97,7 +99,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
                           aria-hidden="true"
                         />
                         <span className="hidden text-base md:ml-1 md:block">
-                          My Posts
+                          {t("navigation:myPosts")}
                         </span>
                       </Link>
                       {isActive("/profile/posts") && (
@@ -116,7 +118,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
                       <Link
                         href="/profile/account"
                         className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:flex-row"
-                        aria-label="Account"
+                        aria-label={t("navigation:account")}
                         aria-current={
                           isActive("/profile/account") ? "page" : undefined
                         }
@@ -126,7 +128,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
                           aria-hidden="true"
                         />
                         <span className="hidden text-base md:ml-1 md:block">
-                          Account
+                          {t("navigation:account")}
                         </span>
                       </Link>
                       {isActive("/profile/account") && (
@@ -145,7 +147,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
                       <Link
                         href="/profile/preferences"
                         className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:flex-row"
-                        aria-label="Preferences"
+                        aria-label={t("navigation:preferences")}
                         aria-current={
                           isActive("/profile/preferences") ? "page" : undefined
                         }
@@ -155,7 +157,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
                           aria-hidden="true"
                         />
                         <span className="hidden text-base md:ml-1 md:block">
-                          Preferences
+                          {t("navigation:preferences")}
                         </span>
                       </Link>
                       {isActive("/profile/preferences") && (

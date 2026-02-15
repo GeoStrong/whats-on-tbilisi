@@ -1,0 +1,31 @@
+{
+  "mainTitle": "აღმოაჩინე შენი შემდეგი თავგადასავალი",
+  "featuredActivities": "პოპულარული ღონისძიებები",
+  "featuredActivitiesDescription": "ტრენდული ღონისძიებები ყველაზე მეტი ჩართულობით",
+  "upcomingActivities": "მოსალოდნელი ღონისძიებები",
+  "upcomingActivitiesDescription": "არ გამოტოვო ეს ღონისძიებები, რომლებიც მალე მოხდება",
+  "ongoingActivities": "მიმდინარე ღონისძიებები",
+  "ongoingActivitiesDescription": "შემოიერთო ღონისძიებებს, რომლებიც ახლა მიმდინარეობს",
+  "pastActivities": "წარსულში გატარებული ღონისძიებები",
+  "pastActivitiesDescription": "იხილე ღონისძიებები, რომლებიც ახლახან შედგა",
+  "activityDetails": {
+    "address": "მისამართი",
+    "timeStart": "დაწყების დრო",
+    "timeEnd": "დამთავრების დრო",
+    "dateStart": "დაწყების თარიღი",
+    "dateEnd": "დამთავრების თარიღი",
+    "targetAudience": "სამიზნე გუნდი",
+    "participants": "მონაწილეები",
+    "categories": "კატეგორიები",
+    "location": "მდებარეობა",
+    "description": "აღწერილობა",
+    "open": "ღონისძიების გახსნა",
+    "share": "გააზიარე ეს ღონისძიება მეგობრებთან:",
+    "modify": "ღონისძიების დეტალების შეცვლა"
+  },
+  "activityParticipation": {
+    "going": "თქვენ მონაწილეობთ ამ ღონისძიებაში",
+    "participated": "თქვენ უკვე იმონაწილეთ ამ ღონისძიებაში",
+    "ended": "ამ ღონისძიებას უკვე არ უწყობს მონაწილეობას."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "mainTitle": "Discover Your Next Adventure",
+  "featuredActivities": "Featured Activities",
+  "featuredActivitiesDescription": "Trending events with the most engagement",
+  "upcomingActivities": "Upcoming Activities",
+  "upcomingActivitiesDescription": "Don't miss out on these events happening soon",
+  "ongoingActivities": "Ongoing Activities",
+  "ongoingActivitiesDescription": "Join these events happening right now",
+  "pastActivities": "Past Activities",
+  "pastActivitiesDescription": "See what events have recently taken place",
+  "activityDetails": {
+    "address": "Address",
+    "timeStart": "Start Time",
+    "timeEnd": "End Time",
+    "dateStart": "Start Date",
+    "dateEnd": "End Date",
+    "targetAudience": "Target Audience",
+    "participants": "Participants",
+    "categories": "Categories",
+    "location": "Location",
+    "description": "Description",
+    "open": "Open Activity",
+    "share": "Share this activity with friends:",
+    "modify": "Modify Activity"
+  },
+  "activityParticipation": {
+    "going": "You are participating",
+    "participated": "You participated in this activity",
+    "ended": "This activity no longer accepting participants."
+  }
+}

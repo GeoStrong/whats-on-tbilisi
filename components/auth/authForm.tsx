@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { authActions } from "@/lib/store/authSlice";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 interface AuthDialogProps {
   open: boolean;
@@ -29,15 +30,22 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
+  const { t } = useTranslation(["auth", "validation", "errors"]);
 
   const SignSchema = Yup.object().shape({
     fullName: isSignin
       ? Yup.string().notRequired()
-      : Yup.string().min(2, "Too short!").required("Required"),
-    email: Yup.string().email("Invalid email").required("Required"),
+      : Yup.string()
+          .min(2, t("validation:tooShort"))
+          .required(t("validation:required")),
+    email: Yup.string()
+      .email(t("validation:invalidEmail"))
+      .required(t("validation:required")),
     password: isSignin
       ? Yup.string()
-      : Yup.string().min(6, "At least 6 characters").required("Required"),
+      : Yup.string()
+          .min(6, t("validation:minChars", { count: 6 }))
+          .required(t("validation:required")),
   });
 
   const handleSubmit = async (
@@ -57,7 +65,7 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
           const message =
             emailError instanceof Error
               ? emailError.message
-              : "We couldn't send your verification email. Please resend from your profile.";
+              : t("errors:verificationEmailFailed");
           toast.error(message);
         }
         onOpenChange(false);
@@ -68,7 +76,7 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
       onOpenChange(false);
     } catch (err: unknown) {
       if (err instanceof Error) setError(err.message);
-      else setError("Unexpected error");
+      else setError(t("errors:unexpectedError"));
     } finally {
       setSubmitting(false);
     }
@@ -79,21 +87,21 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="w-[90%] sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Welcome to What&apos;sOn-Tbilisi</DialogTitle>
+            <DialogTitle>{t("auth:dialog.welcomeTitle")}</DialogTitle>
             <DialogDescription>
               {isSignin
-                ? "Sign in to your account"
-                : "Create a new account below"}
+                ? t("auth:dialog.signInDescription")
+                : t("auth:dialog.signUpDescription")}
             </DialogDescription>
           </DialogHeader>
 
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin" onClick={() => setIsSignin(true)}>
-                Sign In
+                {t("auth:dialog.signInTab")}
               </TabsTrigger>
               <TabsTrigger value="signup" onClick={() => setIsSignin(false)}>
-                Sign Up
+                {t("auth:dialog.signUpTab")}
               </TabsTrigger>
             </TabsList>
 
@@ -110,11 +118,11 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
                 <Form className="mt-4 space-y-4">
                   {!isSignin && (
                     <div className="space-y-1">
-                      <Label htmlFor="fullName">Full Name</Label>
+                      <Label htmlFor="fullName">{t("auth:fields.fullName")}</Label>
                       <Field
                         name="fullName"
                         as={Input}
-                        placeholder="John Doe"
+                        placeholder={t("auth:placeholders.fullName")}
                         id="fullName"
                       />
                       <ErrorMessage
@@ -126,12 +134,12 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
                   )}
 
                   <div className="space-y-1">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{t("auth:fields.email")}</Label>
                     <Field
                       name="email"
                       as={Input}
                       type="email"
-                      placeholder="your@email.com"
+                      placeholder={t("auth:placeholders.email")}
                       id="email"
                     />
                     <ErrorMessage
@@ -142,12 +150,12 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
                   </div>
 
                   <div className="space-y-1">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t("auth:fields.password")}</Label>
                     <Field
                       name="password"
                       as={Input}
                       type="password"
-                      placeholder="••••••••"
+                      placeholder={t("auth:placeholders.password")}
                       id="password"
                     />
                     <ErrorMessage
@@ -169,7 +177,7 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
                           router.push("/forgot-password");
                         }}
                       >
-                        Forgot your password?
+                        {t("auth:dialog.forgotPassword")}
                       </button>
                     )}
                   </div>
@@ -181,11 +189,11 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onOpenChange }) => {
                   >
                     {isSubmitting
                       ? isSignin
-                        ? "Signing in..."
-                        : "Creating account..."
+                        ? t("auth:buttons.signingIn")
+                        : t("auth:buttons.creatingAccount")
                       : isSignin
-                        ? "Sign In"
-                        : "Sign Up"}
+                        ? t("auth:buttons.signIn")
+                        : t("auth:buttons.signUp")}
                   </Button>
                 </Form>
               )}

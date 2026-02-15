@@ -1,0 +1,11 @@
+{
+  "unexpectedError": "მოულოდნელი შეცდომა",
+  "genericTryAgain": "რაღაც შეცდომაა. სცადეთ თავიდან.",
+  "verificationEmailFailed": "დადასტურების წერილის გაგზავნა ვერ მოხერხდა. სცადეთ პროფილიდან ხელახლა გაგზავნა.",
+  "missingVerificationToken": "დადასტურების ტოკენი არ მოიძებნა.",
+  "verificationFailedExpired": "დადასტურება ვერ მოხერხდა. შესაძლოა ბმული ვადაგასულია.",
+  "unableResetPassword": "პაროლის აღდგენა ვერ მოხერხდა.",
+  "invalidOrExpiredResetLink": "ბმული არასწორია ან ვადა გასულია.",
+  "errorDeletingPost": "პოსტის წაშლის შეცდომა. სცადეთ თავიდან.",
+  "errorUpdatingPost": "პოსტის განახლების შეცდომა. სცადეთ თავიდან."
+}

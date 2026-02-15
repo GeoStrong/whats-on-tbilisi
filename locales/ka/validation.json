@@ -1,0 +1,8 @@
+{
+  "required": "სავალდებულოა",
+  "invalidEmail": "ელფოსტა არასწორია",
+  "tooShort": "ძალიან მოკლეა!",
+  "minChars": "მინიმუმ {{count}} სიმბოლო",
+  "passwordMin": "პაროლი უნდა შეიცავდეს მინიმუმ {{count}} სიმბოლოს",
+  "passwordsMustMatch": "პაროლები არ ემთხვევა"
+}

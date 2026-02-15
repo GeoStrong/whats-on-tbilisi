@@ -1,0 +1,11 @@
+{
+  "unexpectedError": "Unexpected error",
+  "genericTryAgain": "Something went wrong. Please try again.",
+  "verificationEmailFailed": "We couldn't send your verification email. Please resend from your profile.",
+  "missingVerificationToken": "Missing verification token.",
+  "verificationFailedExpired": "Verification failed. The link may be expired.",
+  "unableResetPassword": "Unable to reset password.",
+  "invalidOrExpiredResetLink": "Invalid or expired reset link.",
+  "errorDeletingPost": "Error deleting post. Please try again.",
+  "errorUpdatingPost": "Error updating post. Please try again."
+}

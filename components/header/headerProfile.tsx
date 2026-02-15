@@ -13,9 +13,11 @@ import Link from "next/link";
 import { UserProfile } from "@/lib/types";
 import useScreenSize from "@/lib/hooks/useScreenSize";
 import useOptimizedImage from "@/lib/hooks/useOptimizedImage";
+import { useTranslation } from "react-i18next";
 
 const HeaderProfile: React.FC<{ user: UserProfile | null }> = ({ user }) => {
   const { isMobile } = useScreenSize();
+  const { t } = useTranslation(["navigation"]);
 
   const { imageUrl } = useOptimizedImage(user?.avatar_path || "", {
     quality: 50,
@@ -38,10 +40,10 @@ const HeaderProfile: React.FC<{ user: UserProfile | null }> = ({ user }) => {
             <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <Link href="/profile" className="cursor-pointer">
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>{t("navigation:profile")}</DropdownMenuItem>
             </Link>
             <Link href="/profile/preferences" className="cursor-pointer">
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>{t("navigation:settings")}</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
 
@@ -51,7 +53,7 @@ const HeaderProfile: React.FC<{ user: UserProfile | null }> = ({ user }) => {
                 window.location.reload();
               }}
             >
-              Log out
+              {t("navigation:logOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

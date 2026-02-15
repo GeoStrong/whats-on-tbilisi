@@ -1,0 +1,22 @@
+{
+  "titleForYou": "For you",
+  "openProfile": "Open Profile",
+  "tabs": {
+    "posts": "Posts",
+    "participation": "Participation"
+  },
+  "participationDescription": "See where your friends are going",
+  "empty": {
+    "noPosts": "You don't have any posts in your feed yet! Start by following users and activities you're interested in.",
+    "viewActivities": "View Activities"
+  },
+  "startExploring": "Start exploring activities and events around you!",
+  "startExploringParticipation": "Start exploring activities and join events to build your participation history.",
+  "createdAt": "Created at",
+  "updatedAt": "Updated at",
+  "postDelete": {
+    "title": "Delete Post",
+    "description": "Are you sure you want to delete this post? This action cannot be undone.",
+    "cancel": "Cancel"
+  }
+}

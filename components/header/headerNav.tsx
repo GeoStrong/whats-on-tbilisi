@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import HeaderProfile from "./headerProfile";
 import HeaderProfileLoader from "./headerProfileLoader";
-import { AiOutlinePlusCircle } from "react-icons/ai";
 import { UserProfile } from "@/lib/types";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -18,6 +17,8 @@ import {
   Search02Icon,
   User03Icon,
 } from "@hugeicons/core-free-icons";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../i18n/LanguageSwitcher";
 
 interface HeaderNavProps {
   onAuthClick: () => void;
@@ -33,12 +34,13 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
   isAuthenticated,
 }) => {
   const pathname = usePathname();
+  const { t } = useTranslation(["navigation"]);
 
   return (
     <>
       <nav
         className="hidden items-center gap-3 md:flex"
-        aria-label="Main navigation"
+        aria-label={t("navigation:mainNavigation")}
       >
         <LayoutGroup>
           <ul className="flex items-center gap-6">
@@ -48,7 +50,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
               <Link
                 href="/"
                 className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                aria-label="Feed"
+                aria-label={t("navigation:feed")}
                 aria-current={pathname === "/" ? "page" : undefined}
               >
                 <HugeiconsIcon
@@ -59,7 +61,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 <span
                   className={`text-sm ${pathname === "/" && "font-semibold"} `}
                 >
-                  Feed
+                  {t("navigation:feed")}
                 </span>
               </Link>
               {pathname === "/" && (
@@ -75,7 +77,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
               <Link
                 href="/activities"
                 className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                aria-label="Activities"
+                aria-label={t("navigation:activities")}
                 aria-current={pathname === "/activities" ? "page" : undefined}
               >
                 <HugeiconsIcon
@@ -86,7 +88,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 <span
                   className={`text-sm ${pathname === "/activities" && "font-semibold"} `}
                 >
-                  Activities
+                  {t("navigation:activities")}
                 </span>
               </Link>
               {pathname === "/activities" && (
@@ -102,7 +104,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
               <Link
                 href="/discover"
                 className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                aria-label="Search and Discover"
+                aria-label={t("navigation:searchAndDiscover")}
                 aria-current={pathname === "/discover" ? "page" : undefined}
               >
                 <HugeiconsIcon
@@ -113,7 +115,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 <span
                   className={`text-sm ${pathname === "/discover" && "font-semibold"} `}
                 >
-                  Search
+                  {t("navigation:search")}
                 </span>
               </Link>
               {pathname === "/discover" && (
@@ -129,7 +131,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
               <Link
                 href="/map"
                 className="mb-1 flex flex-col items-center gap-1 rounded-lg px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                aria-label="Map"
+                aria-label={t("navigation:map")}
                 aria-current={pathname === "/map" ? "page" : undefined}
               >
                 <HugeiconsIcon
@@ -140,7 +142,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 <span
                   className={`text-sm ${pathname === "/map" && "font-semibold"} `}
                 >
-                  Map
+                  {t("navigation:map")}
                 </span>
               </Link>
               {pathname === "/map" && (
@@ -157,16 +159,22 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 <Link
                   href="/create-activity"
                   className="mb-1 flex h-12 items-center gap-1 rounded-full bg-primary px-3 py-1 text-sm text-white transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                  aria-label="Create Activity"
+                  aria-label={t("navigation:createActivity")}
                   aria-current={
                     pathname === "/create-activity" ? "page" : undefined
                   }
                 >
                   <HugeiconsIcon icon={AddSquareIcon} />
-                  Create Activity
+                  {t("navigation:createActivity")}
                 </Link>
               </li>
             )}
+
+            <div className="flex items-center gap-2">
+              <div className="hidden md:block">
+                <LanguageSwitcher />
+              </div>
+            </div>
 
             <li className={`hover:text-primary`}>
               {isLoading ? (
@@ -176,14 +184,14 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                   onClick={onAuthClick}
                   variant="ghost"
                   className="gap-2 border"
-                  aria-label="Sign in to your account"
+                  aria-label={t("navigation:signInToAccount")}
                 >
                   <HugeiconsIcon
                     icon={User03Icon}
                     className="h-5 w-5"
                     strokeWidth={2}
                   />
-                  <span className="md:inline">Sign In</span>
+                  <span className="md:inline">{t("navigation:signIn")}</span>
                 </Button>
               ) : (
                 <HeaderProfile user={user} />

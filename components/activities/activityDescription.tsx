@@ -28,8 +28,8 @@ import { Button } from "../ui/button";
 import useOptimizedImage from "@/lib/hooks/useOptimizedImage";
 import OptimizedImage from "../ui/optimizedImage";
 import { checkUserParticipation } from "@/lib/profile/profile";
-import { BiRightTopArrowCircle } from "react-icons/bi";
 import UserCard from "../users/userCard";
+import { useTranslation } from "react-i18next";
 
 const snapPoints = [0.5, 1];
 
@@ -51,6 +51,7 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
   const [categories, setCategories] = useState<(Category | null)[]>([]);
   const { user } = useGetUserProfile();
   const [isUserParticipant, setIsUserParticipant] = useState<boolean>(false);
+  const { t } = useTranslation(["common", "activity"]);
 
   const { imageUrl: activityImage } = useOptimizedImage(activity.image, {
     quality: 50,
@@ -95,7 +96,7 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
                 href={`/activities/${activity.id}`}
                 className="absolute right-5 top-4 flex items-center gap-2 duration-300 hover:text-primary"
               >
-                Open Activity
+                {t("activity:activityDetails:open")}
                 <MdOutlineOpenInNew />
               </Link>
             }
@@ -123,37 +124,29 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
                   {activity.description}
                 </DrawerDescription>
                 <div className="mt-5 text-left">
-                  {activity?.hostName && (
-                    <p className="text-base">
-                      Hosted by:{" "}
-                      <span className="linear-yellow text-base">
-                        {activity?.hostName}
-                      </span>
-                    </p>
-                  )}
                   <p className="">
-                    Address:{" "}
+                    {t("activity:activityDetails:address")}:{" "}
                     <span className="text-lg font-bold">
                       {activity.location}
                     </span>
                   </p>
 
                   <p className="text-md">
-                    Time:{" "}
+                    {t("activity:activityDetails:timeStart")}:{" "}
                     <span className="text-lg font-bold">
                       {isString(activity?.time) ? activity.time : ""}
                     </span>
                   </p>
                   {activity.endTime && (
                     <p className="text-md">
-                      End Time:{" "}
+                      {t("activity:activityDetails:timeEnd")}:{" "}
                       <span className="text-lg font-bold">
                         {isString(activity?.endTime) ? activity.endTime : ""}
                       </span>
                     </p>
                   )}
                   <p className="text-md">
-                    Start Date:{" "}
+                    {t("activity:activityDetails:dateStart")}:{" "}
                     <span className="text-lg font-bold">
                       {activity.date &&
                         new Date(activity.date).toLocaleString("en-US", {
@@ -164,9 +157,21 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
                         })}
                     </span>
                   </p>
+                  <p className="text-md">
+                    {t("activity:activityDetails:dateEnd")}:{" "}
+                    <span className="text-lg font-bold">
+                      {activity.endDate &&
+                        new Date(activity.endDate).toLocaleString("en-US", {
+                          month: "long",
+                          year: "numeric",
+                          weekday: "short",
+                          day: "numeric",
+                        })}
+                    </span>
+                  </p>
                   {activity.targetAudience && (
                     <p className="">
-                      Target Audience:
+                      {t("activity:activityDetails:targetAudience")}:{" "}
                       <span className="text-lg font-bold">
                         {" "}
                         {activity.targetAudience}
@@ -194,7 +199,7 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
                     />
                   )}
                   <p className="de mt-4 flex items-center justify-between gap-2 md:justify-start">
-                    Share this activity with friends:
+                    {t("activity:activityDetails:share")}
                     <Share activity={activity}>
                       <FiShare className="text-xl" />
                     </Share>
@@ -204,19 +209,20 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
               <DrawerFooter className="flex flex-col items-center gap-2 md:flex-row-reverse">
                 {user?.id !== undefined && activity.user_id === user?.id && (
                   <Link href={`/activities/${activity.id}`}>
-                    <Button className="h-12">Modify Activity</Button>
+                    <Button className="h-12">
+                      {t("activity:activityDetails:modify")}
+                    </Button>
                   </Link>
                 )}
                 {isUserParticipant && activity.status === "inactive" ? (
                   <div className="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-lg font-bold shadow-md dark:bg-yellow-900">
                     <p className="text-center text-sm text-yellow-500">
-                      You participated in this activity
+                      {t("activity:activityParticipation:participated")}
                     </p>
                   </div>
                 ) : isUserParticipant ? (
-                  <p className="text-lg font-bold">
-                    You are
-                    <span className="pl-2 text-green-600">Going</span>
+                  <p className="text-lg font-bold text-green-600">
+                    {t("activity:activityParticipation:going")}
                   </p>
                 ) : !isUserParticipant &&
                   user?.id !== undefined &&
@@ -226,12 +232,12 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
                 ) : activity.status === "inactive" ? (
                   <div className="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-lg font-bold shadow-md dark:bg-yellow-900">
                     <p className="text-center text-sm text-yellow-500">
-                      This activity no longer accepting participants.
+                      {t("activity:activityParticipation:ended")}
                     </p>
                   </div>
                 ) : null}
                 <DrawerClose className="h-12 bg-transparent p-2">
-                  Close
+                  {t("common:actions:close")}
                 </DrawerClose>
               </DrawerFooter>
               {snap !== 1 && isMobile && (

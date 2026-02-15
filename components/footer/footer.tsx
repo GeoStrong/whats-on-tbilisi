@@ -1,42 +1,48 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 import { BsFacebook, BsGithub, BsInstagram, BsLinkedin } from "react-icons/bs";
 import FooterNavMobile from "./footerNavMobile";
 import { getPWADisplayMode } from "@/lib/functions/helperFunctions";
+import { useTranslation } from "react-i18next";
 
 const Footer: React.FC = () => {
   const isTWA = getPWADisplayMode() === "standalone";
+  const { t } = useTranslation(["navigation"]);
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
       <footer className="border-t bg-white py-3 dark:border-gray-600 dark:bg-gray-900 md:px-6">
         <div className="hidden w-full md:block">
           <div className="flex flex-col items-center justify-around md:items-start">
             <Link className="text-lg" href="/">
-              Feed
+              {t("navigation:feed")}
             </Link>
             <Link className="text-lg" href="/activities">
-              Activities
+              {t("navigation:activities")}
             </Link>
             <Link className="text-lg" href="/discover">
-              Discover
+              {t("navigation:discover")}
             </Link>
             <Link className="text-lg" href="/map">
-              Map
+              {t("navigation:map")}
             </Link>
             <Link className="text-lg" href="/create-activity">
-              Create a New Activity
+              {t("navigation:createNewActivity")}
             </Link>
             <Link className="text-lg" href="/privacy">
-              Privacy Policy
+              {t("navigation:privacyPolicy")}
             </Link>
             <Link className="text-lg" href="/terms">
-              Terms of Service
+              {t("navigation:termsOfService")}
             </Link>
           </div>
           <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
             <div className=""></div>
             <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-              © 2025 What&apos;sOn-Tbilisi. All rights reserved.
+              {t("navigation:copyright", { year: currentYear })}
             </p>
             <div className="flex gap-2">
               <Link href="https://github.com/GeoStrong" target="_blank">

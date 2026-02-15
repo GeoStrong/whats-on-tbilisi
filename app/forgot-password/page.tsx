@@ -8,34 +8,36 @@ import { Form, Formik, Field, ErrorMessage } from "formik";
 import Link from "next/link";
 import React, { useState } from "react";
 import * as Yup from "yup";
+import { useTranslation } from "react-i18next";
 
 type ForgotStatus = "idle" | "loading" | "success" | "error";
 
 const ForgotPasswordPage: React.FC = () => {
   const [status, setStatus] = useState<ForgotStatus>("idle");
   const [error, setError] = useState("");
+  const { t } = useTranslation(["auth", "validation", "errors", "common"]);
 
   const ForgotPasswordSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Required"),
+    email: Yup.string()
+      .email(t("validation:invalidEmail"))
+      .required(t("validation:required")),
   });
 
   return (
     <div className="mx-auto flex min-h-[65vh] w-full max-w-md flex-col justify-center px-4">
       <div className="rounded-xl border bg-card p-6 shadow-sm">
-        <h1 className="text-2xl font-semibold">Forgot password</h1>
+        <h1 className="text-2xl font-semibold">{t("auth:forgotPassword.title")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Enter your email and we&apos;ll send a reset link if an account
-          exists.
+          {t("auth:forgotPassword.description")}
         </p>
 
         {status === "success" ? (
           <div className="mt-5 space-y-4">
             <p className="text-sm text-emerald-700 dark:text-emerald-400">
-              If an account exists for that email, we&apos;ve sent a password
-              reset link.
+              {t("auth:forgotPassword.success")}
             </p>
             <Link href="/">
-              <Button className="w-full">Back to home</Button>
+              <Button className="w-full">{t("common:actions.backToHome")}</Button>
             </Link>
           </div>
         ) : (
@@ -53,7 +55,7 @@ const ForgotPasswordPage: React.FC = () => {
                 const message =
                   submitError instanceof Error
                     ? submitError.message
-                    : "Something went wrong. Please try again.";
+                    : t("errors:genericTryAgain");
                 setError(message);
                 setStatus("error");
               } finally {
@@ -64,13 +66,13 @@ const ForgotPasswordPage: React.FC = () => {
             {({ isSubmitting }) => (
               <Form className="mt-5 space-y-4">
                 <div className="space-y-1">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t("auth:fields.email")}</Label>
                   <Field
                     as={Input}
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder={t("auth:placeholders.email")}
                   />
                   <ErrorMessage
                     name="email"
@@ -88,11 +90,13 @@ const ForgotPasswordPage: React.FC = () => {
                   className="w-full"
                   disabled={isSubmitting || status === "loading"}
                 >
-                  {status === "loading" ? "Sending..." : "Send reset link"}
+                  {status === "loading"
+                    ? t("common:actions.loading")
+                    : t("auth:buttons.sendResetLink")}
                 </Button>
 
                 <Link href="/" className="block text-center text-sm underline">
-                  Back to sign in
+                  {t("auth:forgotPassword.backToSignIn")}
                 </Link>
               </Form>
             )}

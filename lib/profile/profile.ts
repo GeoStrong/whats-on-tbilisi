@@ -1,6 +1,7 @@
 import { handleUploadFile } from "../functions/helperFunctions";
 import { getActivityById } from "../functions/supabaseFunctions";
 import { supabase } from "../supabase/supabaseClient";
+import type { AppLocale } from "../i18n/types";
 import {
   ActivityEntity,
   FollowersEntity,
@@ -43,6 +44,18 @@ export const handleUploadUserInformation = async (
   if (error) throw error;
 
   return data;
+};
+
+export const updatePreferredLanguage = async (
+  userId: string,
+  locale: AppLocale,
+) => {
+  const { error } = await supabase
+    .from("users")
+    .update({ preferred_language: locale })
+    .eq("id", userId);
+
+  if (error) throw error;
 };
 
 export const handleSavedActivities = async (

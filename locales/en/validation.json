@@ -1,0 +1,8 @@
+{
+  "required": "Required",
+  "invalidEmail": "Invalid email",
+  "tooShort": "Too short!",
+  "minChars": "At least {{count}} characters",
+  "passwordMin": "Password must be at least {{count}} characters",
+  "passwordsMustMatch": "Passwords must match"
+}

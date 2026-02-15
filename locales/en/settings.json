@@ -1,0 +1,17 @@
+{
+  "display": {
+    "title": "Display Preferences",
+    "description": "Customize your viewing experience.",
+    "theme": {
+      "label": "Theme",
+      "select": "Select Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "language": {
+      "label": "Language",
+      "description": "Choose your interface language"
+    }
+  }
+}

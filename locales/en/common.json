@@ -1,0 +1,29 @@
+{
+  "appName": "What'sOnTbilisi",
+  "actions": {
+    "save": "Save",
+    "close": "Close",
+    "cancel": "Cancel",
+    "goHome": "Go home",
+    "backToHome": "Back to home",
+    "continue": "Continue",
+    "loading": "Loading...",
+    "delete": "Delete"
+  },
+  "language": {
+    "label": "Language",
+    "description": "Choose your preferred language",
+    "switch": "Switch language",
+    "english": "English",
+    "georgian": "Georgian",
+    "short": {
+      "en": "EN",
+      "ka": "KA"
+    }
+  },
+  "inputs": {
+    "search": {
+      "placeholder": "Search for activities, events, and more..."
+    }
+  }
+}

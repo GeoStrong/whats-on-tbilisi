@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { TabsContent } from "../ui/tabs";
 import {
   Card,
   CardContent,
@@ -15,6 +14,7 @@ import {
   // Lock,
   // Mail,
   Palette,
+  Languages,
   Monitor,
   Sun,
   Moon,
@@ -33,9 +33,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../i18n/LanguageSwitcher";
 
 const ProfilePreferences: React.FC = () => {
   const { theme, setTheme } = useThemeSwitch();
+  const { t } = useTranslation(["settings"]);
   return (
     <>
       <div className="space-y-4">
@@ -97,9 +100,9 @@ const ProfilePreferences: React.FC = () => {
 
         <Card className="border-none shadow-none hover:shadow-none dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="">Display Preferences</CardTitle>
+            <CardTitle className="">{t("settings:display.title")}</CardTitle>
             <CardDescription className="text-base">
-              Customize your viewing experience.
+              {t("settings:display.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -107,7 +110,9 @@ const ProfilePreferences: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Palette className="h-6 w-6 text-muted-foreground" />
-                  <Label className="text-base">Theme</Label>
+                  <Label className="text-base">
+                    {t("settings:display.theme.label")}
+                  </Label>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -118,23 +123,25 @@ const ProfilePreferences: React.FC = () => {
                       {theme === "system" ? (
                         <>
                           <Monitor className="mr-2 h-4 w-4" />
-                          System
+                          {t("settings:display.theme.system")}
                         </>
                       ) : theme === "dark" ? (
                         <>
                           <Moon className="mr-2 h-4 w-4" />
-                          Dark
+                          {t("settings:display.theme.dark")}
                         </>
                       ) : (
                         <>
                           <Sun className="mr-2 h-4 w-4" />
-                          Light
+                          {t("settings:display.theme.light")}
                         </>
                       )}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Select Theme</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                      {t("settings:display.theme.select")}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuRadioGroup
                       value={theme || "system"}
@@ -144,20 +151,35 @@ const ProfilePreferences: React.FC = () => {
                     >
                       <DropdownMenuRadioItem value="system">
                         <Monitor className="mr-2 h-4 w-4" />
-                        System
+                        {t("settings:display.theme.system")}
                       </DropdownMenuRadioItem>
                       <DropdownMenuRadioItem value="light">
                         <Sun className="mr-2 h-4 w-4" />
-                        Light
+                        {t("settings:display.theme.light")}
                       </DropdownMenuRadioItem>
                       <DropdownMenuRadioItem value="dark">
                         <Moon className="mr-2 h-4 w-4" />
-                        Dark
+                        {t("settings:display.theme.dark")}
                       </DropdownMenuRadioItem>
                     </DropdownMenuRadioGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Languages className="h-6 w-6 text-muted-foreground" />
+                  <Label className="text-base">
+                    {t("settings:display.language.label")}
+                  </Label>
+                </div>
+                <LanguageSwitcher />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {t("settings:display.language.description")}
+              </p>
             </div>
           </CardContent>
         </Card>

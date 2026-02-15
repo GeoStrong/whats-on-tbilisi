@@ -7,6 +7,7 @@ export type UserProfile = {
   created_at: Date | string;
   additionalInfo?: string;
   email_verified_at?: Date | string | null;
+  preferred_language?: "en" | "ka" | null;
 };
 
 export type ActivityCategories =

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserProfile } from "../types";
 import { AppSession } from "../types/api";
+import type { AppLocale } from "../i18n/types";
 import {
   getSession,
   fetchUserProfile as apiFetchUserProfile,
@@ -75,6 +76,10 @@ export const userSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
+    },
+    setPreferredLanguage: (state, action: PayloadAction<AppLocale>) => {
+      if (!state.user) return;
+      state.user.preferred_language = action.payload;
     },
   },
   extraReducers: (builder) => {

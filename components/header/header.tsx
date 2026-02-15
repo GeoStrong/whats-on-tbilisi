@@ -12,11 +12,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import { authActions } from "@/lib/store/authSlice";
 import HeaderProfile from "./headerProfile";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../i18n/LanguageSwitcher";
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const { authDialogOpen } = useSelector((state: RootState) => state.auth);
   const { user, isLoading, isAuthenticated } = useGetUserProfile();
+  const { t } = useTranslation(["navigation"]);
 
   const setAuthDialogOpen = (value: boolean) => {
     dispatch(authActions.setAuthDialogOpen(value));
@@ -33,11 +36,11 @@ const Header: React.FC = () => {
       <Link
         href="/"
         className="linear-yellow flex items-center gap-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-        aria-label="What'sOnTbilisi Home"
+        aria-label={t("navigation:homeAria")}
       >
         <Image
           src="/favicon.png"
-          alt="What'sOnTbilisi logo"
+          alt={t("navigation:logoAlt")}
           width={40}
           height={40}
           priority
@@ -53,12 +56,17 @@ const Header: React.FC = () => {
         isAuthenticated={isAuthenticated}
         onAuthClick={openAuthDialog}
       />
-      <div className="md:hidden">
+      <div className="flex items-center gap-2 md:hidden">
+        <LanguageSwitcher compact />
         {isLoading ? (
           <div className="h-10 w-20 animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
         ) : !isAuthenticated || !user ? (
-          <Button onClick={openAuthDialog} variant="outline" className="gap-2">
-            Sign in
+          <Button
+            onClick={openAuthDialog}
+            variant="outline"
+            className="gap-2 text-xs"
+          >
+            {t("navigation:signIn")}
           </Button>
         ) : (
           <HeaderProfile user={user} />
