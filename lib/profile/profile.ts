@@ -144,6 +144,7 @@ export const checkUserParticipation = async (
   if (error && error.code !== "PGRST116") {
     throw error;
   }
+
   return !!data;
 };
 

@@ -1,3 +1,4 @@
+import { AiOutlineComment } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -82,9 +83,7 @@ const ActivityComments: React.FC<{
 
   const groupedComments = groupCommentsOneLevel(comments || []);
 
-  const handleCommentSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
+  const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user?.id) return;
 
@@ -114,7 +113,8 @@ const ActivityComments: React.FC<{
           containerTrigger={
             !customIcon && (
               <>
-                <h3 className="mb-3 text-lg font-bold">
+                <h3 className="mb-3 flex items-center gap-3 text-lg font-bold">
+                  <AiOutlineComment className="text-2xl" />
                   Comments
                   <span className="inline-block pl-3">{comments.length}</span>
                 </h3>
@@ -243,7 +243,7 @@ const ActivityComments: React.FC<{
                     placeholder={
                       !isUserVerified ? "Verify email to comment" : ""
                     }
-                    className="h-12 rounded-full border !text-lg dark:border-gray-500 disabled:opacity-50"
+                    className="h-12 rounded-full border !text-lg disabled:opacity-50 dark:border-gray-500"
                   />
                   <AnimatePresence>
                     {commentTextInput !== "" && isUserVerified && (
@@ -279,7 +279,8 @@ const ActivityComments: React.FC<{
               customIcon
             ) : (
               <div className="relative w-full rounded-xl bg-white px-3 py-4 shadow-md dark:bg-gray-800">
-                <h3 className="mb-3 text-left font-bold">
+                <h3 className="mb-3 flex items-center gap-3 text-left text-lg font-bold">
+                  <AiOutlineComment className="text-xl" />
                   Comments
                   <span className="inline-block pl-3">{comments.length}</span>
                 </h3>
@@ -397,7 +398,7 @@ const ActivityComments: React.FC<{
                     placeholder={
                       !isUserVerified ? "Verify email to comment" : ""
                     }
-                    className="h-12 rounded-full border pr-16 dark:border-gray-500 disabled:opacity-50"
+                    className="h-12 rounded-full border pr-16 disabled:opacity-50 dark:border-gray-500"
                   />
                   <AnimatePresence>
                     {commentTextInput !== "" && isUserVerified && (

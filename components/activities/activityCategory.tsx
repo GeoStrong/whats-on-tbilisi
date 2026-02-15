@@ -14,7 +14,12 @@ const ActivityCategory: React.FC<{ category: Category }> = ({ category }) => {
   useEffect(() => {
     (async () => {
       const activitiesByCategory = await getActivitiesByCategoryId(category.id);
-      setActivityQuantity(activitiesByCategory.length);
+      // Only count activities with status 'active' or 'pending'
+      const filtered = activitiesByCategory.filter(
+        (activity) =>
+          activity.status === "active" || activity.status === "pending",
+      );
+      setActivityQuantity(filtered.length);
     })();
   }, [category.id]);
 

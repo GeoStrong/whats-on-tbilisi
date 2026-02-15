@@ -86,7 +86,7 @@ const ActivityCards: React.FC = () => {
   return (
     <div className="space-y-10">
       <ActivitySection
-        title="🌟 Featured Activities"
+        title="Featured Activities"
         description="Trending events with the most engagement"
         activities={featured}
         variant="featured"

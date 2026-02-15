@@ -33,9 +33,14 @@ const SmartActivityCategoriesCarousel: React.FC = () => {
               const activities = await getActivitiesByCategoryId(
                 String(category.id),
               );
+              // Only count activities with status 'active' or 'pending'
+              const filtered = activities.filter(
+                (activity) =>
+                  activity.status === "active" || activity.status === "pending",
+              );
               return {
                 ...category,
-                _activityCount: activities.length,
+                _activityCount: filtered.length,
               } as CategoryWithCount;
             } catch {
               return {
@@ -48,10 +53,14 @@ const SmartActivityCategoriesCarousel: React.FC = () => {
 
         if (isCancelled) return;
 
+        // Sort: categories with activities first, then by count descending, then by name
         const sorted = [...categoriesWithCounts].sort((a, b) => {
           const aCount = a._activityCount ?? 0;
           const bCount = b._activityCount ?? 0;
-          return bCount - aCount;
+          if (aCount === 0 && bCount > 0) return 1;
+          if (bCount === 0 && aCount > 0) return -1;
+          if (bCount !== aCount) return bCount - aCount;
+          return a.name.localeCompare(b.name);
         });
 
         setSortedCategories(sorted);

@@ -53,12 +53,30 @@ const getStatusBadgeStyles = (variant: ActivityVariant): string => {
   return variants[variant];
 };
 
-const getStatusBadgeLabel = (variant: ActivityVariant): string => {
-  const labels: Record<ActivityVariant, string> = {
-    featured: "🌟 Featured",
-    ongoing: "🔴 Live",
-    upcoming: "📅 Coming",
-    past: "✓ Completed",
+import { MdStar, MdLiveTv, MdEvent, MdCheckCircle } from "react-icons/md";
+
+const getStatusBadgeLabel = (variant: ActivityVariant): React.ReactNode => {
+  const labels: Record<ActivityVariant, React.ReactNode> = {
+    featured: (
+      <>
+        <MdStar className="mr-1 inline" /> Featured
+      </>
+    ),
+    ongoing: (
+      <>
+        <MdLiveTv className="mr-1 inline" /> Live
+      </>
+    ),
+    upcoming: (
+      <>
+        <MdEvent className="mr-1 inline" /> Coming
+      </>
+    ),
+    past: (
+      <>
+        <MdCheckCircle className="mr-1 inline" /> Completed
+      </>
+    ),
   };
   return labels[variant];
 };

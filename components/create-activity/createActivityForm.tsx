@@ -29,10 +29,6 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
   handleOpenMobileMap,
   displayOpenMapButton,
 }) => {
-  // const { pathname } = useLocation();
-
-  // const isCreatePage = pathname === "/create-activity";
-
   useEffect(() => {
     if (latLng) {
       const { setFieldValue, values } = formik; // Destructure only necessary methods and values
@@ -360,13 +356,15 @@ const CreateActivityForm: React.FC<CreateActivityProps> = ({
       </div>
 
       {/* Submit */}
-      <Button
-        type="submit"
-        disabled={formik.isSubmitting}
-        className="h-12 w-full"
-      >
-        {formik.isSubmitting ? "Submitting..." : "Update Activity"}
-      </Button>
+      {formik.values.status !== "inactive" && (
+        <Button
+          type="submit"
+          disabled={formik.isSubmitting}
+          className="h-12 w-full"
+        >
+          {formik.isSubmitting ? "Submitting..." : "Update Activity"}
+        </Button>
+      )}
     </Form>
   );
 };

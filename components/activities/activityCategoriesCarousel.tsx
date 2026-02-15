@@ -3,6 +3,7 @@
 import React, { Suspense } from "react";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import ActivityCategory from "./activityCategory";
+import AllActivitiesCategoryButton from "./allActivitiesCategoryButton";
 import { Category } from "@/lib/types";
 import ActivityCategoriesCarouselLoading from "./activityCategoriesCarouselLoading";
 
@@ -16,6 +17,9 @@ const Categories: React.FC<CategoriesProps> = ({ categories }) => {
       <div className="sticky top-[3.7rem] z-30 border-b bg-white px-2 py-3 dark:border-gray-600 dark:bg-gray-900 md:px-20">
         <Carousel opts={{ dragFree: true }}>
           <CarouselContent className="cursor-grab">
+            <CarouselItem className="basis-auto pl-2" key="all-activities">
+              <AllActivitiesCategoryButton />
+            </CarouselItem>
             {categories.map((category) => (
               <CarouselItem className="basis-auto pl-2" key={category.id}>
                 <ActivityCategory category={category} />

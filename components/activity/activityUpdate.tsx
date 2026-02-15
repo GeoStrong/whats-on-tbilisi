@@ -42,6 +42,7 @@ const ActivityUpdate: React.FC<{
     host,
     googleLocation,
     categories,
+    status,
   } = activity;
   const dispatch = useDispatch();
   const { latLng } = useSelector((state: RootState) => state.map);
@@ -71,6 +72,7 @@ const ActivityUpdate: React.FC<{
     host,
     categories,
     googleLocation,
+    status,
   };
 
   const { formikComponent, openMobileMapRef, openCreateActivityAlertRef } =
@@ -97,10 +99,20 @@ const ActivityUpdate: React.FC<{
         setActiveSnapPoint={setSnap}
         fadeFromIndex={0}
       >
-        <DrawerTrigger className="h-10 w-1/2 rounded-md border bg-white px-8 text-black shadow-sm md:w-auto">
+        <DrawerTrigger
+          className={`h-10 w-1/2 rounded-md border bg-white px-8 text-black shadow-sm md:w-auto ${activity.status === "inactive" ? "cursor-not-allowed opacity-50" : ""}`}
+          disabled={activity.status === "inactive"}
+          title={
+            activity.status === "inactive"
+              ? "You cannot edit past activities"
+              : "Edit"
+          }
+        >
           Edit
         </DrawerTrigger>
-        <DrawerContent className="w-full">
+        <DrawerContent
+          className={`w-full ${activity.status === "inactive" ? "hidden" : ""}`}
+        >
           <APIProvider
             apiKey={env.googleMapsApiKey || ""}
             libraries={["places"]}

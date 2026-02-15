@@ -97,10 +97,20 @@ const ActivityHeaderButtons: React.FC<{
           </p>
         ) : (
           user?.id !== undefined &&
-          !isUserHost && (
+          !isUserHost &&
+          activity.status !== "inactive" && (
             <ActivityParticipation activityId={activity.id} isBtnLarge />
           )
         )}
+        {!isUserHost &&
+          activity.status === "inactive" &&
+          !isUserParticipant && (
+            <div className="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-lg font-bold shadow-md dark:bg-yellow-900">
+              <p className="text-center text-sm text-yellow-500">
+                This activity has ended and no longer accepting participants.
+              </p>
+            </div>
+          )}
       </div>
     </>
   );

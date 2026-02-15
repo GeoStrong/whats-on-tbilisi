@@ -68,9 +68,8 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
 
   useEffect(() => {
     (async () => {
-      if (user! || !activity) return;
-      const participant = await checkUserParticipation(user!.id, activity.id);
-
+      if (!user || !activity) return;
+      const participant = await checkUserParticipation(user.id, activity.id);
       setIsUserParticipant(participant);
     })();
   }, [activity, activity.id, user]);
@@ -208,15 +207,28 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
                     <Button className="h-12">Modify Activity</Button>
                   </Link>
                 )}
-                {isUserParticipant ? (
+                {isUserParticipant && activity.status === "inactive" ? (
+                  <div className="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-lg font-bold shadow-md dark:bg-yellow-900">
+                    <p className="text-center text-sm text-yellow-500">
+                      You participated in this activity
+                    </p>
+                  </div>
+                ) : isUserParticipant ? (
                   <p className="text-lg font-bold">
                     You are
                     <span className="pl-2 text-green-600">Going</span>
                   </p>
                 ) : !isUserParticipant &&
                   user?.id !== undefined &&
-                  activity.user_id !== user?.id ? (
+                  activity.user_id !== user?.id &&
+                  activity.status !== "inactive" ? (
                   <ActivityParticipation isNested activityId={activity.id} />
+                ) : activity.status === "inactive" ? (
+                  <div className="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-lg font-bold shadow-md dark:bg-yellow-900">
+                    <p className="text-center text-sm text-yellow-500">
+                      This activity no longer accepting participants.
+                    </p>
+                  </div>
                 ) : null}
                 <DrawerClose className="h-12 bg-transparent p-2">
                   Close
