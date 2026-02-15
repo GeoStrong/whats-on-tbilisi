@@ -206,7 +206,7 @@ const ActivityDescription: React.FC<ActivityDescriptionProps> = ({
                   </p>
                 </div>
               </DrawerHeader>
-              <DrawerFooter className="flex flex-col items-center gap-2 md:flex-row-reverse">
+              <DrawerFooter className="flex flex-col items-center gap-2">
                 {user?.id !== undefined && activity.user_id === user?.id && (
                   <Link href={`/activities/${activity.id}`}>
                     <Button className="h-12">

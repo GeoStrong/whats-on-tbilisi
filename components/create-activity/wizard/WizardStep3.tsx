@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { WizardFormState } from "./types";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -29,6 +30,7 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
   imagePreview,
   isSubmitting,
 }) => {
+  const { t } = useTranslation(["create-activity"]);
   const selectedCategories = useMemo(() => {
     return categories.filter((cat) =>
       formState.categories?.includes(cat.id as ActivityCategories),
@@ -61,7 +63,7 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <div className="absolute bottom-4 left-4 right-4">
               <h2 className="text-xl font-bold text-white">
-                {formState.title || "Untitled Activity"}
+                {formState.title || t("create-activity:step3.untitledActivity")}
               </h2>
             </div>
           </div>
@@ -71,9 +73,11 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
           <div className="flex h-[100px] items-center justify-center bg-gray-100 dark:bg-gray-700">
             <div className="text-center">
               <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200">
-                {formState.title || "Untitled Activity"}
+                {formState.title || t("create-activity:step3.untitledActivity")}
               </h2>
-              <p className="text-sm text-gray-500">No hero image</p>
+              <p className="text-sm text-gray-500">
+                {t("create-activity:step3.noHeroImage")}
+              </p>
             </div>
           </div>
         )}
@@ -94,7 +98,8 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
 
           {/* Description */}
           <p className="mb-4 line-clamp-3 text-sm text-gray-600 dark:text-gray-300">
-            {formState.description || "No description provided"}
+            {formState.description ||
+              t("create-activity:step3.noDescriptionProvided")}
           </p>
 
           {/* Details Grid */}
@@ -106,20 +111,25 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
               <FaClock className="text-primary" />
               <span>
-                {formState.time || "Time not set"}
+                {formState.time || t("create-activity:step3.timeNotSet")}
                 {formState.endTime && ` - ${formState.endTime}`}
               </span>
             </div>
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 md:col-span-2">
               <FaMapMarkerAlt className="text-primary" />
               <span className="line-clamp-1">
-                {formState.location || "Location not set"}
+                {formState.location ||
+                  t("create-activity:step3.locationNotSet")}
               </span>
             </div>
             {formState.maxAttendees && (
               <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                 <FaUsers className="text-primary" />
-                <span>Max {formState.maxAttendees} participants</span>
+                <span>
+                  {t("create-activity:step3.maxParticipantsFormat", {
+                    count: formState.maxAttendees,
+                  })}
+                </span>
               </div>
             )}
           </div>
@@ -129,26 +139,29 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
       {/* Review Checklist */}
       <div className="rounded-lg border bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
         <h3 className="mb-3 flex items-center gap-2 font-semibold text-green-700 dark:text-green-400">
-          <FaCheck /> Ready to publish
+          <FaCheck /> {t("create-activity:step3.readyToPublish")}
         </h3>
         <ul className="space-y-2 text-sm text-green-600 dark:text-green-400">
           <li className="flex items-center gap-2">
             <FaCheck className="h-3 w-3" />
-            Title and description added
+            {t("create-activity:step3.checklist.titleAndDescription")}
           </li>
           <li className="flex items-center gap-2">
             <FaCheck className="h-3 w-3" />
-            {selectedCategories.length} categor
-            {selectedCategories.length === 1 ? "y" : "ies"} selected
+            {selectedCategories.length}{" "}
+            {selectedCategories.length === 1
+              ? t("create-activity:step3.checklist.categoryCount.singular")
+              : t("create-activity:step3.checklist.categoryCount.plural")}{" "}
+            {t("create-activity:messages.categorySelected")}
           </li>
           <li className="flex items-center gap-2">
             <FaCheck className="h-3 w-3" />
-            Date, time and location set
+            {t("create-activity:step3.checklist.dateTimeLocation")}
           </li>
           {imagePreview && (
             <li className="flex items-center gap-2">
               <FaCheck className="h-3 w-3" />
-              Hero image uploaded
+              {t("create-activity:step3.checklist.heroImage")}
             </li>
           )}
         </ul>
@@ -159,7 +172,9 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FaRss className="text-primary" />
-            <span className="font-medium">Post to your Feed</span>
+            <span className="font-medium">
+              {t("create-activity:step3.postToFeed")}
+            </span>
           </div>
           <Switch
             checked={formState.postToFeed}
@@ -172,12 +187,12 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
         {formState.postToFeed && (
           <div className="space-y-2">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Share this activity with your followers! Add an optional comment:
+              {t("create-activity:step3.feedInstructions")}
             </p>
             <Textarea
               value={formState.feedComment}
               onChange={(e) => updateFormState({ feedComment: e.target.value })}
-              placeholder="Excited to host this event! Hope to see you there..."
+              placeholder={t("create-activity:step3.feedCommentPlaceholder")}
               className="min-h-[80px] dark:border-gray-600"
             />
           </div>
@@ -187,7 +202,7 @@ const WizardStep3: React.FC<WizardStep3Props> = ({
       {isSubmitting && (
         <div className="flex items-center justify-center gap-2 text-primary">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-          <span>Creating your activity...</span>
+          <span>{t("create-activity:step3.creatingActivity")}</span>
         </div>
       )}
     </div>

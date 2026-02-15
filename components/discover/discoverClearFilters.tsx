@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import useAddSearchQuery from "@/lib/hooks/useAddSearchQuery";
+import { useTranslation } from "react-i18next";
 
 interface DiscoverClearFiltersProps {
   onSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -13,6 +14,7 @@ const DiscoverClearFilters: React.FC<DiscoverClearFiltersProps> = ({
   onSelectDate,
   onSelectedCategories,
 }) => {
+  const { t } = useTranslation(["discover"]);
   const { handleReplace } = useAddSearchQuery();
 
   const clearFilters = () => {
@@ -27,9 +29,9 @@ const DiscoverClearFilters: React.FC<DiscoverClearFiltersProps> = ({
       <Button
         onClick={clearFilters}
         variant="outline"
-        className="flex justify-between rounded-lg border bg-gray-200 px-4 py-2 dark:bg-gray-600"
+        className="flex justify-between rounded-lg border bg-gray-200 px-4 py-2 text-sm dark:bg-gray-600"
       >
-        <span>Cancel all filters</span> <span>×</span>
+        <span>{t("discover:clearAllFilters")}</span> <span>×</span>
       </Button>
     </>
   );

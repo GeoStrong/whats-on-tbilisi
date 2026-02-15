@@ -1,0 +1,151 @@
+{
+  "title": "Create a New Public Activity",
+  "form": {
+    "title": "Title *",
+    "titlePlaceholder": "Activity title",
+    "description": "Description *",
+    "descriptionPlaceholder": "Activity description",
+    "date": "Date *",
+    "endDate": "End Date",
+    "startTime": "Time *",
+    "endTime": "End Time",
+    "address": "Address *",
+    "addressPlaceholder": "Start typing an address...",
+    "coordinates": "Google Coordinates *",
+    "coordinatesPlaceholder": "Please select on the map",
+    "categories": "Select categories * (max 3)",
+    "link": "Link",
+    "linkPlaceholder": "Optional URL",
+    "targetAudience": "Target Audience",
+    "targetAudiencePlaceholder": "e.g., Adults, Students",
+    "maxAttendees": "Max Attendees",
+    "maxAttendeesPlaceholder": "No limit",
+    "image": "Image"
+  },
+  "steps": {
+    "1": {
+      "title": "Basic Info",
+      "description": "Hero image, title, description & categories"
+    },
+    "2": {
+      "title": "Details",
+      "description": "Location, date, time & additional info"
+    },
+    "3": {
+      "title": "Finalize",
+      "description": "Review and post to your feed"
+    }
+  },
+  "wizard": {
+    "step": "Step",
+    "of": "of",
+    "stepSeparator": "/",
+    "back": "Back",
+    "next": "Next",
+    "create": "Create Activity",
+    "update": "Update Activity",
+    "creating": "Creating...",
+    "stepNotStarted": "Please fill in all required fields",
+    "notLoggedIn": "You must be logged in to create an activity",
+    "pleaseSignUp": "Please sign up or log in to your account to create an activity",
+    "signIn": "Sign in",
+    "notVerified": "Please verify your email to create an activity. Check your inbox for the verification email."
+  },
+  "step1": {
+    "stepTitle": "Basic Info",
+    "stepDescription": "Hero image, title, description & categories",
+    "heading": "Activity Details",
+    "titleLabel": "Activity Title *",
+    "titlePlaceholder": "Give your activity a catchy name",
+    "descriptionLabel": "Description *",
+    "descriptionPlaceholder": "Tell potential participants what to expect. Keep it fun and informative!",
+    "categoryLabel": "Category * (Select up to 3)"
+  },
+  "step2": {
+    "stepTitle": "Details",
+    "stepDescription": "Date, time, location & additional info",
+    "heading": "When & Where?",
+    "locationHeading": "Where will it happen?",
+    "selectLocation": "Pin exact meeting point",
+    "addressPlaceholder": "Search address or landmark...",
+    "coordinatesFormat": "lat: {{lat}}, lng: {{lng}}",
+    "dateLabel": "Date *",
+    "startTimeLabel": "Start Time *",
+    "endTimeLabel": "End Time",
+    "endsSameDay": "Ends same Day",
+    "endDateLabel": "End Date",
+    "isRecurring": "Is this activity recurring?",
+    "selectRecurringDays": "Select Recurring Days:",
+    "selectedRecurringDates": "Selected Recurring Dates:",
+    "removeRecurringDate": "Remove",
+    "maxParticipants": "Max Participants",
+    "targetAudioLabel": "Target Audience",
+    "targetAudiencePlaceholder": "e.g., Adults, Students",
+    "externalLink": "External Link",
+    "externalLinkPlaceholder": "Optional URL",
+    "chooseLocation": "Choose the exact location",
+    "mapInstructions": "Click on the map to set your meeting point",
+    "confirmLocation": "Confirm Location"
+  },
+  "step3": {
+    "stepTitle": "Finalize",
+    "stepDescription": "Review and post to your feed",
+    "heading": "Review & Publish",
+    "previewTitle": "Activity Preview",
+    "untitledActivity": "Untitled Activity",
+    "noHeroImage": "No hero image",
+    "noDescriptionProvided": "No description provided",
+    "timeNotSet": "Time not set",
+    "locationNotSet": "Location not set",
+    "maxParticipantsFormat": "Max {{count}} participants",
+    "readyToPublish": "Ready to publish",
+    "checklist": {
+      "titleAndDescription": "Title and description added",
+      "dateTimeLocation": "Date, time and location set",
+      "heroImage": "Hero image uploaded"
+    },
+    "postToFeed": "Post to your Feed",
+    "feedInstructions": "Share this activity with your followers! Add an optional comment:",
+    "feedCommentPlaceholder": "Excited to host this event! Hope to see you there...",
+    "creatingActivity": "Creating your activity..."
+  },
+  "heroImage": {
+    "heading": "Upload a Hero Image",
+    "description": "Drag and drop your best activity photo here. This will be the main cover users see first.",
+    "recommendation": "Recommended size: 1200x600px",
+    "browse": "Browse Files",
+    "change": "Change Image",
+    "remove": "Remove"
+  },
+  "location": {
+    "chooseLocation": "Choose the location",
+    "mapInstructions": "Simply Click on the Map to put your pinpoint",
+    "confirmLocation": "Confirm Location",
+    "addressInput": "Enter address"
+  },
+  "recurring": {
+    "selectDays": "Select Days"
+  },
+  "dialog": {
+    "createdTitle": "You created Activity!",
+    "updatedTitle": "You updated Activity",
+    "createdMessage": "You have successfully created an Activity 🎉. It will be shared to your feed with a small label and an optional comment.",
+    "updatedMessage": "You have successfully updated an Activity 🎉. You can also share this update to your feed with an optional comment.",
+    "postPreview": "A post will be created like:",
+    "createdOnPrefix": "Created this activity on",
+    "updatedOnPrefix": "Updated this activity on",
+    "feedComment": "Add a post comment (optional)",
+    "feedCommentPlaceholder": "Share a few words about this activity...",
+    "posting": "Posting to feed...",
+    "goToFeed": "Go to Feed"
+  },
+  "messages": {
+    "createdSuccess": "Activity created successfully! 🎉",
+    "error": "There was an error creating your activity. Please try again.",
+    "categoryCount": {
+      "singular": "categor",
+      "plural": "ies"
+    },
+    "categorySelected": "selected"
+  }
+}

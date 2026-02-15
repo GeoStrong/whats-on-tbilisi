@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MessageSquare } from "lucide-react";
 import Link from "next/link";
 import type { EnrichedComment } from "@/lib/hooks/useDiscoverSearch";
+import { useTranslation } from "react-i18next";
 
 interface DiscoverCommentsResultsProps {
   comments: EnrichedComment[] | undefined;
@@ -17,11 +18,13 @@ const DiscoverCommentsResults: React.FC<DiscoverCommentsResultsProps> = ({
   isLoading,
   query,
 }) => {
+  const { t } = useTranslation(["discover"]);
+
   if (!query.trim()) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
         <MessageSquare className="mb-3 h-10 w-10 opacity-40" />
-        <p className="text-lg">Search for comments by content</p>
+        <p className="text-lg">{t("discover:searchForComments")}</p>
       </div>
     );
   }
@@ -30,7 +33,10 @@ const DiscoverCommentsResults: React.FC<DiscoverCommentsResultsProps> = ({
     return (
       <div className="space-y-4">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="space-y-2 rounded-lg border p-4 dark:border-slate-700">
+          <div
+            key={i}
+            className="space-y-2 rounded-lg border p-4 dark:border-slate-700"
+          >
             <Skeleton className="h-3 w-24" />
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-3 w-40" />
@@ -43,7 +49,7 @@ const DiscoverCommentsResults: React.FC<DiscoverCommentsResultsProps> = ({
   if (!comments || comments.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-        <p className="text-lg">No comments found for &ldquo;{query}&rdquo;</p>
+        <p className="text-lg">{t("discover:noCommentsFound", { query })}</p>
       </div>
     );
   }
@@ -53,11 +59,17 @@ const DiscoverCommentsResults: React.FC<DiscoverCommentsResultsProps> = ({
    */
   const highlightMatch = (text: string) => {
     if (!query.trim()) return text;
-    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+    const regex = new RegExp(
+      `(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+      "gi",
+    );
     const parts = text.split(regex);
     return parts.map((part, i) =>
       regex.test(part) ? (
-        <mark key={i} className="rounded bg-yellow-200 px-0.5 dark:bg-yellow-800">
+        <mark
+          key={i}
+          className="rounded bg-yellow-200 px-0.5 dark:bg-yellow-800"
+        >
           {part}
         </mark>
       ) : (
@@ -94,7 +106,9 @@ const DiscoverCommentsResults: React.FC<DiscoverCommentsResultsProps> = ({
             </div>
 
             {/* Comment text */}
-            <p className="mb-2 leading-relaxed">{highlightMatch(comment.text)}</p>
+            <p className="mb-2 leading-relaxed">
+              {highlightMatch(comment.text)}
+            </p>
 
             {/* Link to parent activity */}
             <Link

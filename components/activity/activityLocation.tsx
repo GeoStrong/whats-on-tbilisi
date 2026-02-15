@@ -6,10 +6,12 @@ import { ActivityEntity, Category } from "@/lib/types";
 import { Skeleton } from "../ui/skeleton";
 import { env } from "@/lib/utils/env";
 import { getCategoriesByActivityId } from "@/lib/functions/supabaseFunctions";
+import { useTranslation } from "react-i18next";
 
 const ActivityLocation: React.FC<{ activity: ActivityEntity }> = ({
   activity,
 }) => {
+  const { t } = useTranslation(["activity"]);
   const [category, setCategory] = useState<Category | null>(null);
   const mapKey = env.googleMapsApiKey || "";
 
@@ -23,7 +25,9 @@ const ActivityLocation: React.FC<{ activity: ActivityEntity }> = ({
   return (
     <>
       <div className="w-full rounded-xl bg-white px-3 py-4 shadow-md dark:bg-gray-800">
-        <h3 className="mb-3 font-bold md:text-lg">Location on map</h3>
+        <h3 className="mb-3 font-bold md:text-lg">
+          {t("activity:locationOnMap")}
+        </h3>
 
         {mapKey ? (
           <MapWrapper

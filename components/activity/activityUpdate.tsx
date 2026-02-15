@@ -19,6 +19,7 @@ import { mapActions } from "@/lib/store/mapSlice";
 import { useDispatch } from "react-redux";
 import { env } from "@/lib/utils/env";
 import { APIProvider } from "@vis.gl/react-google-maps";
+import { useTranslation } from "react-i18next";
 
 const snapPoints = [0.5, 1];
 
@@ -26,6 +27,7 @@ const ActivityUpdate: React.FC<{
   user: UserProfile;
   activity: ActivityEntity;
 }> = ({ activity, user }) => {
+  const { t } = useTranslation(["activity"]);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const {
     title,
@@ -104,11 +106,11 @@ const ActivityUpdate: React.FC<{
           disabled={activity.status === "inactive"}
           title={
             activity.status === "inactive"
-              ? "You cannot edit past activities"
-              : "Edit"
+              ? t("activity:cannotEditPastActivities")
+              : t("activity:edit")
           }
         >
-          Edit
+          {t("activity:edit")}
         </DrawerTrigger>
         <DrawerContent
           className={`w-full ${activity.status === "inactive" ? "hidden" : ""}`}
@@ -119,7 +121,7 @@ const ActivityUpdate: React.FC<{
           >
             <DrawerHeader className="max-h-screen overflow-y-auto p-5">
               <DrawerTitle className="mb-3 text-center text-xl">
-                Edit Activity
+                {t("activity:editActivity")}
               </DrawerTitle>
               <div className="">
                 <CreateActivityMobileMap buttonRef={openMobileMapRef} />

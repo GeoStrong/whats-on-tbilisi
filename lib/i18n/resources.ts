@@ -7,6 +7,8 @@ import validationEn from "../../locales/en/validation.json";
 import errorsEn from "../../locales/en/errors.json";
 import emptyStatesEn from "../../locales/en/emptyStates.json";
 import activityEn from "../../locales/en/activity.json";
+import discoverEn from "../../locales/en/discover.json";
+import createActivityEn from "../../locales/en/create-activity.json";
 
 import commonKa from "../../locales/ka/common.json";
 import authKa from "../../locales/ka/auth.json";
@@ -17,6 +19,8 @@ import validationKa from "../../locales/ka/validation.json";
 import errorsKa from "../../locales/ka/errors.json";
 import emptyStatesKa from "../../locales/ka/emptyStates.json";
 import activityKa from "../../locales/ka/activity.json";
+import discoverKa from "../../locales/ka/discover.json";
+import createActivityKa from "../../locales/ka/create-activity.json";
 
 export const namespaces = [
   "common",
@@ -28,6 +32,8 @@ export const namespaces = [
   "errors",
   "emptyStates",
   "activity",
+  "discover",
+  "create-activity",
 ] as const;
 
 export type AppNamespace = (typeof namespaces)[number];
@@ -44,6 +50,8 @@ export const resources = {
     errors: errorsEn,
     emptyStates: emptyStatesEn,
     activity: activityEn,
+    discover: discoverEn,
+    "create-activity": createActivityEn,
   },
   ka: {
     common: commonKa,
@@ -55,5 +63,7 @@ export const resources = {
     errors: errorsKa,
     emptyStates: emptyStatesKa,
     activity: activityKa,
+    discover: discoverKa,
+    "create-activity": createActivityKa,
   },
 } as const;

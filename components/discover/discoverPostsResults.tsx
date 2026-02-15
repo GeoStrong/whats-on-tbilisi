@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { FileText } from "lucide-react";
 import Link from "next/link";
 import UserAvatar from "@/components/users/userAvatar";
+import { useTranslation } from "react-i18next";
 
 interface DiscoverPostsResultsProps {
   posts: FeedPostWithActivity[] | undefined;
@@ -18,11 +19,13 @@ const DiscoverPostsResults: React.FC<DiscoverPostsResultsProps> = ({
   isLoading,
   query,
 }) => {
+  const { t } = useTranslation(["discover"]);
+
   if (!query.trim()) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
         <FileText className="mb-3 h-10 w-10 opacity-40" />
-        <p className="text-lg">Search for posts by content</p>
+        <p className="text-lg">{t("discover:searchForPosts")}</p>
       </div>
     );
   }
@@ -31,7 +34,10 @@ const DiscoverPostsResults: React.FC<DiscoverPostsResultsProps> = ({
     return (
       <div className="space-y-4">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="space-y-3 rounded-lg border p-4 dark:border-slate-700">
+          <div
+            key={i}
+            className="space-y-3 rounded-lg border p-4 dark:border-slate-700"
+          >
             <div className="flex items-center gap-3">
               <Skeleton className="h-10 w-10 rounded-full" />
               <Skeleton className="h-4 w-32" />
@@ -47,7 +53,7 @@ const DiscoverPostsResults: React.FC<DiscoverPostsResultsProps> = ({
   if (!posts || posts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-        <p className="text-lg">No posts found for &ldquo;{query}&rdquo;</p>
+        <p className="text-lg">{t("discover:noPostsFound", { query })}</p>
       </div>
     );
   }

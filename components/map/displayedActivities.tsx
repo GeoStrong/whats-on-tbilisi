@@ -16,6 +16,7 @@ import {
 import useScreenSize from "@/lib/hooks/useScreenSize";
 import ActivityCardsWrapper from "../activities/activityCardsWrapper";
 import SmartActivityCategoriesCarousel from "../activities/smartActivityCategoriesCarousel";
+import { useTranslation } from "react-i18next";
 
 interface CreateActivityProps {
   buttonRef: React.RefObject<HTMLButtonElement>;
@@ -29,6 +30,7 @@ const DisplayedActivities: React.FC<CreateActivityProps> = ({
   open = false,
 }) => {
   const { isMobile } = useScreenSize();
+  const { t } = useTranslation(["activity"]);
 
   return (
     <>
@@ -42,21 +44,20 @@ const DisplayedActivities: React.FC<CreateActivityProps> = ({
         <DrawerTrigger ref={buttonRef} className="hidden"></DrawerTrigger>
         <DrawerOverlay className="fixed inset-0 bg-black/40" />
         <DrawerPortal>
-          <DrawerContent className="mx-[-1px] flex h-full w-full flex-col border-0 bg-white">
+          <DrawerContent className="mx-[-1px] flex h-full w-full flex-col border-0 bg-white md:w-1/2">
             <div className="flex h-dvh w-full flex-col overflow-y-auto">
               <DrawerHeader className="relative">
-                <DrawerTitle className="mt-3 text-center text-xl font-bold">
-                  All Activities
+                <DrawerTitle className="mt-3 text-center text-base font-bold">
+                  {t("activity:allDisplayedActivities")}
                 </DrawerTitle>
                 <DrawerDescription className="text-left text-base"></DrawerDescription>
               </DrawerHeader>
-              <div className="flex flex-col gap-3 p-4">
-                {isMobile && <SmartActivityCategoriesCarousel />}
+              <div className="flex flex-row gap-3 p-4">
                 <ActivityCardsWrapper />
               </div>
               <DrawerFooter className="flex flex-col gap-2 md:flex-row-reverse">
                 <DrawerClose className="h-12 bg-transparent p-2">
-                  Cancel
+                  {t("activity:close")}
                 </DrawerClose>
               </DrawerFooter>
             </div>

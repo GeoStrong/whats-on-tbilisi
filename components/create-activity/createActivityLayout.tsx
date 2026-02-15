@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { NewActivityEntity } from "@/lib/types";
 import useGetUserProfile from "@/lib/hooks/useGetUserProfile";
 import { Button } from "../ui/button";
@@ -21,6 +22,7 @@ import { APIProvider } from "@vis.gl/react-google-maps";
 const CreateActivityLayout: React.FC<{ mapKey: string }> = ({ mapKey }) => {
   const dispatch = useDispatch();
   const { user, isLoading, isAuthenticated } = useGetUserProfile();
+  const { t } = useTranslation(["create-activity"]);
   const { latLng } = useSelector((state: RootState) => state.map);
   const { isMobile } = useScreenSize();
   const { isFullscreen } = useSelector((state: RootState) => state.map);
@@ -85,7 +87,7 @@ const CreateActivityLayout: React.FC<{ mapKey: string }> = ({ mapKey }) => {
           ) : !isAuthenticated || !user ? (
             <div className="flex flex-col items-center gap-4">
               <p className="text-center text-xl">
-                Please sign up or log in to your account to create an activity
+                {t("create-activity:wizard.pleaseSignUp")}
               </p>
               <Button
                 className="border"
@@ -94,7 +96,7 @@ const CreateActivityLayout: React.FC<{ mapKey: string }> = ({ mapKey }) => {
                   dispatch(authActions.setAuthDialogOpen(true));
                 }}
               >
-                Sign in
+                {t("create-activity:wizard.signIn")}
               </Button>
             </div>
           ) : (

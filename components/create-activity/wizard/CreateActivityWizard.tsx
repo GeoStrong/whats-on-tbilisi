@@ -5,6 +5,7 @@ import { APIProvider } from "@vis.gl/react-google-maps";
 import { useDispatch } from "react-redux";
 import { useEffectOnce } from "react-use";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,7 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
   const dispatch = useDispatch();
   const router = useRouter();
   const { user, isLoading, isAuthenticated } = useGetUserProfile();
+  const { t } = useTranslation(["create-activity"]);
   const { invalidateAll: invalidateAllActivities } = useInvalidateActivities();
   const createPostMutation = useCreateFeedPost(user!);
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
@@ -74,12 +76,12 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
   const handleSubmit = async () => {
     const isValid = await validateAll();
     if (!isValid) {
-      toast.error("Please fill in all required fields");
+      toast.error(t("create-activity:wizard.stepNotStarted"));
       return;
     }
 
     if (!user) {
-      toast.error("You must be logged in to create an activity");
+      toast.error(t("create-activity:wizard.notLoggedIn"));
       return;
     }
 
@@ -139,16 +141,14 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
       invalidateAllActivities();
 
       // Show success message
-      toast.success("Activity created successfully! 🎉");
+      toast.success(t("create-activity:messages.createdSuccess"));
 
       // Reset form and redirect
       resetForm();
       router.push("/");
     } catch (error) {
       console.error("Error creating activity:", error);
-      toast.error(
-        "There was an error creating your activity. Please try again.",
-      );
+      toast.error(t("create-activity:dialog.error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -220,14 +220,14 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
       <APIProvider apiKey={mapKey} libraries={["places"]}>
         <div className="flex w-full flex-col items-center gap-4 rounded-xl bg-white p-8 shadow-sm dark:bg-gray-800">
           <p className="text-center text-xl">
-            Please sign up or log in to your account to create an activity
+            {t("create-activity:wizard.pleaseSignUp")}
           </p>
           <Button
             className="border"
             variant="ghost"
             onClick={() => dispatch(authActions.setAuthDialogOpen(true))}
           >
-            Sign in
+            {t("create-activity:wizard.signIn")}
           </Button>
         </div>
       </APIProvider>
@@ -238,70 +238,79 @@ const CreateActivityWizard: React.FC<CreateActivityWizardProps> = ({
     return (
       <div className="flex w-full flex-col items-center gap-4 rounded-xl border bg-white p-8 shadow-md dark:bg-gray-800">
         <p className="text-center text-xl">
-          Please verify your email to create an activity. Check your inbox for
-          the verification email.
+          {t("create-activity:wizard.notVerified")}
         </p>
       </div>
     );
   }
 
   return (
-    <APIProvider apiKey={mapKey} libraries={["places"]}>
-      <div className="w-full rounded-xl border bg-white shadow-lg dark:bg-gray-800">
-        {/* Step Indicator */}
-        <div className="border-b px-4 dark:border-gray-700">
-          <WizardStepIndicator
-            currentStep={currentStep}
-            completedSteps={completedSteps}
-            onStepClick={goToStep}
-          />
-        </div>
-
-        {/* Step Content */}
-        <div className="p-4 md:p-6">{renderStepContent()}</div>
-
-        {/* Navigation Buttons */}
-        <div className="flex items-center justify-between border-t p-4 dark:border-gray-700">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={goBack}
-            disabled={currentStep === 1 || isSubmitting}
-            className="gap-2"
-          >
-            <FaArrowLeft className="h-3 w-3" />
-            Back
-          </Button>
-
-          <div className="hidden items-center gap-2 text-sm text-gray-500 md:flex">
-            Step {currentStep} of {WIZARD_STEPS.length}
+    <>
+      <h1 className="mb-6 text-center text-3xl font-bold">
+        {t("create-activity:title")}
+      </h1>
+      <APIProvider apiKey={mapKey} libraries={["places"]}>
+        <div className="w-full rounded-xl border bg-white shadow-lg dark:bg-gray-800">
+          {/* Step Indicator */}
+          <div className="border-b px-4 dark:border-gray-700">
+            <WizardStepIndicator
+              currentStep={currentStep}
+              completedSteps={completedSteps}
+              onStepClick={goToStep}
+            />
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-500 md:hidden">
-            {currentStep}/{WIZARD_STEPS.length}
-          </div>
+          {/* Step Content */}
+          <div className="p-4 md:p-6">{renderStepContent()}</div>
 
-          <Button
-            type="button"
-            onClick={handleNext}
-            disabled={isSubmitting}
-            className="gap-2"
-          >
-            {currentStep === WIZARD_STEPS.length ? (
-              <>
-                <FaCheck className="h-3 w-3" />
-                {isSubmitting ? "Creating..." : "Create Activity"}
-              </>
-            ) : (
-              <>
-                Next
-                <FaArrowRight className="h-3 w-3" />
-              </>
-            )}
-          </Button>
+          {/* Navigation Buttons */}
+          <div className="flex items-center justify-between border-t p-4 dark:border-gray-700">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={goBack}
+              disabled={currentStep === 1 || isSubmitting}
+              className="gap-2"
+            >
+              <FaArrowLeft className="h-3 w-3" />
+              {t("create-activity:wizard.back")}
+            </Button>
+
+            <div className="hidden items-center gap-2 text-sm text-gray-500 md:flex">
+              {t("create-activity:wizard.step")} {currentStep}{" "}
+              {t("create-activity:wizard.of")} {WIZARD_STEPS.length}
+            </div>
+
+            <div className="flex items-center gap-2 text-sm text-gray-500 md:hidden">
+              {currentStep}
+              {t("create-activity:wizard.stepSeparator")}
+              {WIZARD_STEPS.length}
+            </div>
+
+            <Button
+              type="button"
+              onClick={handleNext}
+              disabled={isSubmitting}
+              className="gap-2"
+            >
+              {currentStep === WIZARD_STEPS.length ? (
+                <>
+                  <FaCheck className="h-3 w-3" />
+                  {isSubmitting
+                    ? t("create-activity:wizard.creating")
+                    : t("create-activity:wizard.create")}
+                </>
+              ) : (
+                <>
+                  {t("create-activity:wizard.next")}
+                  <FaArrowRight className="h-3 w-3" />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
-      </div>
-    </APIProvider>
+      </APIProvider>
+    </>
   );
 };
 

@@ -20,11 +20,13 @@ import { Category, ActivityEntity, ActivityCategories } from "@/lib/types";
 import { checkUserParticipation } from "@/lib/profile/profile";
 import { useInvalidateActivities } from "@/lib/hooks/useActivities";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const ActivityHeaderButtons: React.FC<{
   activity: ActivityEntity;
   categories: (Category | null)[];
 }> = ({ activity, categories }) => {
+  const { t } = useTranslation(["activity"]);
   const { user } = useGetUserProfile();
   const [isUserParticipant, setIsUserParticipant] = useState<boolean>(false);
   const { invalidateAll: invalidateAllActivities } = useInvalidateActivities();
@@ -68,32 +70,37 @@ const ActivityHeaderButtons: React.FC<{
 
             <Dialog>
               <DialogTrigger className="h-10 w-1/2 rounded-md bg-red-600 px-8 py-1 text-white shadow-lg md:w-auto">
-                Delete
+                {t("activity:delete")}
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader className="text-center md:w-2/3">
-                  <DialogTitle>
-                    Are you absolutely sure you want to delete?
-                  </DialogTitle>
+                  <DialogTitle>{t("activity:areYouSureDelete")}</DialogTitle>
                   <DialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your activity and remove your data from our servers.
+                    {t("activity:deleteWarning")}
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex-row justify-end gap-3">
-                  <DialogClose>Close</DialogClose>
+                  <DialogClose>{t("activity:close")}</DialogClose>
                   <Button variant="destructive" onClick={deleteActivityHandler}>
-                    Delete
+                    {t("activity:delete")}
                   </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </div>
         )}
-        {isUserParticipant ? (
+        {isUserParticipant && activity.status === "inactive" ? (
+          <div className="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-lg font-bold shadow-md dark:bg-yellow-900">
+            <p className="text-center text-sm text-yellow-500">
+              {t("activity:activityParticipation:participated")}
+            </p>
+          </div>
+        ) : isUserParticipant ? (
           <p className="rounded-md border p-4 text-lg font-bold shadow-md">
-            You are
-            <span className="pl-2 text-green-600">Going</span>
+            {t("activity:activityParticipation.going")}
+            <span className="pl-2 text-green-600">
+              {t("activity:youAreGoing")}
+            </span>
           </p>
         ) : (
           user?.id !== undefined &&
@@ -107,7 +114,7 @@ const ActivityHeaderButtons: React.FC<{
           !isUserParticipant && (
             <div className="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-lg font-bold shadow-md dark:bg-yellow-900">
               <p className="text-center text-sm text-yellow-500">
-                This activity has ended and no longer accepting participants.
+                {t("activity:participationEnded")}
               </p>
             </div>
           )}

@@ -5,6 +5,7 @@ import { UserProfile } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Users } from "lucide-react";
 import UserCard from "../users/userCard";
+import { useTranslation } from "react-i18next";
 
 interface DiscoverUsersResultsProps {
   users: UserProfile[] | undefined;
@@ -17,11 +18,13 @@ const DiscoverUsersResults: React.FC<DiscoverUsersResultsProps> = ({
   isLoading,
   query,
 }) => {
+  const { t } = useTranslation(["discover"]);
+
   if (!query.trim()) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
         <Users className="mb-3 h-10 w-10 opacity-40" />
-        <p className="text-lg">Search for users by name or email</p>
+        <p className="text-lg">{t("discover:searchForUsers")}</p>
       </div>
     );
   }
@@ -49,7 +52,7 @@ const DiscoverUsersResults: React.FC<DiscoverUsersResultsProps> = ({
   if (!users || users.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-        <p className="text-lg">No users found for &ldquo;{query}&rdquo;</p>
+        <p className="text-lg">{t("discover:noUsersFound", { query })}</p>
       </div>
     );
   }

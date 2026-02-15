@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import DiscoverClearFilters from "./discoverClearFilters";
 import DiscoverCategories from "./discoverCategories";
 import useAddSearchQuery from "@/lib/hooks/useAddSearchQuery";
+import { useTranslation } from "react-i18next";
 import {
   Sheet,
   SheetClose,
@@ -29,6 +30,7 @@ const DiscoverFilters: React.FC<DiscoverFiltersProps> = ({
   setSearch,
   setSelectedDate,
 }) => {
+  const { t } = useTranslation(["discover"]);
   const { searchParams } = useAddSearchQuery();
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
@@ -44,16 +46,16 @@ const DiscoverFilters: React.FC<DiscoverFiltersProps> = ({
           <SheetTrigger className="flex w-full justify-center">
             <div className="flex items-center justify-center gap-3 rounded-md border bg-white p-3 shadow-md dark:bg-gray-900">
               <GiSettingsKnobs />
-              Open Filters
+              {t("discover:openFilters")}
             </div>
           </SheetTrigger>
           <SheetContent className="w-full text-black dark:bg-gray-800 dark:text-white">
             <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
+              <SheetTitle>{t("discover:filters")}</SheetTitle>
               <Accordion type="single" collapsible>
                 <AccordionItem value="categories">
                   <AccordionTrigger className="text-lg">
-                    Select Categories
+                    {t("discover:categories")}
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="rounded-xl bg-white p-4 shadow-md dark:bg-slate-800 md:block md:w-64">
@@ -67,9 +69,9 @@ const DiscoverFilters: React.FC<DiscoverFiltersProps> = ({
               </Accordion>
               <SheetDescription></SheetDescription>
             </SheetHeader>
-            <SheetFooter className="flex w-full flex-row items-center justify-end gap-3">
+            <SheetFooter className="flex w-full flex-col items-center justify-end gap-3">
               <SheetClose className="rounded-md border px-4 py-2 dark:bg-gray-900">
-                Close
+                {t("common:actions.close")}
               </SheetClose>
               <DiscoverClearFilters
                 onSearch={setSearch}

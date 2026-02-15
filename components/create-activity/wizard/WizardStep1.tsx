@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { WizardFormState } from "./types";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +26,7 @@ const WizardStep1: React.FC<WizardStep1Props> = ({
   setImagePreview,
   errors,
 }) => {
+  const { t } = useTranslation(["create-activity"]);
   const handleCategoryToggle = (categoryId: ActivityCategories) => {
     const currentCategories = formState.categories || [];
     const isSelected = currentCategories.includes(categoryId);
@@ -66,14 +68,14 @@ const WizardStep1: React.FC<WizardStep1Props> = ({
             className="flex items-center gap-2 text-sm font-medium"
           >
             <FaPencilAlt className="text-primary" />
-            Activity Title *
+            {t("create-activity:step1.titleLabel")}
           </label>
           <Input
             id="wizard-title"
             name="title"
             value={formState.title}
             onChange={(e) => updateFormState({ title: e.target.value })}
-            placeholder="Give your activity a catchy name"
+            placeholder={t("create-activity:step1.titlePlaceholder")}
             className="dark:border-gray-600"
           />
           {errors.title && (
@@ -88,14 +90,14 @@ const WizardStep1: React.FC<WizardStep1Props> = ({
             className="flex items-center gap-2 text-sm font-medium"
           >
             <FaAlignLeft className="text-primary" />
-            Description *
+            {t("create-activity:step1.descriptionLabel")}
           </label>
           <Textarea
             id="wizard-description"
             name="description"
             value={formState.description}
             onChange={(e) => updateFormState({ description: e.target.value })}
-            placeholder="Tell potential participants what to expect. Keep it fun and informative!"
+            placeholder={t("create-activity:step1.descriptionPlaceholder")}
             className="min-h-[100px] dark:border-gray-600"
           />
           {errors.description && (
@@ -108,7 +110,7 @@ const WizardStep1: React.FC<WizardStep1Props> = ({
       <div className="flex flex-col gap-2">
         <label className="flex items-center gap-2 text-sm font-medium">
           <FaTags className="text-primary" />
-          Category * (Select up to 3)
+          {t("create-activity:step1.categoryLabel")}
         </label>
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => {

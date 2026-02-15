@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Input } from "../ui/input";
 import { useDispatch } from "react-redux";
 import { mapActions } from "@/lib/store/mapSlice";
@@ -21,6 +22,7 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
   placeholder = "Enter address",
   className = "",
 }) => {
+  const { t } = useTranslation(["create-activity"]);
   const inputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const [inputValue, setInputValue] = useState(value);
@@ -103,7 +105,7 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
       ref={inputRef}
       value={inputValue}
       onChange={handleInputChange}
-      placeholder={placeholder}
+      placeholder={placeholder || t("create-activity:location.addressInput")}
       className={className}
     />
   );

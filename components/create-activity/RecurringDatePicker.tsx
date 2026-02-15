@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import DatePicker from "react-multi-date-picker";
 import DateObject from "react-date-object";
 
@@ -17,6 +18,7 @@ const RecurringDatePicker: React.FC<RecurringDatePickerProps> = ({
   placeholder = "Select Days",
   className = "",
 }) => {
+  const { t } = useTranslation(["create-activity"]);
   const handleChange = (dates: DateObject[]) => {
     const formattedDates = dates.map(
       (date) => date.toDate().toISOString().split("T")[0],
@@ -32,7 +34,7 @@ const RecurringDatePicker: React.FC<RecurringDatePickerProps> = ({
       format="YYYY-MM-DD"
       className={`w-full ${className}`}
       inputClass="border-2 pl-2 rounded-[6px] h-9 w-full dark:border-gray-600"
-      placeholder={placeholder}
+      placeholder={placeholder || t("create-activity:recurring.selectDays")}
       mapDays={({ date, today, selectedDate, isSameDate }) => {
         const className = "custom-day";
         let style: React.CSSProperties = {};

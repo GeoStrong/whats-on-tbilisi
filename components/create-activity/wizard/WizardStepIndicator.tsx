@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { WIZARD_STEPS } from "./types";
+import { useWizardSteps } from "@/lib/hooks/useWizardSteps";
 import { FaCheck } from "react-icons/fa";
 
 interface WizardStepIndicatorProps {
@@ -15,11 +15,13 @@ const WizardStepIndicator: React.FC<WizardStepIndicatorProps> = ({
   onStepClick,
   completedSteps,
 }) => {
+  const wizardSteps = useWizardSteps();
+
   return (
     <div className="w-full py-4">
       {/* Desktop view */}
       <div className="hidden md:flex md:items-center md:justify-center">
-        {WIZARD_STEPS.map((step, index) => {
+        {wizardSteps.map((step, index) => {
           const isCompleted = completedSteps.includes(step.id);
           const isCurrent = currentStep === step.id;
           const isClickable =
@@ -61,7 +63,7 @@ const WizardStepIndicator: React.FC<WizardStepIndicatorProps> = ({
                   </p>
                 </div>
               </div>
-              {index < WIZARD_STEPS.length - 1 && (
+              {index < wizardSteps.length - 1 && (
                 <div
                   className={`mx-4 h-0.5 w-16 lg:w-24 ${
                     completedSteps.includes(step.id)
@@ -77,7 +79,7 @@ const WizardStepIndicator: React.FC<WizardStepIndicatorProps> = ({
 
       {/* Mobile view - compact */}
       <div className="flex items-center justify-center gap-2 md:hidden">
-        {WIZARD_STEPS.map((step) => {
+        {wizardSteps.map((step) => {
           const isCompleted = completedSteps.includes(step.id);
           const isCurrent = currentStep === step.id;
 
@@ -102,7 +104,7 @@ const WizardStepIndicator: React.FC<WizardStepIndicatorProps> = ({
         })}
       </div>
       <p className="mt-2 text-center text-sm font-medium text-primary md:hidden">
-        {WIZARD_STEPS.find((s) => s.id === currentStep)?.title}
+        {wizardSteps.find((s) => s.id === currentStep)?.title}
       </p>
     </div>
   );

@@ -6,6 +6,7 @@ import ActivityCard from "@/components/activities/activityCard";
 import { redirect } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface DiscoverActivitiesResultsProps {
   activities: ActivityEntity[] | undefined;
@@ -18,11 +19,15 @@ const DiscoverActivitiesResults: React.FC<DiscoverActivitiesResultsProps> = ({
   isLoading,
   query,
 }) => {
+  const { t } = useTranslation(["discover"]);
+
   if (!query.trim()) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
         <Search className="mb-3 h-10 w-10 opacity-40" />
-        <p className="text-lg">Search for activities by name, location, or description</p>
+        <p className="text-lg">
+          Search for activities by name, location, or description
+        </p>
       </div>
     );
   }
@@ -44,7 +49,7 @@ const DiscoverActivitiesResults: React.FC<DiscoverActivitiesResultsProps> = ({
   if (!activities || activities.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-        <p className="text-lg">No activities found for &ldquo;{query}&rdquo;</p>
+        <p className="text-lg">{t("discover:noActivitiesFound", { query })}</p>
       </div>
     );
   }

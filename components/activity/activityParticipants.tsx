@@ -17,6 +17,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { motion, AnimatePresence } from "motion/react";
 import UserAvatar from "../users/userAvatar";
 import UserCard from "../users/userCard";
+import { useTranslation } from "react-i18next";
 
 const snapPoints = [0.5, 1];
 
@@ -28,6 +29,7 @@ const ActivityParticipants: React.FC<{
   isHost?: boolean;
   participants: ActivityParticipantsEntity[];
 }> = ({ isHost, participants }) => {
+  const { t } = useTranslation(["activity"]);
   const [open, setOpen] = useState(false);
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
   const [participantUserInfo, setParticipantUserInfo] = useState<
@@ -55,7 +57,7 @@ const ActivityParticipants: React.FC<{
           containerTrigger={
             <div className="flex flex-col">
               <h3 className="mb-3 font-bold md:text-lg">
-                Participants
+                {t("activity:participantsLabel")}
                 <span className="inline-block pl-3">{participants.length}</span>
               </h3>
               <div className="flex items-center gap-2">
@@ -83,7 +85,9 @@ const ActivityParticipants: React.FC<{
             <div className="absolute right-1/2 top-5 w-full translate-x-1/2 bg-white dark:bg-gray-800">
               <div className="flex justify-between px-5 shadow-md">
                 <div className=""></div>
-                <h3 className="mb-5 text-xl font-bold">Participants</h3>
+                <h3 className="mb-5 text-xl font-bold">
+                  {t("activity:participantsLabel")}
+                </h3>
                 <Button
                   onClick={() => setOpen(false)}
                   variant="outline"
@@ -193,7 +197,7 @@ const ActivityParticipants: React.FC<{
         >
           <DrawerTrigger className="w-full rounded-xl bg-white px-3 py-4 text-left shadow-md dark:bg-gray-800">
             <h3 className="mb-3 font-bold md:text-lg">
-              Participants
+              {t("activity:participantsLabel")}
               <span className="inline-block pl-3">{participants.length}</span>
             </h3>
             <div className="flex items-center gap-2">
@@ -206,12 +210,17 @@ const ActivityParticipants: React.FC<{
               ))}
             </div>
           </DrawerTrigger>
-          <DrawerContent className="w-full" headerChildren={"Participants"}>
+          <DrawerContent
+            className="w-full"
+            headerChildren={t("activity:participantsLabel")}
+          >
             <div className="mb-20 h-dvh overflow-y-auto">
               <DrawerHeader>
-                <DrawerTitle className="hidden">Participants</DrawerTitle>
+                <DrawerTitle className="hidden">
+                  {t("activity:participantsLabel")}
+                </DrawerTitle>
                 <DrawerDescription className="hidden">
-                  Participants
+                  {t("activity:participantsLabel")}
                 </DrawerDescription>
               </DrawerHeader>
               <div className="w-full px-5">

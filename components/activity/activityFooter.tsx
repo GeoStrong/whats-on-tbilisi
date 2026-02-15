@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Category, ActivityEntity } from "@/lib/types";
+import { Category } from "@/lib/types";
 import {
   Carousel,
   CarouselContent,
@@ -12,11 +12,13 @@ import {
 import ActivityCard from "../activities/activityCard";
 import { useActivitiesByCategory } from "@/lib/hooks/useActivities";
 import { redirect } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const ActivityFooter: React.FC<{
   categories: (Category | null)[];
   activityId: string;
 }> = ({ categories, activityId }) => {
+  const { t } = useTranslation(["activity"]);
   // const { isMobile } = useScreenSize();
   const firstCategory = categories[0]?.id;
   const secondCategory = categories[1]?.id;
@@ -38,9 +40,7 @@ const ActivityFooter: React.FC<{
 
   const secondActivities = useMemo(
     () =>
-      secondCategoryActivities.filter(
-        (activity) => activity.id !== activityId,
-      ),
+      secondCategoryActivities.filter((activity) => activity.id !== activityId),
     [secondCategoryActivities, activityId],
   );
 
@@ -48,7 +48,7 @@ const ActivityFooter: React.FC<{
     <footer className="py-4">
       {firstActivities.length !== 0 && (
         <div className="flex flex-col gap-3">
-          <h3 className="font-bold">More Activities like this</h3>
+          <h3 className="font-bold">{t("activity:moreActivitiesLikeThis")}</h3>
           <Carousel opts={{ dragFree: true }}>
             <CarouselContent>
               {firstActivities.map((activity) => {
@@ -78,7 +78,8 @@ const ActivityFooter: React.FC<{
       {secondCategory && secondActivities.length !== 0 && (
         <div className="mt-10 flex flex-col gap-3">
           <h3 className="font-bold">
-            Discover More {categories[1]?.name} Activities
+            {t("activity:discoverMore")} {categories[1]?.name}{" "}
+            {t("activity:activities")}
           </h3>
           <Carousel>
             <CarouselContent>

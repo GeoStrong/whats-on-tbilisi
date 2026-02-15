@@ -1,6 +1,7 @@
 import React from "react";
 import useAddSearchQuery from "@/lib/hooks/useAddSearchQuery";
 import { Label } from "../ui/label";
+import { useTranslation } from "react-i18next";
 import { Input } from "../ui/input";
 import { categories } from "@/lib/data/categories";
 
@@ -13,6 +14,7 @@ const DiscoverCategories: React.FC<DiscoverCategoriesProps> = ({
   selectedCategories,
   onSelectedCategories,
 }) => {
+  const { t } = useTranslation(["discover"]);
   const { handleSearch } = useAddSearchQuery();
 
   const toggleCategory = (cat: string) => {
@@ -30,7 +32,9 @@ const DiscoverCategories: React.FC<DiscoverCategoriesProps> = ({
 
   return (
     <>
-      <h2 className="mb-4 font-semibold">Categories</h2>
+      <h4 className="mb-4 text-base font-semibold">
+        {t("discover:categories")}
+      </h4>
 
       <div className="flex h-44 flex-col gap-3 overflow-y-auto pr-2">
         {categories.map((category) => {

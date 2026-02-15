@@ -32,9 +32,6 @@ const ActivityCards: React.FC = () => {
   if (pathname === "/map") {
     return (
       <>
-        <h2 className="section-title mt-3 text-xl md:mt-1">
-          {t("activity:featuredActivities")}
-        </h2>
         {activities === null && (
           <div className="mt-5">
             <ActivityCardsLoading />
@@ -42,11 +39,11 @@ const ActivityCards: React.FC = () => {
         )}
         {activities?.length === 0 ? (
           <p className="mt-3 text-center">
-            No activities found for the selected category. Try another{" "}
-            <span className="text-primary">category</span>.
+            {t("activity:noActivitiesFound")}{" "}
+            <span className="text-primary">{t("activity:category")}</span>.
           </p>
         ) : (
-          <div className={`mt-3 grid gap-5 ${gridStyles}`}>
+          <div className={`mt-3 grid w-full grid-cols-1 gap-5 md:grid-cols-2`}>
             {activities?.map((activity) => (
               <ActivityCard
                 key={activity.id}
@@ -78,8 +75,8 @@ const ActivityCards: React.FC = () => {
   if (!hasAnyActivities) {
     return (
       <p className="mt-3 text-center">
-        No activities found for the selected category. Try another{" "}
-        <span className="text-primary">category</span>.
+        {t("activity:noActivitiesFound")}{" "}
+        <span className="text-primary">{t("activity:category")}</span>.
       </p>
     );
   }

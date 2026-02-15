@@ -33,6 +33,7 @@ import { ActivityEntity, UserProfile } from "@/lib/types";
 import { fetchUserInfo } from "@/lib/profile/profile";
 import ExpandableContainer from "../general/expandableContainer";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const snapPoints = [0.5, 1];
 
@@ -41,6 +42,7 @@ const ActivityComments: React.FC<{
   activity: ActivityEntity;
   customIcon?: React.ReactNode;
 }> = ({ user, activity, customIcon }) => {
+  const { t } = useTranslation(["activity"]);
   const [open, setOpen] = useState(false);
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
   const [commentTextInput, setCommentTextInput] = useState<string>("");
@@ -88,7 +90,7 @@ const ActivityComments: React.FC<{
     if (!user?.id) return;
 
     if (!isUserVerified) {
-      toast.error("Please verify your email to comment");
+      toast.error(t("activity:pleaseVerifyEmailToComment"));
       return;
     }
 
@@ -115,7 +117,7 @@ const ActivityComments: React.FC<{
               <>
                 <h3 className="mb-3 flex items-center gap-3 text-lg font-bold">
                   <AiOutlineComment className="text-2xl" />
-                  Comments
+                  {t("activity:comments")}
                   <span className="inline-block pl-3">{comments.length}</span>
                 </h3>
                 <div className="flex items-center gap-3">
@@ -150,7 +152,9 @@ const ActivityComments: React.FC<{
             <div className="absolute right-1/2 top-5 w-full translate-x-1/2 border-b bg-white dark:border-b-gray-500 dark:bg-gray-800">
               <div className="flex items-start justify-between px-5 shadow-md">
                 <div className=""></div>
-                <h3 className="mb-5 text-xl font-bold">Comments</h3>
+                <h3 className="mb-5 text-xl font-bold">
+                  {t("activity:comments")}
+                </h3>
                 <button onClick={() => setOpen(false)} className="pt-2">
                   <AiOutlineClose />
                 </button>
@@ -159,7 +163,7 @@ const ActivityComments: React.FC<{
             <div className="mt-14 h-[88%] overflow-y-auto">
               {groupedComments.length === 0 && (
                 <p className="text-center text-gray-500">
-                  No comments yet. Be the first to comment!
+                  {t("activity:beFirstToComment")}
                 </p>
               )}
               {groupedComments.map(({ root, replies }) => (
@@ -425,10 +429,9 @@ const ActivityComments: React.FC<{
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete comment</DialogTitle>
+            <DialogTitle>{t("activity:deleteComment")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this comment? This action cannot
-              be undone.
+              {t("activity:deleteCommentWarning")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -440,7 +443,7 @@ const ActivityComments: React.FC<{
                   setDeleteTargetId(null);
                 }}
               >
-                Cancel
+                {t("activity:cancel")}
               </Button>
               <Button
                 onClick={async () => {
@@ -452,7 +455,7 @@ const ActivityComments: React.FC<{
                 }}
                 className="bg-red-600"
               >
-                Delete
+                {t("activity:delete")}
               </Button>
             </div>
           </DialogFooter>

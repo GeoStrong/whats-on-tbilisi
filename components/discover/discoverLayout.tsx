@@ -22,15 +22,11 @@ import DiscoverActivitiesResults from "./discoverActivitiesResults";
 import DiscoverUsersResults from "./discoverUsersResults";
 import DiscoverPostsResults from "./discoverPostsResults";
 import DiscoverCommentsResults from "./discoverCommentsResults";
-import {
-  Search,
-  Users,
-  FileText,
-  MessageSquare,
-  LayoutGrid,
-} from "lucide-react";
+import { Users, FileText, MessageSquare, LayoutGrid } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const DiscoverLayout: React.FC = () => {
+  const { t } = useTranslation(["discover"]);
   const { activities } = useActivitiesFilter();
   const { handleSearch, searchParams } = useAddSearchQuery();
 
@@ -80,11 +76,11 @@ const DiscoverLayout: React.FC = () => {
     [handleSearch],
   );
 
-  const filterOptions = ["All", "Featured", "Ongoing", "Past", "Upcoming"];
+  const filterOptions = ["all", "featured", "ongoing", "past", "upcoming"];
 
   const isActiveFilter = (filter: string) => {
     const currentFilter = searchParams.get("filter");
-    if (filter === "All") {
+    if (filter === "all") {
       return !currentFilter || currentFilter === "all";
     }
     return currentFilter === filter.toLowerCase();
@@ -113,7 +109,9 @@ const DiscoverLayout: React.FC = () => {
         <DiscoverLoading />
       ) : (
         <div className="p-4 md:p-8">
-          <h1 className="mb-8 text-4xl font-bold md:text-5xl">Discover</h1>
+          <h1 className="mb-8 text-4xl font-bold md:text-5xl">
+            {t("discover:title")}
+          </h1>
 
           {/* Unified Search Bar */}
           <div className="mb-6 rounded-xl border bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
@@ -133,7 +131,9 @@ const DiscoverLayout: React.FC = () => {
                   className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <LayoutGrid className="h-4 w-4" />
-                  <span className="hidden sm:inline">Activities</span>
+                  <span className="hidden sm:inline">
+                    {t("discover:activities")}
+                  </span>
                   <CountBadge
                     count={counts.activities}
                     isActive={activeTab === "activities"}
@@ -144,7 +144,9 @@ const DiscoverLayout: React.FC = () => {
                   className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <Users className="h-4 w-4" />
-                  <span className="hidden sm:inline">Users</span>
+                  <span className="hidden sm:inline">
+                    {t("discover:users")}
+                  </span>
                   <CountBadge
                     count={counts.users}
                     isActive={activeTab === "users"}
@@ -155,7 +157,9 @@ const DiscoverLayout: React.FC = () => {
                   className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <FileText className="h-4 w-4" />
-                  <span className="hidden sm:inline">Posts</span>
+                  <span className="hidden sm:inline">
+                    {t("discover:posts")}
+                  </span>
                   <CountBadge
                     count={counts.posts}
                     isActive={activeTab === "posts"}
@@ -166,7 +170,9 @@ const DiscoverLayout: React.FC = () => {
                   className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-white"
                 >
                   <MessageSquare className="h-4 w-4" />
-                  <span className="hidden sm:inline">Comments</span>
+                  <span className="hidden sm:inline">
+                    {t("discover:comments")}
+                  </span>
                   <CountBadge
                     count={counts.comments}
                     isActive={activeTab === "comments"}
@@ -195,9 +201,9 @@ const DiscoverLayout: React.FC = () => {
                             onClick={() =>
                               handleSearch("filter", filter.toLowerCase())
                             }
-                            className={`whitespace-nowrap rounded-full border-2 px-4 py-2 dark:border-slate-700 dark:bg-slate-800 ${isActiveFilter(filter) ? "bg-primary text-white" : ""}`}
+                            className={`whitespace-nowrap text-sm rounded-full border-2 px-4 py-2 dark:border-slate-700 dark:bg-slate-800 ${isActiveFilter(filter) ? "bg-primary text-white" : ""}`}
                           >
-                            {filter}
+                            {t(`discover:${filter}`)}
                           </Button>
                         ))}
                       </div>

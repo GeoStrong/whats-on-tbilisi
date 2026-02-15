@@ -1,7 +1,7 @@
 import React from "react";
 
 const ActivityDetails: React.FC<{
-  detail: string;
+  detail: string | React.ReactNode;
   value: string | number | React.ReactNode | undefined;
 }> = ({ detail, value }) => {
   return (

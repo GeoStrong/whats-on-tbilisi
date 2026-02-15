@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { WizardFormState } from "./types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
   mapKey,
 }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation(["create-activity"]);
   const { latLng, isFullscreen } = useSelector((state: RootState) => state.map);
   const [isMapDialogOpen, setIsMapDialogOpen] = useState(false);
   const [isSameDay, setIsSameDay] = useState(true);
@@ -118,7 +120,9 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
       {/* Location Section Header */}
       <div className="flex flex-col items-center gap-2 md:flex-row">
         <FaMapMarkerAlt className="text-lg text-primary" />
-        <h3 className="text-lg font-semibold">Where will it happen?</h3>
+        <h3 className="text-lg font-semibold">
+          {t("create-activity:step2.locationHeading")}
+        </h3>
         <Button
           type="button"
           variant="outline"
@@ -127,7 +131,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
           onClick={() => setIsMapDialogOpen(true)}
         >
           <FaSearchLocation className="mr-2" />
-          Pin exact meeting point
+          {t("create-activity:step2.selectLocation")}
         </Button>
       </div>
 
@@ -144,7 +148,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
                 googleLocation: { lat: place.lat, lng: place.lng },
               });
             }}
-            placeholder="Search address or landmark..."
+            placeholder={t("create-activity:step2.addressPlaceholder")}
             className="dark:border-gray-600"
           />
         </div>
@@ -187,7 +191,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             className="flex items-center gap-2 text-base font-medium"
           >
             <FaCalendarAlt className="text-primary" />
-            Date
+            {t("create-activity:step2.dateLabel")}
           </label>
           <Input
             id="wizard-date"
@@ -210,7 +214,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             className="flex items-center gap-2 text-base font-medium"
           >
             <FaClock className="text-primary" />
-            Start Time *
+            {t("create-activity:step2.startTimeLabel")}
           </label>
           <Input
             id="wizard-time"
@@ -232,7 +236,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             className="flex items-center gap-2 text-base font-medium"
           >
             <FaClock className="text-primary" />
-            End Time
+            {t("create-activity:step2.endTimeLabel")}
           </label>
           <Input
             id="wizard-endTime"
@@ -253,7 +257,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
           {/* Same Day Toggle */}
           <div className="flex items-center gap-2">
             <label htmlFor="sameDayToggle" className="text-base font-medium">
-              Ends same Day
+              {t("create-activity:step2.endsSameDay")}
             </label>
             <input
               id="sameDayToggle"
@@ -271,7 +275,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
                 className="flex items-center gap-2 text-base font-medium"
               >
                 <FaCalendarTimes className="text-primary" />
-                End Date
+                {t("create-activity:step2.endDateLabel")}
               </label>
               <Input
                 id="wizard-endDate"
@@ -287,10 +291,10 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
         </div>
 
         {/* Recurring Activity */}
-        <div className="flex flex-1 flex-col gap-2">
+        {/* <div className="flex flex-1 flex-col gap-2">
           <div className="flex items-center gap-2">
             <label htmlFor="recurringActivity" className="text-base">
-              Is this activity recurring?
+              {t("create-activity:step2.isRecurring")}
             </label>
             <input
               type="checkbox"
@@ -306,7 +310,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
                 className="flex items-center gap-2 text-base font-medium"
               >
                 <FaCalendarPlus className="text-primary" />
-                Select Recurring Days:
+                {t("create-activity:step2.selectRecurringDays")}
               </label>
               <RecurringDatePicker
                 selectedDates={recurringDays}
@@ -317,12 +321,12 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
               />
             </div>
           )}
-        </div>
+        </div> */}
 
         <div className="flex-1">
           {isRecurring && recurringDays.length > 0 && (
             <div className="selected-dates">
-              <h4>Selected Recurring Dates:</h4>
+              <h4>{t("create-activity:step2.selectedRecurringDates")}</h4>
               <ul className="mt-2 flex h-28 flex-col gap-1 overflow-y-auto rounded-md border-2 p-2 px-4 dark:border-gray-600">
                 {recurringDays.map((date, index) => (
                   <li key={index} className="date-item flex">
@@ -338,7 +342,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
                         updateFormState({ recurringDays: updatedDates });
                       }}
                     >
-                      Remove
+                      {t("create-activity:step2.removeRecurringDate")}
                     </button>
                   </li>
                 ))}
@@ -357,7 +361,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             className="flex items-center gap-2 text-base font-medium"
           >
             <FaUsers className="text-primary" />
-            Max Participants
+            {t("create-activity:step2.maxParticipants")}
           </label>
           <Input
             id="wizard-maxAttendees"
@@ -372,7 +376,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
                   : null,
               })
             }
-            placeholder="No limit"
+            placeholder={t("create-activity:form.maxAttendeesPlaceholder")}
             className="dark:border-gray-600"
           />
         </div>
@@ -384,7 +388,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             className="flex items-center gap-2 text-base font-medium"
           >
             <FaUsers className="text-gray-400" />
-            Target Audience
+            {t("create-activity:step2.targetAudioLabel")}
           </label>
           <Input
             id="wizard-targetAudience"
@@ -393,7 +397,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             onChange={(e) =>
               updateFormState({ targetAudience: e.target.value })
             }
-            placeholder="e.g., Adults, Students"
+            placeholder={t("create-activity:step2.targetAudiencePlaceholder")}
             className="dark:border-gray-600"
           />
         </div>
@@ -405,7 +409,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             className="flex items-center gap-2 text-base font-medium"
           >
             <FaLink className="text-gray-400" />
-            External Link
+            {t("create-activity:step2.externalLink")}
           </label>
           <Input
             id="wizard-link"
@@ -413,7 +417,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
             type="url"
             value={formState.link}
             onChange={(e) => updateFormState({ link: e.target.value })}
-            placeholder="Optional URL"
+            placeholder={t("create-activity:step2.externalLinkPlaceholder")}
             className="dark:border-gray-600"
           />
         </div>
@@ -424,10 +428,10 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle className="text-center">
-              Choose the exact location
+              {t("create-activity:step2.chooseLocation")}
             </DialogTitle>
             <DialogDescription>
-              Click on the map to set your meeting point
+              {t("create-activity:step2.mapInstructions")}
             </DialogDescription>
           </DialogHeader>
           <div className="h-[400px] w-full overflow-hidden rounded-lg">
@@ -440,7 +444,7 @@ const WizardStep2: React.FC<WizardStep2Props> = ({
           </div>
           <div className="flex justify-end gap-2">
             <Button type="button" onClick={handleConfirmLocation}>
-              Confirm Location
+              {t("create-activity:step2.confirmLocation")}
             </Button>
           </div>
         </DialogContent>

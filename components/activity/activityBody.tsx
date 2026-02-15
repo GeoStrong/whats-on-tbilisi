@@ -10,6 +10,7 @@ import OptimizedImage from "@/components/ui/optimizedImage";
 import React, { useEffect, useState } from "react";
 import defaultActivityImg from "@/public/images/default-activity-img.png";
 import ActivityDetails from "./activityDetails";
+import { MapPin, Clock, Calendar } from "lucide-react";
 import Link from "next/link";
 import Socials from "../general/socials";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -27,6 +28,7 @@ import UserFollowButton from "../general/userFollowButton";
 import ActivityLocation from "./activityLocation";
 import defaultUserImg from "@/public/images/default-user.png";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 interface ActivityBodyProps {
   categories: (Category | null)[];
@@ -37,6 +39,7 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
   activity,
   categories,
 }) => {
+  const { t } = useTranslation(["activity"]);
   const { handleLocationClick } = useMapZoom(activity.id);
   const [host, setHost] = useState<UserProfile | null>();
   const { user } = useGetUserProfile();
@@ -92,7 +95,7 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
           </div>
           <div className="w-full">
             <h3 className="my-3 text-base font-semibold md:text-xl">
-              About the activity
+              {t("activity:aboutTheActivity")}
             </h3>
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
@@ -115,34 +118,51 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
               {activity.description}
             </p>
             <h3 className="mt-3 text-base font-semibold md:text-xl">
-              Activity Details:
+              {t("activity:activityDetailsTitle")}:
             </h3>
             <div className="mt-2 flex w-full flex-col justify-between md:flex-row">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <ActivityDetails
-                    detail="📍 Address"
+                    detail={
+                      <span className="inline-flex items-center gap-1">
+                        <MapPin className="inline-block h-4 w-4" />
+                        {t("activity:address")}
+                      </span>
+                    }
                     value={activity.location}
                   />
-                  <Link
-                    href="/map"
-                    className="text-sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (activity.googleLocation) {
-                        handleLocationClick(activity.googleLocation);
-                      }
-                    }}
-                  >
-                    See Map ↗️
-                  </Link>
+                  {activity.status !== "inactive" && (
+                    <Link
+                      href="/map"
+                      className="text-sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (activity.googleLocation) {
+                          handleLocationClick(activity.googleLocation);
+                        }
+                      }}
+                    >
+                      {t("activity:seeMap")}
+                    </Link>
+                  )}
                 </div>
                 <ActivityDetails
-                  detail="⌚ Time"
+                  detail={
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="inline-block h-4 w-4" />
+                      {t("activity:time")}
+                    </span>
+                  }
                   value={activity.time as string}
                 />
                 <ActivityDetails
-                  detail="📅 Date"
+                  detail={
+                    <span className="inline-flex items-center gap-1">
+                      <Calendar className="inline-block h-4 w-4" />
+                      {t("activity:date")}
+                    </span>
+                  }
                   value={
                     activity.date &&
                     new Date(activity.date).toLocaleString("en-US", {
@@ -165,7 +185,7 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
                 ))}
             </div>
             <h3 className="mt-3 text-base font-semibold md:text-xl">
-              Share with your friends
+              {t("activity:shareWithFriends")}
             </h3>
             <Socials />
           </div>
@@ -173,7 +193,7 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
       </div>
       <div className="flex flex-col gap-5 md:w-1/4">
         <div className="max-h-40 rounded-xl bg-white px-3 py-4 shadow-md dark:bg-gray-800 lg:col-span-1">
-          <h3 className="font-bold md:text-lg">Host</h3>
+          <h3 className="font-bold md:text-lg">{t("activity:host")}</h3>
           <div className="flex items-center gap-2">
             <Avatar className="h-12 w-12">
               <AvatarImage
@@ -206,7 +226,9 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
           </div>
         </div>
         <div className="rounded-xl bg-white px-3 py-4 shadow-md dark:bg-gray-800 lg:col-span-1">
-          <h3 className="font-bold md:text-lg">Additional Info</h3>
+          <h3 className="font-bold md:text-lg">
+            {t("activity:additionalInfo")}
+          </h3>
           <div className="flex items-center gap-2">
             <div className="mt-2 flex flex-col">
               {activity.link && (
@@ -218,21 +240,21 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
                       className="text-blue-500 underline"
                       target="_blank"
                     >
-                      Learn More
+                      {t("activity:learnMore")}
                     </Link>
                   }
                 />
               )}
               <ActivityDetails
-                detail="👥 Target Audience"
+                detail={`👥 ${t("activity:activityDetails.targetAudience")}`}
                 value={activity.targetAudience}
               />
               <ActivityDetails
-                detail="🔢 Max Attendees"
+                detail={`🔢 ${t("activity:activityDetails.maxAttendees")}`}
                 value={activity.maxAttendees}
               />
               <ActivityDetails
-                detail="Participants"
+                detail={t("activity:activityDetails.participants")}
                 value={activity.participants?.length}
               />
             </div>

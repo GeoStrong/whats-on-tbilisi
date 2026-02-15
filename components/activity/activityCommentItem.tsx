@@ -14,6 +14,7 @@ import OptimizedImage from "../ui/optimizedImage";
 import { fetchUserInfo } from "@/lib/profile/profile";
 import useGetUserProfile from "@/lib/hooks/useGetUserProfile";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 interface ActivityCommentItemProps {
   activityHostId: string;
@@ -32,6 +33,7 @@ const ActivityCommentItem: React.FC<ActivityCommentItemProps> = ({
   onDelete,
   onReplyTo,
 }) => {
+  const { t } = useTranslation(["activity"]);
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const { user: currentUser } = useGetUserProfile();
 
@@ -66,7 +68,7 @@ const ActivityCommentItem: React.FC<ActivityCommentItemProps> = ({
         });
 
   return (
-    <div className="flex items-start gap-3">
+    <div className="mt-3 flex items-start gap-3">
       <Link href={`/users/${comment.user_id}`}>
         <OptimizedImage
           src={avatarUrl}
@@ -87,12 +89,12 @@ const ActivityCommentItem: React.FC<ActivityCommentItemProps> = ({
               <h4
                 className={`text-base ${isReply ? "font-semibold" : "font-bold"}`}
               >
-                {profile?.name || "User"}
+                {profile?.name || t("activity:user")}
                 <span className="pl-2 text-xs font-light text-gray-600 dark:text-gray-400">
                   {commentFormattedDate}
                   {activityHostId === comment.user_id && (
                     <span className="ml-2 rounded-xl border px-2 text-xs font-light text-gray-600 dark:border-gray-400 dark:text-gray-400">
-                      Author
+                      {t("activity:author")}
                     </span>
                   )}
                 </span>
@@ -108,21 +110,21 @@ const ActivityCommentItem: React.FC<ActivityCommentItemProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent className="dark:bg-gray-700">
                 <DropdownMenuLabel className="hidden">
-                  Actions
+                  {t("activity:actions")}
                 </DropdownMenuLabel>
                 <DropdownMenuItem
                   onClick={() => {
                     if (onEdit) onEdit(comment.id, comment.text);
                   }}
                 >
-                  Edit
+                  {t("activity:edit")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
                     if (onDelete) onDelete(comment.id);
                   }}
                 >
-                  Delete
+                  {t("activity:delete")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -130,10 +132,10 @@ const ActivityCommentItem: React.FC<ActivityCommentItemProps> = ({
         </div>
 
         <button
-          className="mt-1 text-base text-gray-600 dark:text-gray-400"
+          className="mt-1 text-sm text-gray-600 dark:text-gray-400"
           onClick={() => onReplyTo && onReplyTo(comment.id, profile?.name)}
         >
-          Reply
+          {t("activity:reply")}
         </button>
       </div>
     </div>

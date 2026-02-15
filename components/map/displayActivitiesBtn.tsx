@@ -5,11 +5,13 @@ import { Button } from "../ui/button";
 import useAddSearchQuery from "@/lib/hooks/useAddSearchQuery";
 import DisplayedActivities from "./displayedActivities";
 import Spinner from "../general/spinner";
+import { useTranslation } from "react-i18next";
 
 const DisplayActivitiesBtn: React.FC = () => {
   const displayActivitiesBtnRef = useRef<HTMLButtonElement>(null!);
   const { searchParams, handleSearch } = useAddSearchQuery();
   const displayIsActive = searchParams.get("display-activities");
+  const { t } = useTranslation(["activity"]);
 
   return (
     <>
@@ -26,7 +28,7 @@ const DisplayActivitiesBtn: React.FC = () => {
         }}
         className="rounded-full px-8 py-6 text-base font-bold text-white md:p-8"
       >
-        Display all Activities
+        {t("activity:displayActivities")}
       </Button>
     </>
   );

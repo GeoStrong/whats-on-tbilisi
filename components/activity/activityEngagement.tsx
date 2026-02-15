@@ -12,6 +12,7 @@ import { AiFillDislike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const ActivityEngagement: React.FC<{
   user: UserProfile | null;
@@ -19,6 +20,7 @@ const ActivityEngagement: React.FC<{
   activityLikes: number;
   activityDislikes: number;
 }> = ({ user, activityId, activityLikes, activityDislikes }) => {
+  const { t } = useTranslation(["activity"]);
   const [likes, setLikes] = useState<number>(activityLikes);
   const [dislikes, setDislikes] = useState<number>(activityDislikes);
   const [userReaction, setUserReaction] = useState<"like" | "dislike" | null>(
@@ -48,7 +50,7 @@ const ActivityEngagement: React.FC<{
       }
 
       if (!isUserVerified) {
-        toast.error("Please verify your email to like or dislike");
+        toast.error(t("activity:pleaseVerifyEmailToComment"));
         return;
       }
 
@@ -73,10 +75,10 @@ const ActivityEngagement: React.FC<{
       <button
         className={`flex items-center gap-2 ${
           userReaction === "like" ? "text-blue-500" : ""
-        } ${!isUserVerified ? "opacity-50 cursor-not-allowed" : ""}`}
+        } ${!isUserVerified ? "cursor-not-allowed opacity-50" : ""}`}
         onClick={() => handleReaction("like")}
         disabled={!isUserVerified}
-        title={!isUserVerified ? "Verify email to like" : ""}
+        title={!isUserVerified ? t("activity:verifyEmailToLike") : ""}
       >
         <AiFillLike className="text-lg md:text-2xl" />
         <span>{likes}</span>
@@ -85,10 +87,10 @@ const ActivityEngagement: React.FC<{
       <button
         className={`flex items-center gap-2 ${
           userReaction === "dislike" ? "text-red-500" : ""
-        } ${!isUserVerified ? "opacity-50 cursor-not-allowed" : ""}`}
+        } ${!isUserVerified ? "cursor-not-allowed opacity-50" : ""}`}
         onClick={() => handleReaction("dislike")}
         disabled={!isUserVerified}
-        title={!isUserVerified ? "Verify email to dislike" : ""}
+        title={!isUserVerified ? t("activity:verifyEmailToDislike") : ""}
       >
         <AiFillDislike className="text-lg md:text-2xl" />
         <span>{dislikes}</span>

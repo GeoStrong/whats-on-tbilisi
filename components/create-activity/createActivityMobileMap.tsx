@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogClose,
@@ -23,7 +24,7 @@ interface CreateActivityMobileMapProps {
 const CreateActivityMobileMap: React.FC<CreateActivityMobileMapProps> = ({
   buttonRef,
 }) => {
-  // const [mapKey, setMapKey] = useState<string>("");
+  const { t } = useTranslation(["create-activity"]);
   const { isFullscreen } = useSelector((state: RootState) => state.map);
 
   // useEffect(() => {
@@ -46,10 +47,10 @@ const CreateActivityMobileMap: React.FC<CreateActivityMobileMapProps> = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-center">
-              Choose the location
+              {t("create-activity:location.chooseLocation")}
             </DialogTitle>
             <DialogDescription>
-              Simply Click on the Map to put your pinpoint
+              {t("create-activity:location.mapInstructions")}
             </DialogDescription>
           </DialogHeader>
           <MapWrapper
@@ -58,7 +59,9 @@ const CreateActivityMobileMap: React.FC<CreateActivityMobileMapProps> = ({
             displayActivities={false}
           />
           <DialogClose>
-            <Button type="button">Confirm Location</Button>
+            <Button type="button">
+              {t("create-activity:location.confirmLocation")}
+            </Button>
           </DialogClose>
         </DialogContent>
       </Dialog>

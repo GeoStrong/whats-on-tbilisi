@@ -3,6 +3,7 @@ import React from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import useAddSearchQuery from "@/lib/hooks/useAddSearchQuery";
+import { useTranslation } from "react-i18next";
 
 interface DiscoverSearchProps {
   search: string;
@@ -14,6 +15,7 @@ const DiscoverSearch: React.FC<DiscoverSearchProps> = ({
   onSearch,
 }) => {
   const { handleSearch } = useAddSearchQuery();
+  const { t } = useTranslation(["discover"]);
 
   return (
     <>
@@ -26,13 +28,13 @@ const DiscoverSearch: React.FC<DiscoverSearchProps> = ({
         }}
       >
         <Input
-          placeholder="Search activities, users, posts, comments..."
+          placeholder={t("discover:searchPlaceholder")}
           className="h-16 placeholder:text-gray-400 dark:bg-gray-800 md:h-12"
           value={search}
           onChange={(e) => onSearch(e.target.value)}
         />
         <Button type="submit" className="h-12 w-full md:w-auto">
-          Search
+          {t("discover:searchButton")}
         </Button>
       </Form>
     </>

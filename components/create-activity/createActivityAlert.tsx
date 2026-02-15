@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,6 +36,7 @@ const CreateActivityAlert: React.FC<CreateActivityAlertProps> = ({
 }) => {
   const router = useRouter();
   const { user } = useGetUserProfile();
+  const { t } = useTranslation(["create-activity"]);
   const [postComment, setPostComment] = useState("");
 
   const createdOnLabel = useMemo(
@@ -82,40 +84,45 @@ const CreateActivityAlert: React.FC<CreateActivityAlertProps> = ({
           <AlertDialogHeader>
             <AlertDialogTitle>
               {isActivityCreated
-                ? "You created Activity!"
-                : "You updated Activity"}
+                ? t("create-activity:dialog.createdTitle")
+                : t("create-activity:dialog.updatedTitle")}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {isActivityCreated
-                ? "You have successfully created an Activity 🎉. It will be shared to your feed with a small label and an optional comment."
-                : "You have successfully updated an Activity 🎉. You can also share this update to your feed with an optional comment."}
+                ? t("create-activity:dialog.createdMessage")
+                : t("create-activity:dialog.updatedMessage")}
             </AlertDialogDescription>
           </AlertDialogHeader>
 
           {activityId && (
             <div className="space-y-2 py-2">
               <p className="text-sm text-muted-foreground">
-                A post will be created like:
+                {t("create-activity:dialog.postPreview")}
               </p>
               <div className="rounded-md bg-muted p-2 text-sm">
                 <p className="font-semibold">
-                  {activityTitle || "New activity"}
+                  {activityTitle ||
+                    t("create-activity:messages.createdSuccess")}
                 </p>
                 <p>
                   {isActivityCreated
-                    ? `Created this activity on ${createdOnLabel}.`
-                    : `Updated this activity on ${createdOnLabel}.`}
+                    ? t("create-activity:dialog.createdOnPrefix") +
+                      ` ${createdOnLabel}.`
+                    : t("create-activity:dialog.updatedOnPrefix") +
+                      ` ${createdOnLabel}.`}
                 </p>
               </div>
               <div className="space-y-1">
                 <label htmlFor="post-comment" className="text-sm font-medium">
-                  Add a post comment (optional)
+                  {t("create-activity:dialog.feedComment")}
                 </label>
                 <Textarea
                   id="post-comment"
                   value={postComment}
                   onChange={(e) => setPostComment(e.target.value)}
-                  placeholder="Share a few words about this activity..."
+                  placeholder={t(
+                    "create-activity:dialog.feedCommentPlaceholder",
+                  )}
                   className="min-h-[80px]"
                   disabled={createPostMutation.isPending}
                 />
@@ -133,10 +140,10 @@ const CreateActivityAlert: React.FC<CreateActivityAlertProps> = ({
                 {createPostMutation.isPending || !activityId ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Posting to feed...
+                    {t("create-activity:dialog.posting")}
                   </>
                 ) : (
-                  "Go to Feed"
+                  t("create-activity:dialog.goToFeed")
                 )}
               </Button>
             </AlertDialogAction>

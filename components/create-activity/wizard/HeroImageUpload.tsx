@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { FaCloudUploadAlt, FaTimes } from "react-icons/fa";
@@ -14,11 +15,11 @@ interface HeroImageUploadProps {
 }
 
 const HeroImageUpload: React.FC<HeroImageUploadProps> = ({
-  value,
   onChange,
   previewUrl,
   onPreviewChange,
 }) => {
+  const { t } = useTranslation(["create-activity"]);
   const [isDragActive, setIsDragActive] = useState(false);
 
   const onDrop = useCallback(
@@ -70,7 +71,7 @@ const HeroImageUpload: React.FC<HeroImageUploadProps> = ({
         <input {...getInputProps()} />
 
         {previewUrl ? (
-          <div className="relative h-[200px] w-full overflow-hidden rounded-xl">
+          <div className="relative min-h-[300px] w-full overflow-hidden rounded-xl">
             <Image
               src={previewUrl}
               alt="Hero preview"
@@ -89,7 +90,7 @@ const HeroImageUpload: React.FC<HeroImageUploadProps> = ({
                     open();
                   }}
                 >
-                  Change Image
+                  {t("create-activity:heroImage.change")}
                 </Button>
                 <Button
                   type="button"
@@ -97,7 +98,8 @@ const HeroImageUpload: React.FC<HeroImageUploadProps> = ({
                   size="sm"
                   onClick={handleRemoveImage}
                 >
-                  <FaTimes className="mr-1" /> Remove
+                  <FaTimes className="mr-1" />{" "}
+                  {t("create-activity:heroImage.remove")}
                 </Button>
               </div>
             </div>
@@ -116,14 +118,13 @@ const HeroImageUpload: React.FC<HeroImageUploadProps> = ({
             </div>
             <div>
               <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                Upload a Hero Image
+                {t("create-activity:heroImage.heading")}
               </p>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Drag and drop your best activity photo here. This will be the
-                main cover users see first.
+                {t("create-activity:heroImage.description")}
               </p>
               <p className="mt-1 text-xs text-primary">
-                Recommended size: 1200x600px
+                {t("create-activity:heroImage.recommendation")}
               </p>
             </div>
             <Button
@@ -134,7 +135,7 @@ const HeroImageUpload: React.FC<HeroImageUploadProps> = ({
                 open();
               }}
             >
-              Browse Files
+              {t("create-activity:heroImage.browse")}
             </Button>
           </div>
         )}
