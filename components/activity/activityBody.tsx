@@ -193,9 +193,9 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
       </div>
       <div className="flex flex-col gap-5 md:w-1/4">
         <div className="max-h-40 rounded-xl bg-white px-3 py-4 shadow-md dark:bg-gray-800 lg:col-span-1">
-          <h3 className="font-bold md:text-lg">{t("activity:host")}</h3>
-          <div className="flex items-center gap-2">
-            <Avatar className="h-12 w-12">
+          <h3 className="text-base font-bold">{t("activity:host")}</h3>
+          <div className="mt-2 flex items-center gap-2">
+            <Avatar className="h-10 w-10">
               <AvatarImage
                 src={hostImage || ""}
                 className="object-cover object-top"
@@ -206,7 +206,7 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
                   alt="Default Avatar"
                   width={20}
                   height={20}
-                  className="h-12 w-12 object-cover"
+                  className="h-10 w-10 object-cover"
                 />
               </AvatarFallback>
             </Avatar>
@@ -226,7 +226,7 @@ const ActivityBody: React.FC<ActivityBodyProps> = ({
           </div>
         </div>
         <div className="rounded-xl bg-white px-3 py-4 shadow-md dark:bg-gray-800 lg:col-span-1">
-          <h3 className="font-bold md:text-lg">
+          <h3 className="text-base font-bold">
             {t("activity:additionalInfo")}
           </h3>
           <div className="flex items-center gap-2">

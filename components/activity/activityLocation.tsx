@@ -25,7 +25,7 @@ const ActivityLocation: React.FC<{ activity: ActivityEntity }> = ({
   return (
     <>
       <div className="w-full rounded-xl bg-white px-3 py-4 shadow-md dark:bg-gray-800">
-        <h3 className="mb-3 font-bold md:text-lg">
+        <h3 className="mb-3 text-base font-bold">
           {t("activity:locationOnMap")}
         </h3>
 

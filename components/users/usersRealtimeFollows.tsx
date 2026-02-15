@@ -19,11 +19,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FollowersEntity } from "@/lib/types";
 import UserCard from "./userCard";
 import { Skeleton } from "../ui/skeleton";
+import { useTranslation } from "react-i18next";
 
 const UsersRealtimeFollows: React.FC<{
   userId: string;
   userName: string;
 }> = ({ userId, userName }) => {
+  const { t } = useTranslation(["users"]);
   const [postedActivitiesNumber, setPostedActivitiesNumber] = useState<
     number | null
   >(null);
@@ -120,7 +122,7 @@ const UsersRealtimeFollows: React.FC<{
               postedActivitiesNumber
             )}
           </p>
-          <p className="text-base">Activities</p>
+          <p className="text-base">{t("users:activities")}</p>
         </div>
         <button
           className="space-y-1 text-center"
@@ -136,7 +138,7 @@ const UsersRealtimeFollows: React.FC<{
               followers.length
             )}
           </p>
-          <p className="text-base">Followers</p>
+          <p className="text-base">{t("users:followers")}</p>
         </button>
         <button
           className="space-y-1 text-center"
@@ -152,7 +154,7 @@ const UsersRealtimeFollows: React.FC<{
               followings.length
             )}
           </p>
-          <p className="text-base">Following</p>
+          <p className="text-base">{t("users:following")}</p>
         </button>
       </div>
       <Dialog open={openFollowDialog} onOpenChange={setOpenFollowDialog}>
@@ -164,10 +166,10 @@ const UsersRealtimeFollows: React.FC<{
               <Tabs defaultValue={activeTab} className="h-96">
                 <TabsList className="flex w-full justify-center">
                   <TabsTrigger value="Followers" className="text-base">
-                    Followers
+                    {t("users:followers")}
                   </TabsTrigger>
                   <TabsTrigger value="Following" className="text-base">
-                    Following
+                    {t("users:following")}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent
@@ -176,7 +178,7 @@ const UsersRealtimeFollows: React.FC<{
                 >
                   {followers?.length === 0 && (
                     <p className="text-center text-gray-500 dark:text-gray-400">
-                      No Followers
+                      {t("users:noFollowers")}
                     </p>
                   )}
                   {followers?.map((user) => (
@@ -189,7 +191,7 @@ const UsersRealtimeFollows: React.FC<{
                 >
                   {followings?.length === 0 && (
                     <p className="text-center text-gray-500 dark:text-gray-400">
-                      No Followings
+                      {t("users:noFollowings")}
                     </p>
                   )}
                   {followings?.map((user) => (

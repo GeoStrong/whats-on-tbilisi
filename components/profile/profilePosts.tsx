@@ -10,8 +10,10 @@ import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import ParticipationHistory from "../general/participationHistory";
 import { UserParticipationHistory } from "@/lib/types";
 import { getUserParticipationHistory } from "@/lib/functions/supabaseFunctions";
+import { useTranslation } from "react-i18next";
 
 const ProfilePosts: React.FC<{ userId: string }> = ({ userId }) => {
+  const { t } = useTranslation(["profile"]);
   const { user } = useGetUserProfile();
   const { data: posts = [], isLoading } = useFeedPostsByUserId(userId);
   const [participationHistory, setParticipationHistory] = useState<
@@ -32,19 +34,21 @@ const ProfilePosts: React.FC<{ userId: string }> = ({ userId }) => {
         <div className="flex w-full justify-center">
           <TabsList>
             <TabsTrigger className="text-base" value="my-posts">
-              My Posts
+              {t("profile:posts.myPosts")}
             </TabsTrigger>
             <TabsTrigger className="text-base" value="my-participations">
-              My Participation History
+              {t("profile:posts.myParticipationHistory")}
             </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="my-posts">
           <Card className="border-none shadow-none hover:shadow-none dark:bg-gray-800">
             <CardHeader>
-              <CardTitle className="text-lg">My Feed Posts</CardTitle>
+              <CardTitle className="text-lg">
+                {t("profile:posts.feedPostsTitle")}
+              </CardTitle>
               <CardDescription className="text-base">
-                Activities you&apos;ve shared to your feed
+                {t("profile:posts.feedPostsDescription")}
               </CardDescription>
             </CardHeader>
             {isLoading ? (
@@ -58,7 +62,7 @@ const ProfilePosts: React.FC<{ userId: string }> = ({ userId }) => {
             ) : posts.length === 0 ? (
               <CardDescription className="md:p-4">
                 <p className="col-span-2 py-8 text-center text-muted-foreground">
-                  You haven&apos;t posted any activities to your feed yet!
+                  {t("profile:posts.noPostsYet")}
                 </p>
               </CardDescription>
             ) : (
@@ -74,10 +78,10 @@ const ProfilePosts: React.FC<{ userId: string }> = ({ userId }) => {
           <Card className="border-none shadow-none hover:shadow-none dark:bg-gray-800">
             <CardHeader>
               <CardTitle className="text-lg">
-                Your Participation History
+                {t("profile:posts.participationTitle")}
               </CardTitle>
               <CardDescription className="text-base">
-                You can explore your participation history here.
+                {t("profile:posts.participationDescription")}
               </CardDescription>
             </CardHeader>
             <CardDescription className="px-3 pb-5">

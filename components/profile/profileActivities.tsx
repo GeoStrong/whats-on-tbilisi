@@ -6,8 +6,10 @@ import { fetchSavedActivities } from "@/lib/profile/profile";
 import { ActivityEntity } from "@/lib/types";
 import { getActivitiesByUserId } from "@/lib/functions/supabaseFunctions";
 import ProfileActivitiesCard from "./profileActivitiesCard";
+import { useTranslation } from "react-i18next";
 
 const ProfileActivities: React.FC<{ userId: string }> = ({ userId }) => {
+  const { t } = useTranslation(["profile"]);
   const [myActivities, setMyActivities] = useState<ActivityEntity[]>([]);
   const [savedActivities, setSavedActivities] = useState<ActivityEntity[]>([]);
 
@@ -27,25 +29,25 @@ const ProfileActivities: React.FC<{ userId: string }> = ({ userId }) => {
           <div className="flex w-full justify-center">
             <TabsList>
               <TabsTrigger className="text-base" value="my-activities">
-                My Actviities
+                {t("profile:activities.myActivities")}
               </TabsTrigger>
               <TabsTrigger className="text-base" value="my-bookmarks">
-                My Bookmarks
+                {t("profile:activities.myBookmarks")}
               </TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="my-activities">
             <ProfileActivitiesCard
               activities={myActivities}
-              title="Activities you posted"
-              description="You can explore activities you posted"
+              title={t("profile:activities.postedTitle")}
+              description={t("profile:activities.postedDescription")}
             />
           </TabsContent>
           <TabsContent value="my-bookmarks">
             <ProfileActivitiesCard
               activities={savedActivities}
-              title="Activities you've bookmarked for later."
-              description="You can explore your bookmarked activities here."
+              title={t("profile:activities.bookmarksTitle")}
+              description={t("profile:activities.bookmarksDescription")}
             />
           </TabsContent>
         </Tabs>

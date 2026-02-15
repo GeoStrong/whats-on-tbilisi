@@ -14,11 +14,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { sendVerificationEmail } from "@/lib/auth/auth";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const SignupSuccessDialog: React.FC = () => {
   const { signupSuccessOpen } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const [isSending, setIsSending] = useState(false);
+  const { t } = useTranslation(["auth"]);
 
   const handleResend = async () => {
     setIsSending(true);
@@ -43,20 +45,14 @@ const SignupSuccessDialog: React.FC = () => {
     >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Check your email</DialogTitle>
+          <DialogTitle>{t("auth:dialog:checkEmailTitle")}</DialogTitle>
           <DialogDescription>
-            Thanks for signing up! We sent a verification email — please click
-            the link in that email to verify your account, then return to log
-            in.
+            {t("auth:dialog:checkEmailDescription")}
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 flex flex-wrap justify-end gap-2">
-          <Button
-            variant="outline"
-            onClick={handleResend}
-            disabled={isSending}
-          >
-            {isSending ? "Sending..." : "Resend email"}
+          <Button variant="outline" onClick={handleResend} disabled={isSending}>
+            {isSending ? "Sending..." : t("auth:buttons:resendEmail")}
           </Button>
           <Button
             onClick={() => dispatch(authActions.setSignupSuccessOpen(false))}

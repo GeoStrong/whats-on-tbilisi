@@ -115,8 +115,8 @@ const ActivityComments: React.FC<{
           containerTrigger={
             !customIcon && (
               <>
-                <h3 className="mb-3 flex items-center gap-3 text-lg font-bold">
-                  <AiOutlineComment className="text-2xl" />
+                <h3 className="mb-3 flex items-center gap-3 text-base font-bold">
+                  <AiOutlineComment className="text-xl" />
                   {t("activity:comments")}
                   <span className="inline-block pl-3">{comments.length}</span>
                 </h3>
@@ -283,9 +283,9 @@ const ActivityComments: React.FC<{
               customIcon
             ) : (
               <div className="relative w-full rounded-xl bg-white px-3 py-4 shadow-md dark:bg-gray-800">
-                <h3 className="mb-3 flex items-center gap-3 text-left text-lg font-bold">
+                <h3 className="mb-3 flex items-center gap-3 text-left text-base font-bold">
                   <AiOutlineComment className="text-xl" />
-                  Comments
+                  {t("activity:comments")}
                   <span className="inline-block pl-3">{comments.length}</span>
                 </h3>
                 <div className="flex items-center gap-3 rounded-md bg-gray-100 p-2 dark:bg-gray-700">
@@ -305,22 +305,30 @@ const ActivityComments: React.FC<{
                       </p>
                     </>
                   ) : (
-                    <p className="text-sm font-extralight">No comments yet</p>
+                    <p className="text-xs font-extralight">
+                      {t("activity:beFirstToComment")}
+                    </p>
                   )}
                 </div>
               </div>
             )}
           </DrawerTrigger>
-          <DrawerContent className="w-full" headerChildren={"Comments"}>
+          <DrawerContent
+            className="w-full"
+            headerChildren={t("activity:comments")}
+          >
             <div className="mb-20 h-dvh overflow-y-auto">
               <DrawerHeader>
-                <DrawerTitle className="hidden">Comments</DrawerTitle>
+                <DrawerTitle className="hidden">
+                  {" "}
+                  {t("activity:comments")}
+                </DrawerTitle>
                 <DrawerDescription className="hidden">
-                  Comments
+                  {t("activity:commentsDescription")}
                 </DrawerDescription>
                 {groupedComments.length === 0 && (
                   <p className="text-center text-gray-500">
-                    No comments yet. Be the first to comment!
+                    {t("activity:beFirstToComment")}
                   </p>
                 )}
                 {groupedComments.map(({ root, replies }) => (

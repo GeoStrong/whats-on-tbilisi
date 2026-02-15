@@ -1,0 +1,18 @@
+{
+  "userNotFound": "მომხმარებელი ვერ მოიძებნა",
+  "checkUrl": "გთხოვთ შეამოწმოთ URL ან დაბრუნდით",
+  "backHome": "მთავარ გვერდზე",
+  "joinedOn": "გაწევრდა",
+  "activities": "აქტივობები",
+  "posts": "პოსტები",
+  "postedActivities": "გამოქვეყნებული აქტივობები",
+  "participationHistory": "მონაწილეობის ისტორია",
+  "noActivitiesPosted": "ეს მომხმარებელი ჯერ აქტივობას არ გამოქვეყნებია.",
+  "usersPosts": "{{userName}}-ის პოსტები",
+  "noPostsYet": "ეს მომხმარებელი ჯერ პოსტს არ გამოქვეყნებია.",
+  "followers": "გამომწერი",
+  "following": "გამოწერილია",
+  "noFollowers": "ფოლოვერი არ არის",
+  "noFollowings": "ვერავის მიყვება",
+  "isJoining": "შეუერთდა"
+}

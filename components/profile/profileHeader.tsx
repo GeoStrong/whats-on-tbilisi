@@ -75,7 +75,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
 
   return (
     <>
-      <Card className="w-full dark:bg-gray-800 md:w-1/2 lg:w-1/3">
+      <Card className="w-full dark:bg-gray-800 md:w-1/2">
         <CardContent className="pt-6">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col items-center gap-4">

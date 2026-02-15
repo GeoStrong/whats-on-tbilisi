@@ -1,0 +1,18 @@
+{
+  "userNotFound": "The User could not be found",
+  "checkUrl": "Please check the URL or go back to the",
+  "backHome": "homepage",
+  "joinedOn": "Joined on",
+  "activities": "Activities",
+  "posts": "Posts",
+  "postedActivities": "Posted Activities",
+  "participationHistory": "Participation History",
+  "noActivitiesPosted": "This user has not posted any activities yet.",
+  "usersPosts": "{{userName}}'s Posts",
+  "noPostsYet": "This user has not made any posts yet.",
+  "followers": "Followers",
+  "following": "Following",
+  "noFollowers": "No Followers",
+  "noFollowings": "No Followings",
+  "isJoining": "is joining"
+}

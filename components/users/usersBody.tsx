@@ -19,8 +19,10 @@ import { BsCalendar2Event } from "react-icons/bs";
 import { FiFileText } from "react-icons/fi";
 import FeedPost from "../feed/FeedPost";
 import ParticipationHistory from "../general/participationHistory";
+import { useTranslation } from "react-i18next";
 
 const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
+  const { t } = useTranslation(["users"]);
   const [postedActivities, setPostedActivities] = useState<
     ActivityEntity[] | null
   >(null);
@@ -66,14 +68,14 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
               value="activities"
             >
               <BsCalendar2Event />
-              Activities
+              {t("users:activities")}
             </TabsTrigger>
             <TabsTrigger
               className="flex items-center gap-2 text-base"
               value="posts"
             >
               <FiFileText />
-              Posts
+              {t("users:posts")}
             </TabsTrigger>
           </TabsList>
         </div>
@@ -85,10 +87,10 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
             <div className="flex w-full justify-center">
               <TabsList>
                 <TabsTrigger className="text-base" value="posted">
-                  Posted Activities
+                  {t("users:postedActivities")}
                 </TabsTrigger>
                 <TabsTrigger className="text-base" value="participation">
-                  Participation History
+                  {t("users:participationHistory")}
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -96,7 +98,7 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
               <div className="grid w-full grid-cols-1 gap-3 p-3 sm:grid-cols-2 md:grid-cols-3">
                 {postedActivities?.length === 0 && (
                   <p className="col-span-full text-center text-lg">
-                    This user has not posted any activities yet.
+                    {t("users:noActivitiesPosted")}
                   </p>
                 )}
                 {postedActivities?.map((activity) => (
@@ -121,7 +123,7 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
           className="rounded-xl border shadow-md dark:bg-gray-800 md:p-4"
         >
           <h3 className="mt-3 text-center text-xl font-bold">
-            {user.name}&apos;s Posts
+            {t("users:usersPosts", { userName: user.name })}
           </h3>
           <div className="my-3">
             {userPosts &&
@@ -130,7 +132,7 @@ const UsersBody: React.FC<{ user: UserProfile }> = ({ user }) => {
               ))}
             {userPosts?.length === 0 && (
               <p className="col-span-full text-center text-lg">
-                This user has not made any posts yet.
+                {t("users:noPostsYet")}
               </p>
             )}
           </div>

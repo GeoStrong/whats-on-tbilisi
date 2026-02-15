@@ -1,10 +1,15 @@
+"use client";
+
 import { UserProfile } from "@/lib/types";
 import React from "react";
 import UserAvatar from "./userAvatar";
 import UserFollowButton from "../general/userFollowButton";
 import UsersRealtimeFollows from "./usersRealtimeFollows";
+import { useTranslation } from "react-i18next";
 
-const UsersHeader: React.FC<{ user: UserProfile }> = async ({ user }) => {
+const UsersHeader: React.FC<{ user: UserProfile }> = ({ user }) => {
+  const { t } = useTranslation(["users"]);
+
   return (
     <div className="mt-5 w-full">
       <div className="flex justify-between gap-5 md:items-center md:gap-10">
@@ -21,7 +26,7 @@ const UsersHeader: React.FC<{ user: UserProfile }> = async ({ user }) => {
       </div>
       <div className="mt-4 w-full">
         <p className="text-base text-gray-500">
-          Joined on{" "}
+          {t("users:joinedOn")}{" "}
           {new Date(user.created_at).toLocaleDateString("en-US", {
             month: "long",
             year: "numeric",

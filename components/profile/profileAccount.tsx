@@ -30,6 +30,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { useTranslation } from "react-i18next";
 
 interface ProfileAccountProps {
   user: UserProfile | null;
@@ -47,31 +48,36 @@ interface PasswordFormValues {
   confirmPassword: string;
 }
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, "Name must be at least 2 characters")
-    .max(30, "Name cannot exceed 30 characters")
-    .required("Name is required"),
-  phone: Yup.string()
-    .max(20, "Phone number cannot exceed 20 characters")
-    .nullable(),
-  bio: Yup.string().max(100, "Bio cannot exceed 100 characters").nullable(),
-});
-
-const passwordValidationSchema = Yup.object().shape({
-  currentPassword: Yup.string().required("Current password is required"),
-  newPassword: Yup.string()
-    .min(8, "New password must be at least 8 characters")
-    .required("New password is required"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("newPassword")], "Passwords must match")
-    .required("Please confirm your new password"),
-});
-
 const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
+  const { t } = useTranslation(["profile"]);
   const [isEditing, setIsEditing] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(2, t("profile:account.nameMinLength"))
+      .max(30, t("profile:account.nameMaxLength"))
+      .required(t("profile:account.nameRequired")),
+    phone: Yup.string()
+      .max(20, t("profile:account.phoneMaxLength"))
+      .nullable(),
+    bio: Yup.string()
+      .max(100, t("profile:account.bioMaxLength"))
+      .nullable(),
+  });
+
+  const passwordValidationSchema = Yup.object().shape({
+    currentPassword: Yup.string().required(
+      t("profile:account.currentPasswordRequired")
+    ),
+    newPassword: Yup.string()
+      .min(8, t("profile:account.newPasswordMinLength"))
+      .required(t("profile:account.newPasswordRequired")),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("newPassword")], t("profile:account.passwordsNotMatch"))
+      .required(t("profile:account.confirmPasswordRequired")),
+  });
 
   if (!user) {
     return null;
@@ -88,7 +94,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
     { setSubmitting }: FormikHelpers<FormValues>,
   ) => {
     if (!user?.email_verified_at) {
-      toast.error("Please verify your email to update your profile");
+      toast.error(t("profile:account.emailVerificationRequired"));
       setSubmitting(false);
       return;
     }
@@ -100,11 +106,11 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
         values.phone,
         values.bio,
       );
-      toast.success("Profile updated successfully");
+      toast.success(t("profile:account.profileUpdated"));
       setIsEditing(false);
     } catch (error) {
       logger.error("Failed to update profile", error);
-      toast.error("Failed to save changes. Please try again.");
+      toast.error(t("profile:account.updateFailed"));
     } finally {
       setSubmitting(false);
     }
@@ -131,7 +137,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
     }: FormikHelpers<PasswordFormValues>,
   ) => {
     if (!user?.email_verified_at) {
-      toast.error("Please verify your email to change your password");
+      toast.error(t("profile:account.emailVerificationRequired"));
       setSubmitting(false);
       return;
     }
@@ -142,7 +148,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
         values.currentPassword,
         values.newPassword,
       );
-      toast.success("Password updated successfully");
+      toast.success(t("profile:account.passwordChangeSuccess"));
       resetForm();
       setIsPasswordDialogOpen(false);
     } catch (error) {
@@ -150,7 +156,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Failed to change password. Please try again.";
+          : t("profile:account.passwordChangeFailed");
 
       if (errorMessage.toLowerCase().includes("new password")) {
         setFieldError("newPassword", errorMessage);
@@ -177,9 +183,11 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
             <Card className="border-none shadow-none hover:shadow-none dark:bg-gray-800">
               <CardHeader className="flex w-full flex-col justify-between md:flex-row">
                 <div>
-                  <CardTitle className="text-lg">Profile Information</CardTitle>
+                  <CardTitle className="text-lg">
+                    {t("profile:account.profileInformation")}
+                  </CardTitle>
                   <CardDescription className="text-base">
-                    Update your personal information and bio.
+                    {t("profile:account.profileDescription")}
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
@@ -194,19 +202,24 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                         }}
                         disabled={isSubmitting}
                       >
-                        Cancel
+                        {t("profile:account.cancel")}
                       </Button>
                       <Button
                         type="submit"
                         disabled={!dirty || !isValid || isSubmitting}
                         aria-busy={isSubmitting}
                       >
-                        {isSubmitting ? "Saving..." : "Save Changes"}
+                        {isSubmitting
+                          ? t("profile:account.saving")
+                          : t("profile:account.saveChanges")}
                       </Button>
                     </>
                   ) : (
-                    <Button type="button" onClick={() => setIsEditing(true)}>
-                      Edit Profile
+                    <Button
+                      type="button"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      {t("profile:account.editProfile")}
                     </Button>
                   )}
                 </div>
@@ -216,7 +229,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                 {/* Name */}
                 <div className="space-y-2">
                   <Label className="text-base" htmlFor="profile-name">
-                    Name
+                    {t("profile:account.name")}
                   </Label>
                   <Field
                     as={Input}
@@ -224,7 +237,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                     name="name"
                     type="text"
                     readOnly={!isEditing}
-                    placeholder="Enter your name"
+                    placeholder={t("profile:account.namePlaceholder")}
                     className="p-5 dark:border-gray-500"
                     aria-invalid={false}
                   />
@@ -238,7 +251,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                 {/* Email (readonly) */}
                 <div className="space-y-2">
                   <Label className="text-base" htmlFor="profile-email">
-                    Email
+                    {t("profile:account.email")}
                   </Label>
                   <Input
                     id="profile-email"
@@ -252,7 +265,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                 {/* Phone */}
                 <div className="space-y-2">
                   <Label className="text-base" htmlFor="profile-phone">
-                    Phone
+                    {t("profile:account.phone")}
                   </Label>
                   <Field
                     as={Input}
@@ -260,7 +273,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                     name="phone"
                     type="tel"
                     readOnly={!isEditing}
-                    placeholder="+123456789"
+                    placeholder={t("profile:account.phonePlaceholder")}
                     className="p-5 dark:border-gray-500"
                   />
                   <ErrorMessage
@@ -273,14 +286,14 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                 {/* Bio */}
                 <div className="space-y-2">
                   <Label className="text-base" htmlFor="profile-bio">
-                    Bio
+                    {t("profile:account.bio")}
                   </Label>
                   <Field
                     as={Textarea}
                     id="profile-bio"
                     name="bio"
                     readOnly={!isEditing}
-                    placeholder="Tell us about yourself..."
+                    placeholder={t("profile:account.bioPlaceholder")}
                     className="p-5 dark:border-gray-500"
                     rows={4}
                   />
@@ -303,14 +316,14 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                         variant="outline"
                         className="p-5 text-sm"
                       >
-                        Change Password
+                        {t("profile:account.changePassword")}
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Change Password</DialogTitle>
+                        <DialogTitle>{t("profile:account.changePassword")}</DialogTitle>
                         <DialogDescription>
-                          Enter your current password to update it.
+                          {t("profile:account.currentPasswordDescription")}
                         </DialogDescription>
                       </DialogHeader>
                       <Formik
@@ -329,7 +342,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                                 className="text-base"
                                 htmlFor="current-password"
                               >
-                                Current password
+                                {t("profile:account.currentPassword")}
                               </Label>
                               <Field
                                 as={Input}
@@ -351,7 +364,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                                 className="text-base"
                                 htmlFor="new-password"
                               >
-                                New password
+                                {t("profile:account.newPassword")}
                               </Label>
                               <Field
                                 as={Input}
@@ -373,7 +386,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                                 className="text-base"
                                 htmlFor="confirm-password"
                               >
-                                Confirm new password
+                                {t("profile:account.confirmPassword")}
                               </Label>
                               <Field
                                 as={Input}
@@ -397,8 +410,8 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                                 aria-busy={isSubmitting}
                               >
                                 {isSubmitting
-                                  ? "Updating..."
-                                  : "Update Password"}
+                                  ? t("profile:account.updating")
+                                  : t("profile:account.updatePassword")}
                               </Button>
                             </DialogFooter>
                           </Form>
@@ -413,7 +426,7 @@ const ProfileAccount: React.FC<ProfileAccountProps> = ({ user }) => {
                     onClick={handleLogout}
                     className="p-5 text-sm"
                   >
-                    Log out
+                    {t("profile:account.logOut")}
                   </Button>
                 </div>
               </CardContent>

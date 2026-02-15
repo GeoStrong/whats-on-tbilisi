@@ -12,6 +12,8 @@ import { useTranslation } from "react-i18next";
 const ParticipationCard: React.FC<{
   participation: UserParticipationHistory;
 }> = ({ participation }) => {
+  const { t } = useTranslation(["users"]);
+
   return (
     <Card className="overflow-hidden border-none shadow-none">
       <CardContent className="p-0">
@@ -27,7 +29,7 @@ const ParticipationCard: React.FC<{
                   className="hover:text-primary"
                 >
                   {participation.userName}{" "}
-                  <span className="font-light">is joining </span>
+                  <span className="font-light">{t("users:isJoining")} </span>
                   &quot;{participation.activity.title}&quot;
                 </Link>
               </div>
@@ -47,16 +49,13 @@ const ParticipationCard: React.FC<{
 };
 
 const EmptyState: React.FC<{ message?: string }> = ({ message }) => {
-  const { t } = useTranslation(["emptyStates", "feed"]);
+  const { t } = useTranslation(["emptyStates", "feed", "users"]);
 
   return (
     <div className="mt-2 flex flex-col items-center justify-center border border-slate-200 px-6 py-16 dark:border-slate-700">
       <h3 className="mb-2 text-lg font-semibold">
         {t("emptyStates:noParticipationHistory")}
       </h3>
-      <p className="max-w-sm text-center text-sm text-muted-foreground">
-        {message || t("feed:startExploringParticipation")}
-      </p>
     </div>
   );
 };

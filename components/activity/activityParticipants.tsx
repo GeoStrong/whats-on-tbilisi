@@ -1,3 +1,4 @@
+import { HiOutlineUsers } from "react-icons/hi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -18,6 +19,7 @@ import { motion, AnimatePresence } from "motion/react";
 import UserAvatar from "../users/userAvatar";
 import UserCard from "../users/userCard";
 import { useTranslation } from "react-i18next";
+import { FiUsers } from "react-icons/fi";
 
 const snapPoints = [0.5, 1];
 
@@ -56,7 +58,8 @@ const ActivityParticipants: React.FC<{
           layoutId="2"
           containerTrigger={
             <div className="flex flex-col">
-              <h3 className="mb-3 font-bold md:text-lg">
+              <h3 className="mb-3 flex items-center gap-3 text-base font-bold">
+                <FiUsers className="text-lg" />
                 {t("activity:participantsLabel")}
                 <span className="inline-block pl-3">{participants.length}</span>
               </h3>
@@ -196,7 +199,8 @@ const ActivityParticipants: React.FC<{
           fadeFromIndex={0}
         >
           <DrawerTrigger className="w-full rounded-xl bg-white px-3 py-4 text-left shadow-md dark:bg-gray-800">
-            <h3 className="mb-3 font-bold md:text-lg">
+            <h3 className="mb-3 flex items-center gap-3 text-base font-bold">
+              <FiUsers className="text-lg" />
               {t("activity:participantsLabel")}
               <span className="inline-block pl-3">{participants.length}</span>
             </h3>
